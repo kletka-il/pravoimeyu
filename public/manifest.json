@@ -1,0 +1,39 @@
+{
+  "name": "Право имею",
+  "short_name": "Право имею",
+  "description": "Юридическая помощь гражданам России — поиск ответов и связь с юристами",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f3ec",
+  "theme_color": "#1a1714",
+  "orientation": "portrait-primary",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "categories": ["legal", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Поиск",
+      "url": "/search",
+      "description": "Задать юридический вопрос"
+    },
+    {
+      "name": "База знаний",
+      "url": "/knowledge",
+      "description": "Статьи по правовым ситуациям"
+    }
+  ]
+}
