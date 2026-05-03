@@ -73,6 +73,14 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
       />
+      {/* Временная метка для проверки деплоя — можно удалить после проверки */}
+      <div
+        className="bg-gradient-to-r from-accent-500 via-brand-600 to-sky-600 text-white text-center py-3.5 px-4 font-semibold text-sm md:text-base shadow-md border-b border-white/20"
+        role="status"
+      >
+        Сайт обновлён — если эта яркая полоска видна, последний деплой на домен
+        подтянулся.
+      </div>
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div
