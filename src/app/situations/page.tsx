@@ -1,7 +1,22 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Жизненные ситуации",
+  description:
+    "Юридические ситуации по категориям: трудовые споры, ДТП, семейное право, жильё, защита прав потребителей и другие. Пошаговые подсказки и юристы по каждой теме.",
+  alternates: { canonical: "https://pravaimei.ru/situations" },
+  openGraph: {
+    title: "Жизненные ситуации · Право имею",
+    description:
+      "Юридические ситуации по категориям: трудовые споры, ДТП, семейное право, жильё, защита прав потребителей и другие.",
+    url: "https://pravaimei.ru/situations",
+    type: "website",
+  },
+};
 
 export default async function SituationsPage() {
   const categories = await prisma.category.findMany({

@@ -12,10 +12,8 @@ export default function ContactsPage() {
       </p>
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-4">
-          <Contact title="Почта" value="hello@pravoimeyu.local" />
-          <Contact title="Горячая линия" value="+7 (800) 000-00-00" />
-          <Contact title="Telegram" value="@pravoimeyu_bot" />
-          <Contact title="Адрес" value="Москва, проспект Юристов, 1, оф. 42" />
+          <Contact title="Общие вопросы" value="info@pravaimei.ru" href="mailto:info@pravaimei.ru" />
+          <Contact title="Защита персональных данных" value="privacy@pravaimei.ru" href="mailto:privacy@pravaimei.ru" />
           <div className="card">
             <h3 className="heading-serif text-xl">Юристам</h3>
             <p className="text-sm text-ink-500 mt-1">
@@ -33,13 +31,19 @@ export default function ContactsPage() {
   );
 }
 
-function Contact({ title, value }: { title: string; value: string }) {
+function Contact({ title, value, href }: { title: string; value: string; href?: string }) {
   return (
     <div className="card">
       <div className="text-xs uppercase tracking-widest text-ink-400">
         {title}
       </div>
-      <div className="heading-serif text-xl mt-1">{value}</div>
+      <div className="heading-serif text-xl mt-1">
+        {href ? (
+          <a href={href} className="text-accent hover:underline">{value}</a>
+        ) : (
+          value
+        )}
+      </div>
     </div>
   );
 }

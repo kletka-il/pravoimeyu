@@ -1,6 +1,21 @@
 import { prisma } from "@/lib/prisma";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Наши победы",
+  description:
+    "Реальные дела юристов «Право имею»: выигранные суды, взысканные компенсации, восстановленные права. Примеры успешных дел по трудовым, семейным и гражданским спорам.",
+  alternates: { canonical: "https://pravaimei.ru/wins" },
+  openGraph: {
+    title: "Наши победы · Право имею",
+    description:
+      "Реальные дела юристов «Право имею»: выигранные суды, взысканные компенсации, восстановленные права.",
+    url: "https://pravaimei.ru/wins",
+    type: "website",
+  },
+};
 
 export default async function WinsPage() {
   const wins = await prisma.win.findMany({

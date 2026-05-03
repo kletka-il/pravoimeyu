@@ -1,6 +1,21 @@
 import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import { prisma } from "@/lib/prisma";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Право имею — юридическая помощь, когда она нужна срочно",
+  description:
+    "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы. Бесплатно для общих вопросов, платно для сложных дел.",
+  alternates: { canonical: "https://pravaimei.ru" },
+  openGraph: {
+    title: "Право имею — юридическая помощь, когда она нужна срочно",
+    description:
+      "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы.",
+    url: "https://pravaimei.ru",
+    type: "website",
+  },
+};
 
 const POPULAR_QUERIES = [
   "Попал в ДТП, виноват не я",
@@ -13,6 +28,34 @@ const POPULAR_QUERIES = [
   "Задержали в полиции",
 ];
 
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Право имею",
+  url: "https://pravaimei.ru",
+  logo: "https://pravaimei.ru/icons/icon-512.png",
+  description:
+    "Юридический портал — умный поиск по правовой базе, подсказки на жизненные ситуации и проверенные юристы.",
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    availableLanguage: "Russian",
+    url: "https://pravaimei.ru/contacts",
+  },
+};
+
+const siteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Право имею",
+  url: "https://pravaimei.ru",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://pravaimei.ru/search?q={search_term_string}",
+    "query-input": "required name=search_term_string",
+  },
+};
+
 export default async function HomePage() {
   const [categories, articlesCount, specialistsCount] = await Promise.all([
     prisma.category.findMany({ orderBy: { order: "asc" } }),
@@ -22,6 +65,14 @@ export default async function HomePage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
+      />
       {/* Hero */}
       <section className="bg-gradient-to-b from-ink-900 via-ink-900 to-ink-800 text-white">
         <div className="container-page py-16 md:py-24">

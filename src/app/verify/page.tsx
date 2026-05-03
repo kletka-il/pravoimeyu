@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { verifyToken } from "@/lib/auth";
+import ResendVerifyForm from "./ResendVerifyForm";
 
 export const dynamic = "force-dynamic";
 
@@ -12,11 +13,13 @@ export default async function VerifyPage({
   if (!token) {
     return (
       <Wrap>
-        <h1 className="heading-serif text-3xl">Нет токена</h1>
+        <h1 className="heading-serif text-3xl">Подтверждение почты</h1>
         <p className="text-ink-600 mt-2">
-          Перейдите по ссылке из письма. Если ссылка не открывается — повторите
-          регистрацию.
+          Перейдите по ссылке из письма, которое мы отправили после регистрации.
+          Если письмо не пришло, попробуйте проверить папку «Спам» или
+          запросите новое.
         </p>
+        <ResendVerifyForm />
       </Wrap>
     );
   }
@@ -26,7 +29,12 @@ export default async function VerifyPage({
       <Wrap>
         <h1 className="heading-serif text-3xl">Не удалось подтвердить</h1>
         <p className="text-ink-600 mt-2">{result.reason}</p>
-        <Link href="/login" className="btn-outline mt-4">
+        <p className="text-ink-600 mt-4 text-sm">
+          Можем отправить новое письмо — введите email, на который
+          регистрировались:
+        </p>
+        <ResendVerifyForm />
+        <Link href="/login" className="btn-outline mt-6">
           На страницу входа
         </Link>
       </Wrap>

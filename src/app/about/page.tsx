@@ -33,42 +33,14 @@ export default function AboutPage() {
 
         <div className="card space-y-3">
           <h2 className="heading-serif text-2xl">Реквизиты</h2>
-          <table className="w-full text-sm">
-            <tbody className="divide-y divide-ink-100">
-              <tr className="py-2">
-                <td className="py-2 text-ink-500 pr-4 w-40">Наименование</td>
-                <td className="py-2 font-medium">ООО «Право имею»</td>
-              </tr>
-              <tr>
-                <td className="py-2 text-ink-500 pr-4">ОГРН</td>
-                <td className="py-2">[ЗАПОЛНИТЬ]</td>
-              </tr>
-              <tr>
-                <td className="py-2 text-ink-500 pr-4">ИНН</td>
-                <td className="py-2">[ЗАПОЛНИТЬ]</td>
-              </tr>
-              <tr>
-                <td className="py-2 text-ink-500 pr-4">КПП</td>
-                <td className="py-2">[ЗАПОЛНИТЬ]</td>
-              </tr>
-              <tr>
-                <td className="py-2 text-ink-500 pr-4">Юр. адрес</td>
-                <td className="py-2">[ЗАПОЛНИТЬ]</td>
-              </tr>
-              <tr>
-                <td className="py-2 text-ink-500 pr-4">Email</td>
-                <td className="py-2">
-                  <a href="mailto:info@pravoimeyu.ru" className="text-accent hover:underline">
-                    info@pravoimeyu.ru
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 text-ink-500 pr-4">Телефон</td>
-                <td className="py-2">[ЗАПОЛНИТЬ]</td>
-              </tr>
-            </tbody>
-          </table>
+          <p className="text-sm text-ink-600 leading-relaxed">
+            Полные реквизиты юридического лица будут опубликованы после
+            завершения регистрации. По всем официальным запросам пишите на{" "}
+            <a href="mailto:info@pravaimei.ru" className="text-accent hover:underline">
+              info@pravaimei.ru
+            </a>
+            .
+          </p>
         </div>
 
         <div className="card space-y-3">
@@ -76,14 +48,14 @@ export default function AboutPage() {
           <div className="space-y-2 text-sm">
             <div className="flex gap-3">
               <span className="text-ink-500 w-32 shrink-0">Общие вопросы</span>
-              <a href="mailto:info@pravoimeyu.ru" className="text-accent hover:underline">
-                info@pravoimeyu.ru
+              <a href="mailto:info@pravaimei.ru" className="text-accent hover:underline">
+                info@pravaimei.ru
               </a>
             </div>
             <div className="flex gap-3">
               <span className="text-ink-500 w-32 shrink-0">Персональные данные</span>
-              <a href="mailto:privacy@pravoimeyu.ru" className="text-accent hover:underline">
-                privacy@pravoimeyu.ru
+              <a href="mailto:privacy@pravaimei.ru" className="text-accent hover:underline">
+                privacy@pravaimei.ru
               </a>
             </div>
             <div className="flex gap-3">

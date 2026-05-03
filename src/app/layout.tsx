@@ -5,15 +5,51 @@ import Footer from "@/components/Footer";
 import { getSession } from "@/lib/session";
 import RegisterSW from "@/components/RegisterSW";
 
+const BASE_URL = "https://pravaimei.ru";
+const DEFAULT_TITLE = "Право имею — юридическая помощь, когда она нужна срочно";
+const DEFAULT_DESC =
+  "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы. Бесплатно для общих вопросов, платно для сложных дел.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: {
-    default: "Право имею — юридическая помощь, когда она нужна срочно",
+    default: DEFAULT_TITLE,
     template: "%s · Право имею",
   },
-  description:
-    "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы. Бесплатно для общих вопросов, платно для сложных дел.",
+  description: DEFAULT_DESC,
+  keywords: [
+    "юридическая помощь",
+    "бесплатная консультация юриста",
+    "правовая помощь онлайн",
+    "юрист онлайн",
+    "правовые ситуации",
+    "юридические вопросы",
+    "право имею",
+  ],
+  authors: [{ name: "Право имею", url: BASE_URL }],
+  creator: "Право имею",
+  publisher: "Право имею",
   manifest: "/manifest.json",
   applicationName: "Право имею",
+  alternates: { canonical: BASE_URL },
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    url: BASE_URL,
+    siteName: "Право имею",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESC,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESC,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

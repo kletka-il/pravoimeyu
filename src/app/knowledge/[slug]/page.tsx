@@ -10,9 +10,27 @@ export const dynamic = "force-dynamic";
 type Props = { params: { slug: string } };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const a = await prisma.article.findUnique({ where: { slug: params.slug } });
+  const a = await prisma.article.findUnique({
+    where: { slug: params.slug },
+    include: { category: true },
+  });
   if (!a) return { title: "Статья не найдена" };
-  return { title: a.title, description: a.shortAnswer };
+  const url = `https://pravaimei.ru/knowledge/${a.slug}`;
+  return {
+    title: a.title,
+    description: a.shortAnswer,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${a.title} · Право имею`,
+      description: a.shortAnswer,
+      url,
+      type: "article",
+      publishedTime: a.createdAt.toISOString(),
+      modifiedTime: a.updatedAt.toISOString(),
+      section: a.category.title,
+      locale: "ru_RU",
+    },
+  };
 }
 
 export default async function ArticlePage({ params }: Props) {
@@ -52,8 +70,47 @@ export default async function ArticlePage({ params }: Props) {
   const lawRefs = (article.lawRefs as Array<{ label: string; ref: string }>) || [];
   const html = markdownToHtml(article.body);
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.shortAnswer,
+    url: `https://pravaimei.ru/knowledge/${article.slug}`,
+    datePublished: article.createdAt.toISOString(),
+    dateModified: article.updatedAt.toISOString(),
+    inLanguage: "ru",
+    publisher: {
+      "@type": "Organization",
+      name: "Право имею",
+      logo: { "@type": "ImageObject", url: "https://pravaimei.ru/icons/icon-512.png" },
+    },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Главная", item: "https://pravaimei.ru" },
+        { "@type": "ListItem", position: 2, name: "База знаний", item: "https://pravaimei.ru/knowledge" },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: article.category.title,
+          item: `https://pravaimei.ru/knowledge?category=${article.category.slug}`,
+        },
+        {
+          "@type": "ListItem",
+          position: 4,
+          name: article.title,
+          item: `https://pravaimei.ru/knowledge/${article.slug}`,
+        },
+      ],
+    },
+  };
+
   return (
     <div className="container-page py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <div className="text-sm text-ink-500 flex items-center gap-2 mb-6">
         <Link href="/knowledge" className="hover:text-accent">
           ← База знаний

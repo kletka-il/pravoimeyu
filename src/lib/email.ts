@@ -32,25 +32,32 @@ export async function sendEmail({ to, subject, text, html }: SendArgs) {
   const from = process.env.SMTP_FROM || "Право имею <noreply@localhost>";
 
   if (!transport) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("SMTP не настроен. Добавьте переменные SMTP_HOST, SMTP_USER, SMTP_PASS в настройках сервера.");
+    }
     // Dev fallback: записываем письмо в /emails как файл
-    const dir = path.join(process.cwd(), "emails");
-    await fs.mkdir(dir, { recursive: true });
-    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const safeTo = to.replace(/[^a-z0-9@._-]/gi, "_");
-    const file = path.join(dir, `${stamp}__${safeTo}.txt`);
-    const content = [
-      `From: ${from}`,
-      `To: ${to}`,
-      `Subject: ${subject}`,
-      "",
-      text,
-      "",
-      "--- HTML ---",
-      html || "(нет HTML версии)",
-    ].join("\n");
-    await fs.writeFile(file, content, "utf8");
-    console.log(`📧 [dev] письмо сохранено: ${file}`);
-    return { ok: true, devFile: file };
+    try {
+      const dir = path.join(process.cwd(), "emails");
+      await fs.mkdir(dir, { recursive: true });
+      const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const safeTo = to.replace(/[^a-z0-9@._-]/gi, "_");
+      const file = path.join(dir, `${stamp}__${safeTo}.txt`);
+      const content = [
+        `From: ${from}`,
+        `To: ${to}`,
+        `Subject: ${subject}`,
+        "",
+        text,
+        "",
+        "--- HTML ---",
+        html || "(нет HTML версии)",
+      ].join("\n");
+      await fs.writeFile(file, content, "utf8");
+      console.log(`📧 [dev] письмо сохранено: ${file}`);
+    } catch {
+      console.log(`📧 [dev] письмо для ${to}: ${subject}`);
+    }
+    return { ok: true };
   }
 
   await transport.sendMail({ from, to, subject, text, html });

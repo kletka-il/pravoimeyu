@@ -78,6 +78,38 @@ export async function registerUser(input: RegisterInput, baseUrl: string) {
   return { userId: user.id, role };
 }
 
+export async function resendVerification(email: string, baseUrl: string) {
+  const normalized = email.trim().toLowerCase();
+  const user = await prisma.user.findUnique({ where: { email: normalized } });
+  if (!user) return { ok: true as const, status: "noop" as const };
+  if (user.emailVerified) return { ok: true as const, status: "already_verified" as const };
+
+  await prisma.verifyToken.updateMany({
+    where: { userId: user.id, usedAt: null, expiresAt: { gt: new Date() } },
+    data: { expiresAt: new Date() },
+  });
+
+  const token = randomBytes(32).toString("hex");
+  await prisma.verifyToken.create({
+    data: {
+      token,
+      userId: user.id,
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    },
+  });
+
+  const link = `${baseUrl.replace(/\/$/, "")}/verify?token=${token}`;
+  const { text, html } = buildVerifyEmail(user.name, link);
+  await sendEmail({
+    to: user.email,
+    subject: "Подтверждение почты — Право имею",
+    text,
+    html,
+  });
+
+  return { ok: true as const, status: "sent" as const };
+}
+
 export async function verifyToken(token: string) {
   const t = await prisma.verifyToken.findUnique({ where: { token } });
   if (!t) return { ok: false as const, reason: "Токен не найден" };

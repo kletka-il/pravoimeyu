@@ -2,12 +2,41 @@ import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import { searchArticles, type SearchHit } from "@/lib/search/index";
 import { prisma } from "@/lib/prisma";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
 type Props = {
   searchParams: { q?: string };
 };
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const q = (searchParams.q || "").trim();
+  if (q) {
+    return {
+      title: `${q} — поиск`,
+      description: `Юридические ответы на вопрос: «${q}». Найдите решение своей правовой ситуации на портале «Право имею».`,
+      openGraph: {
+        title: `${q} — поиск · Право имею`,
+        description: `Юридические ответы на вопрос: «${q}».`,
+        url: `https://pravaimei.ru/search?q=${encodeURIComponent(q)}`,
+      },
+      robots: { index: false },
+    };
+  }
+  return {
+    title: "Поиск юридических ответов",
+    description:
+      "Опишите свою ситуацию — умный поиск найдёт готовые юридические ответы и подберёт специалиста с нужным опытом.",
+    alternates: { canonical: "https://pravaimei.ru/search" },
+    openGraph: {
+      title: "Поиск юридических ответов · Право имею",
+      description: "Опишите ситуацию своими словами — поиск найдёт готовый ответ из правовой базы.",
+      url: "https://pravaimei.ru/search",
+      type: "website",
+    },
+  };
+}
 
 export default async function SearchPage({ searchParams }: Props) {
   const q = (searchParams.q || "").trim();

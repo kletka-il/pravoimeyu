@@ -1,8 +1,23 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import SearchBar from "@/components/SearchBar";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "База знаний",
+  description:
+    "Готовые юридические ответы по жизненным ситуациям: трудовые споры, ДТП, семейное право, защита прав потребителей, уголовные дела и другие темы. Ссылки на нормы закона.",
+  alternates: { canonical: "https://pravaimei.ru/knowledge" },
+  openGraph: {
+    title: "База знаний · Право имею",
+    description:
+      "Готовые юридические ответы по жизненным ситуациям со ссылками на нормы закона.",
+    url: "https://pravaimei.ru/knowledge",
+    type: "website",
+  },
+};
 
 type Props = {
   searchParams: { category?: string };

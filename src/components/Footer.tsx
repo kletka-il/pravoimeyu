@@ -11,8 +11,7 @@ export default function Footer() {
           </p>
           <div className="mt-4 text-xs text-ink-400 space-y-1">
             <div>ООО «Право имею»</div>
-            <div>ОГРН: [ЗАПОЛНИТЬ]</div>
-            <div>ИНН: [ЗАПОЛНИТЬ]</div>
+            <div>info@pravaimei.ru</div>
           </div>
         </div>
         <div>

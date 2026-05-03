@@ -24,12 +24,12 @@ export default function PrivacyPage() {
           </p>
           <ul>
             <li><strong>Полное наименование:</strong> Общество с ограниченной ответственностью «Право имею»</li>
-            <li><strong>ОГРН:</strong> [ЗАПОЛНИТЬ]</li>
-            <li><strong>ИНН:</strong> [ЗАПОЛНИТЬ]</li>
-            <li><strong>Юридический адрес:</strong> [ЗАПОЛНИТЬ]</li>
-            <li><strong>Email:</strong> privacy@pravoimeyu.ru</li>
-            <li><strong>Телефон:</strong> [ЗАПОЛНИТЬ]</li>
+            <li><strong>Email для запросов:</strong> privacy@pravaimei.ru</li>
           </ul>
+          <p className="text-sm text-ink-500">
+            Полные реквизиты (ОГРН, ИНН, юридический адрес) будут опубликованы
+            после завершения регистрации юридического лица.
+          </p>
         </section>
 
         <section>
@@ -118,8 +118,8 @@ export default function PrivacyPage() {
           </ul>
           <p>
             Для реализации прав направьте обращение на email:{" "}
-            <a href="mailto:privacy@pravoimeyu.ru" className="text-accent underline">
-              privacy@pravoimeyu.ru
+            <a href="mailto:privacy@pravaimei.ru" className="text-accent underline">
+              privacy@pravaimei.ru
             </a>
           </p>
         </section>
@@ -138,7 +138,7 @@ export default function PrivacyPage() {
             Оператор вправе вносить изменения в настоящую политику. Действующая
             версия всегда доступна по адресу{" "}
             <Link href="/privacy" className="text-accent underline">
-              pravoimeyu.ru/privacy
+              pravaimei.ru/privacy
             </Link>
             . При существенных изменениях мы уведомим зарегистрированных пользователей
             по email.
@@ -150,8 +150,8 @@ export default function PrivacyPage() {
           <p>
             По всем вопросам, связанным с обработкой персональных данных,
             обращайтесь:{" "}
-            <a href="mailto:privacy@pravoimeyu.ru" className="text-accent underline">
-              privacy@pravoimeyu.ru
+            <a href="mailto:privacy@pravaimei.ru" className="text-accent underline">
+              privacy@pravaimei.ru
             </a>
           </p>
         </section>
