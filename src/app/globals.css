@@ -1,12 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg: #f7f3ec;
+  --bg: #fafbfd;
   --ink: #11142a;
-  --accent: #8a1538;
+  --brand: #1f4cf5;
 }
 
 html, body {
@@ -14,6 +14,7 @@ html, body {
   color: var(--ink);
   font-family: "Inter", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 @layer components {
@@ -24,35 +25,51 @@ html, body {
     font-family: "Cormorant Garamond", Georgia, serif;
     @apply font-semibold text-ink-900 leading-tight tracking-tight;
   }
+  .heading-display {
+    @apply font-extrabold text-ink-900 leading-[1.05] tracking-tight;
+    letter-spacing: -0.02em;
+  }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-accent text-white px-5 py-3 rounded-md font-medium hover:bg-accent-dark transition disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 bg-brand-600 text-white px-6 py-3.5 rounded-xl font-semibold shadow-sm hover:bg-brand-700 hover:shadow-lift active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100;
+  }
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-2 bg-accent-500 text-white px-6 py-3.5 rounded-xl font-semibold shadow-sm hover:bg-accent-600 hover:shadow-lift active:scale-[0.98] transition-all;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 bg-white text-ink-900 px-5 py-3 rounded-md font-medium border border-ink-200 hover:border-ink-400 transition;
+    @apply inline-flex items-center justify-center gap-2 bg-white text-ink-900 px-5 py-3 rounded-xl font-semibold border border-ink-200 hover:border-ink-400 hover:bg-ink-50 transition-all;
   }
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 bg-transparent text-accent px-4 py-2 rounded-md font-medium border border-accent hover:bg-accent hover:text-white transition;
+    @apply inline-flex items-center justify-center gap-2 bg-white text-brand-600 px-5 py-2.5 rounded-xl font-semibold border-2 border-brand-100 hover:border-brand-300 hover:bg-brand-50 transition-all;
   }
   .card {
-    @apply bg-white rounded-lg shadow-card border border-ink-100 p-6;
+    @apply bg-white rounded-2xl shadow-card border border-ink-100/80 p-6 transition-shadow;
+  }
+  .card-hover {
+    @apply card hover:shadow-lift hover:border-brand-200 hover:-translate-y-0.5 transition-all duration-200;
   }
   .input {
-    @apply w-full bg-white border border-ink-200 rounded-md px-4 py-3 text-ink-900 placeholder:text-ink-400 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20;
+    @apply w-full bg-white border-2 border-ink-100 rounded-xl px-4 py-3 text-ink-900 placeholder:text-ink-400 focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-100 transition-colors;
   }
   .label {
-    @apply block text-sm font-medium text-ink-700 mb-1;
+    @apply block text-sm font-semibold text-ink-700 mb-1.5;
   }
   .badge {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium;
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-white border border-ink-200 text-ink-700 hover:border-brand-300 hover:text-brand-700 hover:bg-brand-50 transition-colors;
+  }
+  .chip-active {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-brand-600 text-white border border-brand-600 hover:bg-brand-700 transition-colors;
   }
   .prose-legal {
     @apply max-w-none text-ink-800 leading-relaxed;
   }
   .prose-legal h2 {
-    @apply heading-serif text-2xl mt-8 mb-3;
+    @apply heading-display text-2xl mt-8 mb-3;
   }
   .prose-legal h3 {
-    @apply heading-serif text-xl mt-6 mb-2;
+    @apply heading-display text-xl mt-6 mb-2;
   }
   .prose-legal p {
     @apply my-3;
@@ -66,15 +83,25 @@ html, body {
     @apply my-1;
   }
   .prose-legal a {
-    @apply text-accent underline underline-offset-2 hover:text-accent-dark;
+    @apply text-brand-600 underline underline-offset-2 hover:text-brand-700;
   }
   .prose-legal strong {
     @apply text-ink-900 font-semibold;
   }
+  .gradient-brand {
+    background: linear-gradient(135deg, #1f4cf5 0%, #0c9ce4 50%, #36b8f3 100%);
+  }
+  .gradient-warm {
+    background: linear-gradient(135deg, #ff6b3d 0%, #ffbe1f 100%);
+  }
 }
 
 mark {
-  background: #ffeebd;
+  background: linear-gradient(180deg, transparent 60%, #ffe788 60%);
   padding: 0 2px;
   border-radius: 2px;
+}
+
+::selection {
+  background: rgba(31, 76, 245, 0.2);
 }

@@ -11,41 +11,44 @@ export default function RegisterPage({
 }) {
   const role = searchParams.role === "SPECIALIST" ? ROLE.SPECIALIST : ROLE.CLIENT;
   return (
-    <div className="container-page py-16 max-w-2xl">
-      <h1 className="heading-serif text-3xl mb-2">
-        {role === ROLE.SPECIALIST ? "Регистрация юриста" : "Создать аккаунт"}
+    <div className="container-page py-12 md:py-16 max-w-2xl">
+      <div className="mb-2 inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+        Регистрация
+      </div>
+      <h1 className="heading-display text-3xl md:text-4xl mb-2">
+        {role === ROLE.SPECIALIST ? "Стать юристом 💼" : "Создаём аккаунт ✨"}
       </h1>
-      <p className="text-ink-500 mb-6">
+      <p className="text-ink-500 mb-6 md:text-lg">
         {role === ROLE.SPECIALIST
-          ? "Заполните данные. После подтверждения почты профиль уйдёт на модерацию администратора."
-          : "Регистрация позволяет связаться с юристом, сохранять историю поиска и получать обновления статей."}
+          ? "После подтверждения почты профиль уйдёт на модерацию."
+          : "Чтобы связаться с юристом, сохранять подсказки и получать обновления."}
       </p>
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-6 p-1 bg-ink-100 rounded-2xl w-fit">
         <Link
           href="/register"
-          className={`px-4 py-2 rounded-md text-sm font-medium border transition ${
+          className={`px-5 py-2 rounded-xl text-sm font-semibold transition-all ${
             role === ROLE.CLIENT
-              ? "bg-accent text-white border-accent"
-              : "bg-white border-ink-200 text-ink-700"
+              ? "bg-white text-ink-900 shadow-sm"
+              : "text-ink-500 hover:text-ink-800"
           }`}
         >
           Я клиент
         </Link>
         <Link
           href="/register?role=SPECIALIST"
-          className={`px-4 py-2 rounded-md text-sm font-medium border transition ${
+          className={`px-5 py-2 rounded-xl text-sm font-semibold transition-all ${
             role === ROLE.SPECIALIST
-              ? "bg-accent text-white border-accent"
-              : "bg-white border-ink-200 text-ink-700"
+              ? "bg-white text-ink-900 shadow-sm"
+              : "text-ink-500 hover:text-ink-800"
           }`}
         >
           Я юрист
         </Link>
       </div>
       <RegisterForm role={role} />
-      <p className="text-sm text-ink-500 mt-6">
+      <p className="text-sm text-ink-500 mt-6 text-center">
         Уже есть аккаунт?{" "}
-        <Link href="/login" className="text-accent underline underline-offset-2">
+        <Link href="/login" className="text-brand-600 font-semibold hover:text-brand-700">
           Войти
         </Link>
       </p>

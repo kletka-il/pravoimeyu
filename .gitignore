@@ -12,3 +12,6 @@ emails/
 # Загруженные пользователями файлы
 /uploads/
 .vercel
+tsconfig.tsbuildinfo
+scripts/wipe-users.ts
+scripts/restore-content.ts

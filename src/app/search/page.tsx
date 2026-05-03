@@ -54,15 +54,18 @@ export default async function SearchPage({ searchParams }: Props) {
   const urgentTop = hits[0]?.doc.urgency >= 4 ? hits[0] : null;
 
   return (
-    <div className="container-page py-10">
-      <h1 className="heading-serif text-3xl md:text-4xl mb-6">
-        Что мне делать?
+    <div className="container-page py-10 md:py-12">
+      <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+        Умный поиск
+      </div>
+      <h1 className="heading-display text-3xl md:text-5xl mb-3">
+        Что мне делать? 🔎
       </h1>
-      <SearchBar initial={q} />
-      <p className="text-sm text-ink-500 mt-3">
+      <p className="text-ink-500 mb-6 md:text-lg max-w-2xl">
         Опишите ситуацию своими словами — поиск понимает разговорные формулировки
         и юридические термины.
       </p>
+      <SearchBar initial={q} />
 
       {!q && (
         <div className="mt-12 grid md:grid-cols-2 gap-4">
@@ -80,21 +83,26 @@ export default async function SearchPage({ searchParams }: Props) {
       {q && (
         <>
           {urgentTop && (
-            <div className="mt-8 border-l-4 border-accent bg-accent/5 p-4 rounded-r-md">
-              <div className="badge bg-accent text-white">⚠ Срочно</div>
-              <p className="mt-2 text-ink-800">
-                По вашему запросу есть ситуация с высокой срочностью. Если
-                ситуация развивается прямо сейчас — переходите к статье ниже и
-                рассмотрите возможность связаться с юристом.
-              </p>
+            <div className="mt-8 bg-accent-50 border border-accent-200 rounded-2xl p-5 flex gap-4 items-start">
+              <span className="flex-shrink-0 w-10 h-10 rounded-full bg-accent-500 text-white flex items-center justify-center text-lg">
+                ⚠️
+              </span>
+              <div>
+                <div className="font-bold text-accent-900">Срочная ситуация</div>
+                <p className="mt-1 text-ink-800 text-sm leading-relaxed">
+                  По вашему запросу есть ситуация с высокой срочностью. Если
+                  это происходит прямо сейчас — открывайте статью ниже и
+                  рассмотрите возможность связаться с юристом.
+                </p>
+              </div>
             </div>
           )}
 
-          <div className="mt-8 grid lg:grid-cols-3 gap-8">
+          <div className="mt-8 grid lg:grid-cols-3 gap-6 md:gap-8">
             <div className="lg:col-span-2 space-y-4">
-              <h2 className="heading-serif text-xl text-ink-700">
+              <h2 className="font-bold text-lg text-ink-700">
                 {hits.length === 0
-                  ? "Ничего не нашлось"
+                  ? "Ничего не нашлось 🤔"
                   : `Найдено ответов: ${hits.length}`}
               </h2>
               {hits.length === 0 ? (
@@ -115,16 +123,16 @@ export default async function SearchPage({ searchParams }: Props) {
             </div>
 
             <aside className="space-y-4">
-              <div className="card">
-                <h3 className="heading-serif text-xl mb-2">
+              <div className="bg-gradient-to-br from-brand-50 to-sky-50 border border-brand-100 rounded-2xl p-6">
+                <div className="text-3xl mb-2">🤝</div>
+                <h3 className="font-bold text-xl mb-2 text-ink-900">
                   Нужна помощь юриста?
                 </h3>
-                <p className="text-sm text-ink-500">
-                  По вашему запросу мы подобрали специалистов с подходящим
-                  опытом.
+                <p className="text-sm text-ink-600">
+                  Мы подобрали специалистов с подходящим опытом.
                 </p>
                 {specialists.length === 0 ? (
-                  <p className="mt-3 text-sm text-ink-400">
+                  <p className="mt-3 text-sm text-ink-500">
                     По категории не нашлось юристов — посмотрите всех в каталоге.
                   </p>
                 ) : (
@@ -132,19 +140,19 @@ export default async function SearchPage({ searchParams }: Props) {
                     {specialists.slice(0, 3).map((s) => (
                       <div
                         key={s.id}
-                        className="border border-ink-100 rounded-md p-3"
+                        className="bg-white border border-ink-100 rounded-xl p-3"
                       >
-                        <div className="font-semibold">{s.user.name}</div>
-                        <div className="text-xs text-ink-500">
+                        <div className="font-bold text-ink-900">{s.user.name}</div>
+                        <div className="text-xs text-ink-500 mt-0.5">
                           {s.city} · стаж {s.yearsExperience} лет
                         </div>
-                        <div className="text-xs text-ink-500 mt-1">
+                        <div className="text-xs text-sun-600 font-semibold mt-1">
                           ★ {s.rating.toFixed(1)} ({s.reviewsCount} отзывов)
                         </div>
-                        <div className="text-sm mt-1">
+                        <div className="text-sm mt-1 text-ink-700">
                           {s.pricePerHour
                             ? `${s.pricePerHour.toLocaleString("ru-RU")} ₽/час`
-                            : "Стоимость по запросу"}
+                            : "По запросу"}
                         </div>
                       </div>
                     ))}
@@ -167,12 +175,12 @@ export default async function SearchPage({ searchParams }: Props) {
 
 function ExampleCard({ title, body }: { title: string; body: string }) {
   return (
-    <div className="card">
-      <div className="text-xs uppercase tracking-wide text-accent font-semibold">
+    <div className="card-hover">
+      <div className="text-xs uppercase tracking-widest text-brand-600 font-bold">
         Пример запроса
       </div>
-      <div className="heading-serif text-xl mt-1">{title}</div>
-      <p className="text-ink-600 mt-2">{body}</p>
+      <div className="font-bold text-lg mt-1.5 text-ink-900">{title}</div>
+      <p className="text-ink-600 mt-2 leading-relaxed">{body}</p>
     </div>
   );
 }
@@ -182,26 +190,30 @@ function HitCard({ hit, idx }: { hit: SearchHit; idx: number }) {
   return (
     <Link
       href={`/knowledge/${hit.doc.slug}`}
-      className="card hover:border-accent transition block"
+      className="card-hover block group"
     >
-      <div className="flex items-center gap-2 text-xs">
-        <span className="badge bg-ink-100 text-ink-700">
-          #{idx + 1} в выдаче
+      <div className="flex items-center gap-2 text-xs flex-wrap">
+        <span className="badge bg-brand-100 text-brand-700">
+          #{idx + 1}
         </span>
         <span className="text-ink-400">·</span>
         <span className="text-ink-500">{hit.doc.category.title}</span>
         {u >= 4 && (
-          <span className="badge bg-accent text-white">⚠ срочно</span>
+          <span className="badge bg-accent-500 text-white">⚠ срочно</span>
         )}
       </div>
-      <h3 className="heading-serif text-2xl mt-2">{hit.doc.title}</h3>
+      <h3 className="font-bold text-xl md:text-2xl mt-2 text-ink-900 group-hover:text-brand-700 transition-colors">
+        {hit.doc.title}
+      </h3>
       <p className="text-ink-700 mt-2 leading-relaxed">{hit.doc.shortAnswer}</p>
       {hit.highlights[0] && (
-        <p className="text-sm text-ink-500 mt-3 border-l-2 border-ink-200 pl-3">
+        <p className="text-sm text-ink-500 mt-3 bg-ink-50 rounded-xl px-3 py-2">
           {hit.highlights[0]}
         </p>
       )}
-      <div className="mt-3 text-sm text-accent font-medium">Открыть статью →</div>
+      <div className="mt-3 text-sm text-brand-600 font-semibold group-hover:text-brand-700">
+        Открыть статью →
+      </div>
     </Link>
   );
 }

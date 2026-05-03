@@ -4,8 +4,8 @@
   "description": "Юридическая помощь гражданам России — поиск ответов и связь с юристами",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f7f3ec",
-  "theme_color": "#1a1714",
+  "background_color": "#fafbfd",
+  "theme_color": "#1f4cf5",
   "orientation": "portrait-primary",
   "lang": "ru",
   "icons": [

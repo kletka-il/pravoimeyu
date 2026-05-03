@@ -20,25 +20,44 @@ export default function SearchBar({
     router.push(`/search?q=${encodeURIComponent(q.trim())}`);
   }
 
+  const isLg = size === "lg";
+
   return (
     <form
       onSubmit={onSubmit}
-      className={`flex items-stretch gap-2 ${size === "lg" ? "shadow-card" : ""}`}
+      className={`flex items-stretch gap-0 bg-white rounded-2xl ${
+        isLg ? "shadow-lift p-1.5" : "shadow-soft p-1 border border-ink-100"
+      }`}
     >
-      <input
-        type="search"
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder={placeholder}
-        className={`flex-1 bg-white border border-ink-200 rounded-l-md px-4 ${
-          size === "lg" ? "py-4 text-lg" : "py-3"
-        } text-ink-900 placeholder:text-ink-400 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20`}
-      />
+      <div className="flex-1 flex items-center gap-3 px-4">
+        <svg
+          className={`flex-shrink-0 ${isLg ? "w-6 h-6" : "w-5 h-5"} text-ink-400`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2.2"
+            d="M21 21l-4.35-4.35M11 19a8 8 0 110-16 8 8 0 010 16z"
+          />
+        </svg>
+        <input
+          type="search"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder={placeholder}
+          className={`w-full bg-transparent ${
+            isLg ? "py-4 text-lg" : "py-2.5 text-base"
+          } text-ink-900 placeholder:text-ink-400 focus:outline-none`}
+        />
+      </div>
       <button
         type="submit"
-        className={`bg-accent text-white font-medium rounded-r-md ${
-          size === "lg" ? "px-7 text-lg" : "px-5"
-        } hover:bg-accent-dark transition`}
+        className={`bg-brand-600 text-white font-semibold rounded-xl ${
+          isLg ? "px-7 text-base" : "px-5 text-sm"
+        } hover:bg-brand-700 active:scale-[0.98] transition-all whitespace-nowrap`}
       >
         Найти ответ
       </button>

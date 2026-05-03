@@ -74,27 +74,36 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
       />
       {/* Hero */}
-      <section className="bg-gradient-to-br from-ink-900 via-ink-800 to-sky-900 text-white">
-        <div className="container-page py-16 md:py-24">
+      <section className="relative overflow-hidden">
+        <div
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(ellipse 800px 400px at 80% 0%, rgba(31, 76, 245, 0.12), transparent), radial-gradient(ellipse 600px 400px at 0% 100%, rgba(255, 107, 61, 0.08), transparent)",
+          }}
+        />
+        <div className="container-page pt-12 md:pt-20 pb-10 md:pb-16">
           <div className="max-w-3xl">
-            <div className="text-gold uppercase tracking-widest text-xs font-semibold mb-4">
-              Юридическая помощь, когда она нужна срочно
+            <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1.5 rounded-full text-sm font-semibold mb-6">
+              <span className="inline-block w-2 h-2 bg-brand-500 rounded-full animate-pulse" />
+              Юридическая помощь онлайн — 24/7
             </div>
-            <h1 className="heading-serif text-white text-4xl md:text-6xl mb-6">
-              Что вам делать в этой ситуации — мы знаем
+            <h1 className="heading-display text-4xl md:text-6xl lg:text-7xl mb-6">
+              Что вам делать —{" "}
+              <span className="text-brand-600">мы знаем</span>
             </h1>
-            <p className="text-ink-100 text-lg md:text-xl mb-8 max-w-2xl">
-              Опишите ситуацию своими словами. Мы найдём готовый ответ из правовой
-              базы, а если случай сложный — подберём специалиста с подходящим
-              опытом.
+            <p className="text-ink-600 text-lg md:text-xl mb-8 max-w-2xl">
+              Опишите ситуацию своими словами. Найдём готовый ответ из правовой
+              базы, а если случай сложный — подберём юриста с нужным опытом.
             </p>
             <SearchBar />
             <div className="flex flex-wrap gap-2 mt-5">
+              <span className="text-sm text-ink-500 mr-2 self-center">Часто ищут:</span>
               {POPULAR_QUERIES.map((q) => (
                 <Link
                   key={q}
                   href={`/search?q=${encodeURIComponent(q)}`}
-                  className="text-sm bg-white/10 hover:bg-white/20 text-ink-100 px-3 py-1.5 rounded-full transition"
+                  className="chip"
                 >
                   {q}
                 </Link>
@@ -105,86 +114,114 @@ export default async function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="container-page -mt-10 grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
-        <Stat number={articlesCount} label="Готовых ответов" />
-        <Stat number={categories.length} label="Категорий ситуаций" />
-        <Stat number={specialistsCount} label="Проверенных юристов" />
-        <Stat number="24/7" label="Доступ онлайн" />
+      <section className="container-page grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-16 md:mb-20">
+        <Stat number={articlesCount} label="Готовых ответов" emoji="📋" tint="brand" />
+        <Stat number={categories.length} label="Категорий ситуаций" emoji="🧭" tint="sky" />
+        <Stat number={specialistsCount} label="Проверенных юристов" emoji="⚖️" tint="mint" />
+        <Stat number="24/7" label="Доступ онлайн" emoji="⚡" tint="accent" />
       </section>
 
       {/* Categories */}
-      <section className="container-page py-16">
-        <div className="flex items-end justify-between mb-8">
+      <section className="container-page pb-16 md:pb-20">
+        <div className="flex items-end justify-between mb-8 md:mb-10">
           <div>
-            <h2 className="heading-serif text-3xl md:text-4xl">Жизненные ситуации</h2>
-            <p className="text-ink-500 mt-2">
-              Выберите свою категорию — внутри готовые ответы и юристы
-              соответствующей специализации.
+            <h2 className="heading-display text-3xl md:text-4xl">Жизненные ситуации</h2>
+            <p className="text-ink-500 mt-2 text-base md:text-lg">
+              Выберите категорию — внутри готовые ответы и юристы.
             </p>
           </div>
-          <Link href="/situations" className="hidden md:inline btn-outline">
+          <Link href="/situations" className="hidden md:inline-flex btn-outline">
             Все ситуации →
           </Link>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {categories.map((c) => (
             <Link
               key={c.id}
               href={`/knowledge?category=${c.slug}`}
-              className="card hover:border-accent hover:shadow-soft transition group"
+              className="card-hover group flex gap-4 items-start"
             >
-              <div className="text-4xl mb-3">{c.icon}</div>
-              <div className="heading-serif text-xl group-hover:text-accent transition">
-                {c.title}
+              <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center text-2xl group-hover:bg-brand-100 group-hover:scale-110 transition-all">
+                {c.icon}
               </div>
-              <p className="text-sm text-ink-500 mt-2">{c.description}</p>
+              <div className="flex-1 min-w-0">
+                <div className="font-bold text-lg text-ink-900 group-hover:text-brand-700 transition-colors">
+                  {c.title}
+                </div>
+                <p className="text-sm text-ink-500 mt-1">{c.description}</p>
+              </div>
             </Link>
           ))}
+        </div>
+        <div className="mt-6 md:hidden">
+          <Link href="/situations" className="btn-outline w-full justify-center">
+            Все ситуации →
+          </Link>
         </div>
       </section>
 
       {/* How it works */}
-      <section className="bg-white border-y border-ink-100">
-        <div className="container-page py-16">
-          <h2 className="heading-serif text-3xl md:text-4xl text-center mb-12">
-            Как это работает
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+      <section className="bg-gradient-to-br from-brand-50 via-white to-sky-50 border-y border-ink-100">
+        <div className="container-page py-16 md:py-20">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <div className="inline-block bg-white text-brand-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 shadow-sm">
+              За 3 шага
+            </div>
+            <h2 className="heading-display text-3xl md:text-4xl">
+              Как это работает
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
             <Step
               n="1"
-              title="Опишите свою ситуацию"
-              text="В строке поиска — обычным языком. «Попал в аварию, виноват не я», «Не платят зарплату», «Закрыли въезд в Россию»."
+              emoji="✍️"
+              title="Опишите ситуацию"
+              text="Обычным языком, как другу. «Попал в ДТП, не виноват», «Не платят зарплату», «Закрыли въезд»."
             />
             <Step
               n="2"
-              title="Получите готовые ответы"
-              text="Умный поиск находит юридические подсказки в базе из десятков тщательно подготовленных статей со ссылками на нормы закона."
+              emoji="⚡"
+              title="Получите ответ"
+              text="Умный поиск выдаст подсказку из базы — со ссылками на статьи закона. Бесплатно."
             />
             <Step
               n="3"
-              title="Выберите юриста — если нужно"
-              text="Если вопрос сложный или требует представительства — мы подберём специалиста с нужным опытом и стажем по вашему делу."
+              emoji="🤝"
+              title="Выберите юриста"
+              text="Если вопрос сложный — подберём специалиста с нужным опытом. Только проверенные."
             />
           </div>
         </div>
       </section>
 
       {/* CTA для юристов */}
-      <section className="container-page py-16">
-        <div className="bg-gradient-to-br from-sky-50 to-white border border-sky-100 rounded-lg p-8 flex flex-col md:flex-row items-start md:items-center gap-6">
-          <div className="flex-1">
-            <div className="text-sky-600 uppercase tracking-widest text-xs font-semibold mb-2">
-              Юристам
+      <section className="container-page py-16 md:py-20">
+        <div className="relative overflow-hidden bg-ink-900 rounded-3xl p-8 md:p-12 text-white">
+          <div
+            className="absolute inset-0 opacity-30"
+            style={{
+              background:
+                "radial-gradient(ellipse 600px 300px at 100% 0%, rgba(31, 76, 245, 0.6), transparent), radial-gradient(ellipse 400px 200px at 0% 100%, rgba(255, 107, 61, 0.4), transparent)",
+            }}
+          />
+          <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur text-white/90 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                Юристам
+              </div>
+              <h3 className="heading-display text-2xl md:text-3xl text-white mb-2">
+                Подключитесь к платформе
+              </h3>
+              <p className="text-white/70 text-base md:text-lg max-w-xl">
+                Получайте обращения по своей специализации, ведите кабинет,
+                набирайте отзывы.
+              </p>
             </div>
-            <h3 className="heading-serif text-2xl">Вы юрист?</h3>
-            <p className="text-ink-500 mt-1">
-              Подключайтесь к платформе. Получайте обращения по своей
-              специализации, ведите кабинет, набирайте отзывы.
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Link href="/register?role=SPECIALIST" className="btn-primary">
-              Стать юристом «Право имею»
+            <Link
+              href="/register?role=SPECIALIST"
+              className="bg-white text-ink-900 hover:bg-brand-50 hover:text-brand-700 px-6 py-3.5 rounded-xl font-semibold shadow-lg active:scale-[0.98] transition-all whitespace-nowrap"
+            >
+              Стать юристом →
             </Link>
           </div>
         </div>
@@ -193,26 +230,56 @@ export default async function HomePage() {
   );
 }
 
-function Stat({ number, label }: { number: number | string; label: string }) {
+const tintClasses: Record<string, string> = {
+  brand: "bg-brand-50 border-brand-100",
+  sky: "bg-sky-50 border-sky-100",
+  mint: "bg-mint-50 border-mint-100",
+  accent: "bg-accent-50 border-accent-100",
+};
+
+function Stat({
+  number,
+  label,
+  emoji,
+  tint,
+}: {
+  number: number | string;
+  label: string;
+  emoji: string;
+  tint: keyof typeof tintClasses;
+}) {
   return (
-    <div className="bg-white shadow-card border border-ink-100 rounded-lg p-5 relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent to-sky-500" />
-      <div className="heading-serif text-3xl md:text-4xl text-accent">
+    <div className={`rounded-2xl border ${tintClasses[tint]} p-4 md:p-5`}>
+      <div className="text-2xl mb-1.5">{emoji}</div>
+      <div className="font-extrabold text-2xl md:text-3xl text-ink-900 tracking-tight">
         {number}
       </div>
-      <div className="text-sm text-ink-500 mt-1">{label}</div>
+      <div className="text-xs md:text-sm text-ink-500 mt-0.5 font-medium">{label}</div>
     </div>
   );
 }
 
-function Step({ n, title, text }: { n: string; title: string; text: string }) {
+function Step({
+  n,
+  emoji,
+  title,
+  text,
+}: {
+  n: string;
+  emoji: string;
+  title: string;
+  text: string;
+}) {
   return (
-    <div>
-      <div className="w-10 h-10 bg-accent text-white rounded-full flex items-center justify-center font-serif text-xl mb-4">
-        {n}
+    <div className="bg-white rounded-2xl p-6 shadow-card border border-ink-100">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
+          {n}
+        </div>
+        <span className="text-3xl">{emoji}</span>
       </div>
-      <h3 className="heading-serif text-xl mb-2">{title}</h3>
-      <p className="text-ink-600">{text}</p>
+      <h3 className="font-bold text-xl mb-2 text-ink-900">{title}</h3>
+      <p className="text-ink-600 leading-relaxed">{text}</p>
     </div>
   );
 }

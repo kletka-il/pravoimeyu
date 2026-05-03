@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3361ff"/>
+      <stop offset="55%" stop-color="#1f4cf5"/>
+      <stop offset="100%" stop-color="#0d486b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffbe1f"/>
+      <stop offset="100%" stop-color="#ff6b3d"/>
+    </linearGradient>
+    <filter id="soft" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <!-- Скруглённый квадрат-фон -->
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+
+  <!-- Декоративный кружок-блик -->
+  <circle cx="380" cy="120" r="80" fill="white" opacity="0.08"/>
+  <circle cx="120" cy="400" r="120" fill="white" opacity="0.06"/>
+
+  <!-- Диалоговое облачко с галочкой = молодёжный символ "ответ найден" -->
+  <g>
+    <!-- Облачко -->
+    <path d="M120 156 h220 a44 44 0 0 1 44 44 v124 a44 44 0 0 1 -44 44 h-150 l-58 56 a8 8 0 0 1 -14 -6 v-50 h-2 a44 44 0 0 1 -44 -44 v-124 a44 44 0 0 1 44 -44 z"
+          fill="white"/>
+    <!-- Галочка -->
+    <path d="M168 264 l44 44 l92 -92"
+          stroke="url(#accent)"
+          stroke-width="34"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="none"/>
+  </g>
+</svg>
