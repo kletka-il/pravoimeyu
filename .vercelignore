@@ -1,0 +1,12 @@
+.env
+.env.local
+.env.development
+.env.development.local
+.env.production
+.env.production.local
+emails/
+node_modules/
+.next/
+.vercel/output/
+prisma/dev.db
+*.tsbuildinfo

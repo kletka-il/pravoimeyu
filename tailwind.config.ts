@@ -27,6 +27,18 @@ const config: Config = {
           DEFAULT: "#b08a3e",
           light: "#cba65a",
         },
+        sky: {
+          50: "#f0f7fc",
+          100: "#dcecf6",
+          200: "#bcdcec",
+          300: "#8fc6dd",
+          400: "#5fa8c8",
+          500: "#3d8db4",
+          600: "#2e7398",
+          700: "#285c7c",
+          800: "#234d68",
+          900: "#1f4158",
+        },
         cream: "#f7f3ec",
       },
       fontFamily: {

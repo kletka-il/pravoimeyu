@@ -20,7 +20,7 @@ export default function LoginPage({
         </div>
       )}
       {searchParams.registered === "1" && (
-        <div className="mb-4 border-l-4 border-accent bg-accent/5 px-4 py-3 rounded-r text-sm text-ink-800">
+        <div className="mb-4 border-l-4 border-sky-500 bg-sky-50 px-4 py-3 rounded-r text-sm text-ink-800">
           Регистрация прошла. На вашу почту отправлено письмо для подтверждения.
         </div>
       )}

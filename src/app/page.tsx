@@ -74,7 +74,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
       />
       {/* Hero */}
-      <section className="bg-gradient-to-b from-ink-900 via-ink-900 to-ink-800 text-white">
+      <section className="bg-gradient-to-br from-ink-900 via-ink-800 to-sky-900 text-white">
         <div className="container-page py-16 md:py-24">
           <div className="max-w-3xl">
             <div className="text-gold uppercase tracking-widest text-xs font-semibold mb-4">
@@ -171,8 +171,11 @@ export default async function HomePage() {
 
       {/* CTA для юристов */}
       <section className="container-page py-16">
-        <div className="card flex flex-col md:flex-row items-start md:items-center gap-6">
+        <div className="bg-gradient-to-br from-sky-50 to-white border border-sky-100 rounded-lg p-8 flex flex-col md:flex-row items-start md:items-center gap-6">
           <div className="flex-1">
+            <div className="text-sky-600 uppercase tracking-widest text-xs font-semibold mb-2">
+              Юристам
+            </div>
             <h3 className="heading-serif text-2xl">Вы юрист?</h3>
             <p className="text-ink-500 mt-1">
               Подключайтесь к платформе. Получайте обращения по своей
@@ -192,7 +195,8 @@ export default async function HomePage() {
 
 function Stat({ number, label }: { number: number | string; label: string }) {
   return (
-    <div className="bg-white shadow-card border border-ink-100 rounded-lg p-5">
+    <div className="bg-white shadow-card border border-ink-100 rounded-lg p-5 relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent to-sky-500" />
       <div className="heading-serif text-3xl md:text-4xl text-accent">
         {number}
       </div>
