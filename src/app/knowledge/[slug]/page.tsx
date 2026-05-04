@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     include: { category: true },
   });
   if (!a) return { title: "Статья не найдена" };
-  const url = `https://pravaimei.ru/knowledge/${a.slug}`;
+  const url = `https://pravaimeu.ru/knowledge/${a.slug}`;
   return {
     title: a.title,
     description: a.shortAnswer,
@@ -75,31 +75,31 @@ export default async function ArticlePage({ params }: Props) {
     "@type": "Article",
     headline: article.title,
     description: article.shortAnswer,
-    url: `https://pravaimei.ru/knowledge/${article.slug}`,
+    url: `https://pravaimeu.ru/knowledge/${article.slug}`,
     datePublished: article.createdAt.toISOString(),
     dateModified: article.updatedAt.toISOString(),
     inLanguage: "ru",
     publisher: {
       "@type": "Organization",
       name: "Право имею",
-      logo: { "@type": "ImageObject", url: "https://pravaimei.ru/icons/icon-512.png" },
+      logo: { "@type": "ImageObject", url: "https://pravaimeu.ru/icons/icon-512.png" },
     },
     breadcrumb: {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Главная", item: "https://pravaimei.ru" },
-        { "@type": "ListItem", position: 2, name: "База знаний", item: "https://pravaimei.ru/knowledge" },
+        { "@type": "ListItem", position: 1, name: "Главная", item: "https://pravaimeu.ru" },
+        { "@type": "ListItem", position: 2, name: "База знаний", item: "https://pravaimeu.ru/knowledge" },
         {
           "@type": "ListItem",
           position: 3,
           name: article.category.title,
-          item: `https://pravaimei.ru/knowledge?category=${article.category.slug}`,
+          item: `https://pravaimeu.ru/knowledge?category=${article.category.slug}`,
         },
         {
           "@type": "ListItem",
           position: 4,
           name: article.title,
-          item: `https://pravaimei.ru/knowledge/${article.slug}`,
+          item: `https://pravaimeu.ru/knowledge/${article.slug}`,
         },
       ],
     },

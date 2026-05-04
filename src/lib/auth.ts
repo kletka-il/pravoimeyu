@@ -28,10 +28,45 @@ export const loginSchema = z.object({
 });
 
 export async function registerUser(input: RegisterInput, baseUrl: string) {
-  const exists = await prisma.user.findUnique({ where: { email: input.email } });
+  const exists = await prisma.user.findUnique({
+    where: { email: input.email },
+    include: { specialist: true },
+  });
+
   if (exists) {
+    // Разрешаем переход CLIENT → SPECIALIST если профиля юриста ещё нет
+    if (
+      input.role === ROLE.SPECIALIST &&
+      exists.role === ROLE.CLIENT &&
+      !exists.specialist
+    ) {
+      const passwordOk = await bcrypt.compare(input.password, exists.passwordHash);
+      if (!passwordOk) {
+        throw new Error(
+          "Аккаунт с этой почтой уже существует. Введите верный пароль от него, чтобы перейти к роли юриста.",
+        );
+      }
+      await prisma.$transaction([
+        prisma.user.update({
+          where: { id: exists.id },
+          data: { role: ROLE.SPECIALIST },
+        }),
+        prisma.specialistProfile.create({
+          data: {
+            userId: exists.id,
+            status: "PENDING",
+            yearsExperience: input.yearsExperience ?? 0,
+            phone: input.phone ?? "",
+            city: input.city ?? "",
+            specializations: JSON.stringify(input.specializations ?? []),
+          },
+        }),
+      ]);
+      return { userId: exists.id, role: ROLE.SPECIALIST as Role };
+    }
     throw new Error("Пользователь с такой почтой уже существует");
   }
+
   const passwordHash = await bcrypt.hash(input.password, 10);
   const role: Role = input.role;
 

@@ -26,7 +26,7 @@ export default async function AdminArticlesPage() {
       </div>
       <div className="card p-0 overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-ink-50 text-ink-600 uppercase text-xs">
+          <thead className="bg-ink-50 dark:bg-ink-800/60 text-ink-600 dark:text-ink-400 uppercase text-xs">
             <tr>
               <th className="text-left px-4 py-3">Заголовок</th>
               <th className="text-left px-4 py-3">Категория</th>
@@ -57,7 +57,7 @@ export default async function AdminArticlesPage() {
                   {a.isPublished ? (
                     <span className="badge bg-green-100 text-green-800">Опубликовано</span>
                   ) : (
-                    <span className="badge bg-ink-100 text-ink-700">Черновик</span>
+                    <span className="badge bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300">Черновик</span>
                   )}
                 </td>
                 <td className="px-4 py-3 text-right">

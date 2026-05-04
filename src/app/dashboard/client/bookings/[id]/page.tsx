@@ -30,7 +30,7 @@ export default async function ClientBookingDetail({
     booking.status === "ACCEPTED" || booking.status === "IN_PROGRESS"
       ? "bg-green-100 text-green-800"
       : booking.status === "CLOSED"
-        ? "bg-ink-100 text-ink-700"
+        ? "bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300"
         : booking.status === "CANCELLED"
           ? "bg-red-100 text-red-800"
           : "bg-amber-100 text-amber-800";

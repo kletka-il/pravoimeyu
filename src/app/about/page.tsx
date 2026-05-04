@@ -19,13 +19,13 @@ export default function AboutPage() {
 
         <div className="card space-y-4">
           <h2 className="heading-serif text-2xl">Миссия</h2>
-          <p className="text-ink-700 leading-relaxed">
+          <p className="text-ink-700 dark:text-ink-300 leading-relaxed">
             «Право имею» — юридический портал для граждан России, которые оказались
             в сложной жизненной ситуации и не знают, как действовать по закону.
             Мы даём доступ к проверенной правовой информации и связываем пользователей
             с опытными юристами.
           </p>
-          <p className="text-ink-700 leading-relaxed">
+          <p className="text-ink-700 dark:text-ink-300 leading-relaxed">
             Мы убеждены: знание своих прав — это не привилегия, а необходимость
             для каждого гражданина.
           </p>
@@ -36,8 +36,8 @@ export default function AboutPage() {
           <p className="text-sm text-ink-600 leading-relaxed">
             Полные реквизиты юридического лица будут опубликованы после
             завершения регистрации. По всем официальным запросам пишите на{" "}
-            <a href="mailto:info@pravaimei.ru" className="text-accent hover:underline">
-              info@pravaimei.ru
+            <a href="mailto:p1ava.imeu@gmail.com" className="text-accent hover:underline">
+              p1ava.imeu@gmail.com
             </a>
             .
           </p>
@@ -48,14 +48,14 @@ export default function AboutPage() {
           <div className="space-y-2 text-sm">
             <div className="flex gap-3">
               <span className="text-ink-500 w-32 shrink-0">Общие вопросы</span>
-              <a href="mailto:info@pravaimei.ru" className="text-accent hover:underline">
-                info@pravaimei.ru
+              <a href="mailto:p1ava.imeu@gmail.com" className="text-accent hover:underline">
+                p1ava.imeu@gmail.com
               </a>
             </div>
             <div className="flex gap-3">
               <span className="text-ink-500 w-32 shrink-0">Персональные данные</span>
-              <a href="mailto:privacy@pravaimei.ru" className="text-accent hover:underline">
-                privacy@pravaimei.ru
+              <a href="mailto:p1ava.imeu@gmail.com" className="text-accent hover:underline">
+                p1ava.imeu@gmail.com
               </a>
             </div>
             <div className="flex gap-3">
@@ -69,7 +69,7 @@ export default function AboutPage() {
 
         <div className="card space-y-3">
           <h2 className="heading-serif text-2xl">Правовая оговорка</h2>
-          <div className="text-sm text-ink-700 space-y-2 leading-relaxed">
+          <div className="text-sm text-ink-700 dark:text-ink-300 space-y-2 leading-relaxed">
             <p>
               Информация на данном сайте носит исключительно справочный и общеобразовательный
               характер. Она не является юридической консультацией и не создаёт отношений

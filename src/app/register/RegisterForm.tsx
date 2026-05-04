@@ -5,10 +5,24 @@ import Link from "next/link";
 import { ROLE, type Role } from "@/lib/constants";
 import { SPECIALIZATIONS } from "@/lib/data/categories";
 
+function EyeIcon({ open }: { open: boolean }) {
+  return open ? (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+    </svg>
+  ) : (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+      <line x1="1" y1="1" x2="23" y2="23"/>
+    </svg>
+  );
+}
+
 export default function RegisterForm({ role }: { role: Role }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [specs, setSpecs] = useState<string[]>([]);
   const [consented, setConsented] = useState(false);
 
@@ -24,9 +38,14 @@ export default function RegisterForm({ role }: { role: Role }) {
       setError("Необходимо согласие на обработку персональных данных");
       return;
     }
+    const fd = new FormData(e.currentTarget);
+    const password = String(fd.get("password") ?? "");
+    if (password.length < 8) {
+      setError("Пароль должен быть не короче 8 символов");
+      return;
+    }
     setLoading(true);
     setError(null);
-    const fd = new FormData(e.currentTarget);
     const body: Record<string, unknown> = Object.fromEntries(fd.entries());
     body.role = role;
     if (role === ROLE.SPECIALIST) body.specializations = specs;
@@ -45,7 +64,7 @@ export default function RegisterForm({ role }: { role: Role }) {
   }
 
   return (
-    <form className="card space-y-4" onSubmit={onSubmit}>
+    <form className="card space-y-4" onSubmit={onSubmit} noValidate>
       <div>
         <label className="label">Имя {role === ROLE.SPECIALIST ? "и фамилия" : ""}</label>
         <input className="input" name="name" required minLength={2} />
@@ -56,8 +75,24 @@ export default function RegisterForm({ role }: { role: Role }) {
           <input className="input" name="email" type="email" required />
         </div>
         <div>
-          <label className="label">Пароль (не короче 8 символов)</label>
-          <input className="input" name="password" type="password" required minLength={8} />
+          <label className="label">Пароль (от 8 символов)</label>
+          <div className="relative">
+            <input
+              className="input pr-11"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 transition-colors"
+              tabIndex={-1}
+              aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+            >
+              <EyeIcon open={showPassword} />
+            </button>
+          </div>
         </div>
       </div>
       {role === ROLE.SPECIALIST && (
@@ -94,14 +129,14 @@ export default function RegisterForm({ role }: { role: Role }) {
                   className={`px-3 py-1.5 rounded-full text-sm border transition ${
                     specs.includes(key)
                       ? "bg-accent text-white border-accent"
-                      : "bg-white border-ink-200 text-ink-700 hover:border-accent"
+                      : "bg-white dark:bg-ink-800 border-ink-200 dark:border-ink-700 text-ink-700 dark:text-ink-300 hover:border-accent"
                   }`}
                 >
                   {label}
                 </button>
               ))}
             </div>
-            <p className="text-xs text-ink-500 mt-2">
+            <p className="text-xs text-ink-500 dark:text-ink-400 mt-2">
               Можно выбрать несколько. Профиль будет проверен модератором перед публикацией.
             </p>
           </div>
@@ -114,9 +149,8 @@ export default function RegisterForm({ role }: { role: Role }) {
           checked={consented}
           onChange={(e) => setConsented(e.target.checked)}
           className="mt-0.5 accent-accent"
-          required
         />
-        <span className="text-sm text-ink-700">
+        <span className="text-sm text-ink-700 dark:text-ink-300">
           Я согласен(-на) на обработку персональных данных в соответствии с{" "}
           <Link href="/privacy" target="_blank" className="text-accent underline hover:no-underline">
             политикой конфиденциальности
@@ -129,7 +163,7 @@ export default function RegisterForm({ role }: { role: Role }) {
       <button className="btn-primary w-full" disabled={loading || !consented}>
         {loading ? "Регистрируем…" : "Зарегистрироваться"}
       </button>
-      <p className="text-xs text-ink-500">
+      <p className="text-xs text-ink-500 dark:text-ink-400">
         На указанную почту будет отправлено письмо для подтверждения аккаунта.
       </p>
     </form>

@@ -12,8 +12,8 @@ export default function ContactsPage() {
       </p>
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-4">
-          <Contact title="Общие вопросы" value="info@pravaimei.ru" href="mailto:info@pravaimei.ru" />
-          <Contact title="Защита персональных данных" value="privacy@pravaimei.ru" href="mailto:privacy@pravaimei.ru" />
+          <Contact title="Общие вопросы" value="p1ava.imeu@gmail.com" href="mailto:p1ava.imeu@gmail.com" />
+          <Contact title="Защита персональных данных" value="p1ava.imeu@gmail.com" href="mailto:p1ava.imeu@gmail.com" />
           <div className="card">
             <h3 className="heading-serif text-xl">Юристам</h3>
             <p className="text-sm text-ink-500 mt-1">

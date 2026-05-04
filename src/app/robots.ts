@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/dashboard/", "/api/", "/verify", "/offline"],
       },
     ],
-    sitemap: "https://pravaimei.ru/sitemap.xml",
-    host: "https://pravaimei.ru",
+    sitemap: "https://pravaimeu.ru/sitemap.xml",
+    host: "https://pravaimeu.ru",
   };
 }

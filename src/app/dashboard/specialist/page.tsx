@@ -34,7 +34,7 @@ export default async function SpecialistDashboard() {
                   ? "bg-green-100 text-green-800"
                   : profile.status === "PENDING"
                     ? "bg-amber-100 text-amber-800"
-                    : "bg-ink-100 text-ink-700"
+                    : "bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300"
               }`}
             >
               {SPECIALIST_STATUS_LABEL[profile.status as SpecialistStatus]}

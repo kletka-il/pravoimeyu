@@ -62,7 +62,7 @@ export default async function ClientDashboard() {
                       {b.question}
                     </div>
                   </div>
-                  <span className="badge bg-ink-100 text-ink-700 shrink-0">
+                  <span className="badge bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300 shrink-0">
                     {BOOKING_STATUS_LABEL[b.status as BookingStatus]}
                   </span>
                 </li>

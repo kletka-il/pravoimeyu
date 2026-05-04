@@ -8,12 +8,12 @@ export const metadata: Metadata = {
   title: "Жизненные ситуации",
   description:
     "Юридические ситуации по категориям: трудовые споры, ДТП, семейное право, жильё, защита прав потребителей и другие. Пошаговые подсказки и юристы по каждой теме.",
-  alternates: { canonical: "https://pravaimei.ru/situations" },
+  alternates: { canonical: "https://pravaimeu.ru/situations" },
   openGraph: {
     title: "Жизненные ситуации · Право имею",
     description:
       "Юридические ситуации по категориям: трудовые споры, ДТП, семейное право, жильё, защита прав потребителей и другие.",
-    url: "https://pravaimei.ru/situations",
+    url: "https://pravaimeu.ru/situations",
     type: "website",
   },
 };
@@ -45,7 +45,7 @@ export default async function SituationsPage() {
           >
             <div className="flex items-start justify-between">
               <div className="text-4xl">{c.icon}</div>
-              <span className="badge bg-ink-100 text-ink-600">
+              <span className="badge bg-ink-100 dark:bg-ink-800 text-ink-600 dark:text-ink-300">
                 {c._count.articles} ст.
               </span>
             </div>

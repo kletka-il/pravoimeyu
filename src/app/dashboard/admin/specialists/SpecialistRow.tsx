@@ -57,11 +57,11 @@ export default function SpecialistRow(p: Props) {
               : "цена не указана"}
           </div>
         </div>
-        <span className="badge bg-ink-100 text-ink-700">
+        <span className="badge bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300">
           {SPECIALIST_STATUS_LABEL[p.status]}
         </span>
       </div>
-      {p.bio && <p className="text-sm text-ink-700 mt-3">{p.bio}</p>}
+      {p.bio && <p className="text-sm text-ink-700 dark:text-ink-300 mt-3">{p.bio}</p>}
       <p className="text-xs text-ink-500 mt-2">
         <b>Специализации:</b> {p.specializations}
       </p>

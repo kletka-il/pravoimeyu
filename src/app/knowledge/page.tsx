@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   title: "База знаний",
   description:
     "Готовые юридические ответы по жизненным ситуациям: трудовые споры, ДТП, семейное право, защита прав потребителей, уголовные дела и другие темы. Ссылки на нормы закона.",
-  alternates: { canonical: "https://pravaimei.ru/knowledge" },
+  alternates: { canonical: "https://pravaimeu.ru/knowledge" },
   openGraph: {
     title: "База знаний · Право имею",
     description:
       "Готовые юридические ответы по жизненным ситуациям со ссылками на нормы закона.",
-    url: "https://pravaimei.ru/knowledge",
+    url: "https://pravaimeu.ru/knowledge",
     type: "website",
   },
 };

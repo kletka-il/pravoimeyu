@@ -19,7 +19,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
       openGraph: {
         title: `${q} — поиск · Право имею`,
         description: `Юридические ответы на вопрос: «${q}».`,
-        url: `https://pravaimei.ru/search?q=${encodeURIComponent(q)}`,
+        url: `https://pravaimeu.ru/search?q=${encodeURIComponent(q)}`,
       },
       robots: { index: false },
     };
@@ -28,11 +28,11 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     title: "Поиск юридических ответов",
     description:
       "Опишите свою ситуацию — умный поиск найдёт готовые юридические ответы и подберёт специалиста с нужным опытом.",
-    alternates: { canonical: "https://pravaimei.ru/search" },
+    alternates: { canonical: "https://pravaimeu.ru/search" },
     openGraph: {
       title: "Поиск юридических ответов · Право имею",
       description: "Опишите ситуацию своими словами — поиск найдёт готовый ответ из правовой базы.",
-      url: "https://pravaimei.ru/search",
+      url: "https://pravaimeu.ru/search",
       type: "website",
     },
   };
@@ -207,7 +207,7 @@ function HitCard({ hit, idx }: { hit: SearchHit; idx: number }) {
       </h3>
       <p className="text-ink-700 mt-2 leading-relaxed">{hit.doc.shortAnswer}</p>
       {hit.highlights[0] && (
-        <p className="text-sm text-ink-500 mt-3 bg-ink-50 rounded-xl px-3 py-2">
+        <p className="text-sm text-ink-500 dark:text-ink-400 mt-3 bg-ink-50 dark:bg-ink-800 rounded-xl px-3 py-2">
           {hit.highlights[0]}
         </p>
       )}

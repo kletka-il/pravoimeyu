@@ -4,15 +4,15 @@ import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Право имею — юридическая помощь, когда она нужна срочно",
+  title: "Права имей — юридическая помощь, когда она нужна срочно",
   description:
     "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы. Бесплатно для общих вопросов, платно для сложных дел.",
-  alternates: { canonical: "https://pravaimei.ru" },
+  alternates: { canonical: "https://pravaimeu.ru" },
   openGraph: {
-    title: "Право имею — юридическая помощь, когда она нужна срочно",
+    title: "Права имей — юридическая помощь, когда она нужна срочно",
     description:
       "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы.",
-    url: "https://pravaimei.ru",
+    url: "https://pravaimeu.ru",
     type: "website",
   },
 };
@@ -31,27 +31,27 @@ const POPULAR_QUERIES = [
 const orgSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Право имею",
-  url: "https://pravaimei.ru",
-  logo: "https://pravaimei.ru/icons/icon-512.png",
+  name: "Права имей",
+  url: "https://pravaimeu.ru",
+  logo: "https://pravaimeu.ru/icons/icon-512.png",
   description:
     "Юридический портал — умный поиск по правовой базе, подсказки на жизненные ситуации и проверенные юристы.",
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer service",
     availableLanguage: "Russian",
-    url: "https://pravaimei.ru/contacts",
+    url: "https://pravaimeu.ru/contacts",
   },
 };
 
 const siteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Право имею",
-  url: "https://pravaimei.ru",
+  name: "Права имей",
+  url: "https://pravaimeu.ru",
   potentialAction: {
     "@type": "SearchAction",
-    target: "https://pravaimei.ru/search?q={search_term_string}",
+    target: "https://pravaimeu.ru/search?q={search_term_string}",
     "query-input": "required name=search_term_string",
   },
 };
@@ -73,14 +73,6 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
       />
-      {/* Временная метка для проверки деплоя — можно удалить после проверки */}
-      <div
-        className="bg-gradient-to-r from-accent-500 via-brand-600 to-sky-600 text-white text-center py-3.5 px-4 font-semibold text-sm md:text-base shadow-md border-b border-white/20"
-        role="status"
-      >
-        Сайт обновлён — если эта яркая полоска видна, последний деплой на домен
-        подтянулся.
-      </div>
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div
@@ -169,7 +161,7 @@ export default async function HomePage() {
       </section>
 
       {/* How it works */}
-      <section className="bg-gradient-to-br from-brand-50 via-white to-sky-50 border-y border-ink-100">
+      <section className="bg-gradient-to-br from-brand-50 via-white to-sky-50 dark:from-ink-900 dark:via-ink-950 dark:to-ink-900 border-y border-ink-100 dark:border-ink-800">
         <div className="container-page py-16 md:py-20">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="inline-block bg-white text-brand-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 shadow-sm">
@@ -279,7 +271,7 @@ function Step({
   text: string;
 }) {
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-card border border-ink-100">
+    <div className="bg-white dark:bg-ink-900 rounded-2xl p-6 shadow-card border border-ink-100 dark:border-ink-800">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
           {n}

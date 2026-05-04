@@ -41,11 +41,11 @@ export default async function SpecialistBookings() {
                   <div className="text-xs text-ink-500">{b.contactPhone}</div>
                 )}
               </div>
-              <span className="badge bg-ink-100 text-ink-700 shrink-0">
+              <span className="badge bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300 shrink-0">
                 {BOOKING_STATUS_LABEL[b.status as BookingStatus]}
               </span>
             </div>
-            <p className="text-ink-700 mt-3 leading-relaxed whitespace-pre-line">
+            <p className="text-ink-700 dark:text-ink-300 mt-3 leading-relaxed whitespace-pre-line">
               {b.question}
             </p>
             <BookingActions id={b.id} status={b.status as BookingStatus} />

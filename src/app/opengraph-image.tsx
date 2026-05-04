@@ -121,7 +121,7 @@ export default function Image() {
             fontWeight: 600,
           }}
         >
-          pravaimei.ru
+          pravaimeu.ru
         </div>
       </div>
     ),

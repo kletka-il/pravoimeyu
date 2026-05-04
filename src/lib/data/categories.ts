@@ -106,4 +106,22 @@ export const CATEGORIES: CategorySeed[] = [
     specializationKey: "migration",
     order: 10,
   },
+  {
+    slug: "armiya-i-priziv",
+    title: "Армия и призыв",
+    description:
+      "Повестка, медкомиссия, отсрочки по здоровью и учёбе, АГС, обжалование решений военкомата.",
+    icon: "🪖",
+    specializationKey: "general",
+    order: 11,
+  },
+  {
+    slug: "konstituciya-rf",
+    title: "Конституция и права",
+    description:
+      "Базовые права граждан по Конституции РФ: молчание, адвокат, жильё, свобода, суд.",
+    icon: "📖",
+    specializationKey: "general",
+    order: 12,
+  },
 ];

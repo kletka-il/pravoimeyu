@@ -18,7 +18,7 @@ export default function Footer() {
           </p>
           <div className="mt-4 text-xs text-ink-400 space-y-1">
             <div>ООО «Право имею»</div>
-            <div>info@pravaimei.ru</div>
+            <div>p1ava.imeu@gmail.com</div>
           </div>
         </div>
         <div>

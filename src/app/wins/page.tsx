@@ -7,12 +7,12 @@ export const metadata: Metadata = {
   title: "Наши победы",
   description:
     "Реальные дела юристов «Право имею»: выигранные суды, взысканные компенсации, восстановленные права. Примеры успешных дел по трудовым, семейным и гражданским спорам.",
-  alternates: { canonical: "https://pravaimei.ru/wins" },
+  alternates: { canonical: "https://pravaimeu.ru/wins" },
   openGraph: {
     title: "Наши победы · Право имею",
     description:
       "Реальные дела юристов «Право имею»: выигранные суды, взысканные компенсации, восстановленные права.",
-    url: "https://pravaimei.ru/wins",
+    url: "https://pravaimeu.ru/wins",
     type: "website",
   },
 };

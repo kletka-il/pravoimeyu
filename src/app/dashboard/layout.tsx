@@ -56,7 +56,7 @@ export default async function DashboardLayout({
           <Link
             key={n.href}
             href={n.href}
-            className="px-3 py-1.5 rounded-full text-sm border border-ink-200 bg-white text-ink-700 hover:border-accent hover:text-accent transition"
+            className="px-3 py-1.5 rounded-full text-sm border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800 text-ink-700 dark:text-ink-300 hover:border-accent hover:text-accent transition"
           >
             {n.title}
           </Link>

@@ -37,11 +37,11 @@ export default async function ClientBookings() {
                   ★ {b.specialist.rating.toFixed(1)}
                 </div>
               </div>
-              <span className="badge bg-ink-100 text-ink-700">
+              <span className="badge bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300">
                 {BOOKING_STATUS_LABEL[b.status as BookingStatus]}
               </span>
             </div>
-            <p className="text-ink-700 mt-3 leading-relaxed whitespace-pre-line">
+            <p className="text-ink-700 dark:text-ink-300 mt-3 leading-relaxed whitespace-pre-line">
               {b.question}
             </p>
             <div className="flex items-center justify-between mt-3">

@@ -24,7 +24,7 @@ export default function PrivacyPage() {
           </p>
           <ul>
             <li><strong>Полное наименование:</strong> Общество с ограниченной ответственностью «Право имею»</li>
-            <li><strong>Email для запросов:</strong> privacy@pravaimei.ru</li>
+            <li><strong>Email для запросов:</strong> p1ava.imeu@gmail.com</li>
           </ul>
           <p className="text-sm text-ink-500">
             Полные реквизиты (ОГРН, ИНН, юридический адрес) будут опубликованы
@@ -118,8 +118,8 @@ export default function PrivacyPage() {
           </ul>
           <p>
             Для реализации прав направьте обращение на email:{" "}
-            <a href="mailto:privacy@pravaimei.ru" className="text-accent underline">
-              privacy@pravaimei.ru
+            <a href="mailto:p1ava.imeu@gmail.com" className="text-accent underline">
+              p1ava.imeu@gmail.com
             </a>
           </p>
         </section>
@@ -138,7 +138,7 @@ export default function PrivacyPage() {
             Оператор вправе вносить изменения в настоящую политику. Действующая
             версия всегда доступна по адресу{" "}
             <Link href="/privacy" className="text-accent underline">
-              pravaimei.ru/privacy
+              pravaimeu.ru/privacy
             </Link>
             . При существенных изменениях мы уведомим зарегистрированных пользователей
             по email.
@@ -150,8 +150,8 @@ export default function PrivacyPage() {
           <p>
             По всем вопросам, связанным с обработкой персональных данных,
             обращайтесь:{" "}
-            <a href="mailto:privacy@pravaimei.ru" className="text-accent underline">
-              privacy@pravaimei.ru
+            <a href="mailto:p1ava.imeu@gmail.com" className="text-accent underline">
+              p1ava.imeu@gmail.com
             </a>
           </p>
         </section>
