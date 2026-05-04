@@ -25,37 +25,48 @@ export default function BookingActions({
   status: BookingStatus;
 }) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const next = NEXT[status] ?? [];
   if (next.length === 0) return null;
 
   async function setStatus(s: BookingStatus) {
     setLoading(true);
-    await fetch(`/api/bookings/${id}`, {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ status: s }),
-    });
-    setLoading(false);
-    router.refresh();
+    setError(null);
+    try {
+      const res = await fetch(`/api/bookings/${id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ status: s }),
+      });
+      if (!res.ok) throw new Error();
+      router.refresh();
+    } catch {
+      setError("Не удалось обновить статус. Попробуйте ещё раз.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
-    <div className="mt-3 flex gap-2 flex-wrap">
-      {next.map((s) => (
-        <button
-          key={s}
-          disabled={loading}
-          onClick={() => setStatus(s)}
-          className={
-            s === BOOKING_STATUS.CANCELLED
-              ? "btn-ghost text-sm"
-              : "btn-primary text-sm py-2 px-4"
-          }
-        >
-          {LABEL[s]}
-        </button>
-      ))}
+    <div className="mt-3 space-y-2">
+      <div className="flex gap-2 flex-wrap">
+        {next.map((s) => (
+          <button
+            key={s}
+            disabled={loading}
+            onClick={() => setStatus(s)}
+            className={
+              s === BOOKING_STATUS.CANCELLED
+                ? "btn-ghost text-sm disabled:opacity-50"
+                : "btn-primary text-sm py-2 px-4 disabled:opacity-50"
+            }
+          >
+            {LABEL[s]}
+          </button>
+        ))}
+      </div>
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
 }

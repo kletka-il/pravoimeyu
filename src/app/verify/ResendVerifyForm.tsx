@@ -44,7 +44,7 @@ export default function ResendVerifyForm({ defaultEmail = "" }: { defaultEmail?:
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.ru"
+          placeholder="ваш@email.ru"
         />
       </div>
       {error && <p className="text-sm text-accent">{error}</p>}

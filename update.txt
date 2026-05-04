@@ -1,0 +1,6 @@
+cd ~/Desktop/project_pravoimeyu                                                   
+  npx vercel --prod
+
+
+  if we change db 
+  then also - npx tsx scripts/restore-content.ts

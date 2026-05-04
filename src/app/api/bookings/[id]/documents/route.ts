@@ -79,15 +79,21 @@ export async function POST(
   const buffer = Buffer.from(await file.arrayBuffer());
   await fs.writeFile(filePath, buffer);
 
-  const doc = await prisma.document.create({
-    data: {
-      bookingId: params.id,
-      uploaderId: s.userId!,
-      name: file.name,
-      path: path.join(params.id, fileName),
-      size: file.size,
-    },
-    include: { uploader: { select: { name: true, role: true } } },
-  });
+  let doc;
+  try {
+    doc = await prisma.document.create({
+      data: {
+        bookingId: params.id,
+        uploaderId: s.userId!,
+        name: file.name,
+        path: path.join(params.id, fileName),
+        size: file.size,
+      },
+      include: { uploader: { select: { name: true, role: true } } },
+    });
+  } catch {
+    await fs.unlink(filePath).catch(() => {});
+    return NextResponse.json({ error: "Ошибка сохранения файла" }, { status: 500 });
+  }
   return NextResponse.json(doc);
 }
