@@ -16,7 +16,7 @@ export default function RegisterPage({
         Регистрация
       </div>
       <h1 className="heading-display text-3xl md:text-4xl mb-2">
-        {role === ROLE.SPECIALIST ? "Стать юристом 💼" : "Создаём аккаунт ✨"}
+        {role === ROLE.SPECIALIST ? "Стать юристом" : "Создаём аккаунт"}
       </h1>
       <p className="text-ink-500 mb-6 md:text-lg">
         {role === ROLE.SPECIALIST

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import SearchBar from "@/components/SearchBar";
+import CategoryIcon from "@/components/CategoryIcon";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -25,9 +26,7 @@ type Props = {
 
 export default async function KnowledgePage({ searchParams }: Props) {
   const activeSlug = searchParams.category;
-  const categories = await prisma.category.findMany({
-    orderBy: { order: "asc" },
-  });
+  const categories = await prisma.category.findMany({ orderBy: { order: "asc" } });
 
   const where = activeSlug
     ? { isPublished: true, category: { slug: activeSlug } }
@@ -41,85 +40,73 @@ export default async function KnowledgePage({ searchParams }: Props) {
   const activeCat = categories.find((c) => c.slug === activeSlug);
 
   return (
-    <div className="container-page py-10 md:py-12">
-      <div className="inline-flex items-center gap-2 bg-mint-50 text-mint-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
-        База знаний
+    <div className="container-page py-10 md:py-14">
+      {/* Header */}
+      <div className="max-w-2xl mb-8">
+        <p className="text-sm font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest mb-2">
+          База знаний
+        </p>
+        <h1 className="heading-sans text-4xl md:text-5xl mb-3 text-ink-900 dark:text-white">
+          {activeCat ? activeCat.title : "Все статьи"}
+        </h1>
+        <p className="text-ink-500 dark:text-ink-400 md:text-lg leading-relaxed">
+          {activeCat
+            ? activeCat.description
+            : "Готовые юридические подсказки. Выберите категорию или используйте поиск."}
+        </p>
       </div>
-      <h1 className="heading-display text-4xl md:text-5xl mb-3">
-        {activeCat ? `${activeCat.icon} ${activeCat.title}` : "База знаний 📚"}
-      </h1>
-      <p className="text-ink-500 max-w-2xl mb-6 md:text-lg">
-        {activeCat
-          ? activeCat.description
-          : "Все юридические подсказки. Выберите категорию или используйте умный поиск."}
-      </p>
+
       <SearchBar size="md" />
 
-      <div className="mt-8 flex flex-wrap gap-2">
-        <CategoryChip
-          href="/knowledge"
-          active={!activeSlug}
-          title={`Все · ${articles.length}`}
-        />
+      {/* Category chips */}
+      <div className="mt-6 flex flex-wrap gap-2">
+        <Link href="/knowledge" className={!activeSlug ? "chip-active" : "chip"}>
+          Все · {articles.length}
+        </Link>
         {categories.map((c) => (
-          <CategoryChip
+          <Link
             key={c.id}
             href={`/knowledge?category=${c.slug}`}
-            active={c.slug === activeSlug}
-            title={`${c.icon} ${c.title}`}
-          />
+            className={c.slug === activeSlug ? "chip-active" : "chip"}
+          >
+            {c.title}
+          </Link>
         ))}
       </div>
 
+      {/* Articles grid */}
       <div className="mt-8 grid md:grid-cols-2 gap-4">
         {articles.length === 0 ? (
-          <div className="card md:col-span-2 text-center py-10">
-            <div className="text-4xl mb-2">📭</div>
-            <p className="text-ink-700">В этой категории пока нет статей.</p>
+          <div className="card md:col-span-2 text-center py-12">
+            <p className="text-ink-400 font-medium">В этой категории пока нет статей.</p>
           </div>
         ) : (
           articles.map((a) => (
-            <Link
-              key={a.id}
-              href={`/knowledge/${a.slug}`}
-              className="card-hover group"
-            >
-              <div className="text-xs text-ink-500 flex items-center gap-2 flex-wrap">
-                <span className="text-lg">{a.category.icon}</span>
+            <Link key={a.id} href={`/knowledge/${a.slug}`} className="card-hover group">
+              <div className="flex items-center gap-2 text-xs text-ink-500 dark:text-ink-400 mb-2">
+                <span className="text-brand-500">
+                  <CategoryIcon slug={a.category.slug} size={14} />
+                </span>
                 <span className="font-medium">{a.category.title}</span>
                 {a.urgency >= 4 && (
-                  <span className="badge bg-accent-100 text-accent-700">⚠ срочно</span>
+                  <span className="badge bg-accent-100 dark:bg-accent-900/40 text-accent-700 dark:text-accent-300">
+                    срочно
+                  </span>
                 )}
               </div>
-              <h2 className="font-bold text-lg md:text-xl mt-2 text-ink-900 group-hover:text-brand-700 transition-colors">
+              <h2 className="font-bold text-lg md:text-xl text-ink-900 dark:text-white group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">
                 {a.title}
               </h2>
-              <p className="text-sm text-ink-600 mt-2 line-clamp-3 leading-relaxed">
+              <p className="text-sm text-ink-500 dark:text-ink-400 mt-2 line-clamp-3 leading-relaxed">
                 {a.shortAnswer}
               </p>
-              <div className="mt-3 text-sm text-brand-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+              <p className="mt-3 text-sm text-brand-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
                 Читать →
-              </div>
+              </p>
             </Link>
           ))
         )}
       </div>
     </div>
-  );
-}
-
-function CategoryChip({
-  href,
-  active,
-  title,
-}: {
-  href: string;
-  active: boolean;
-  title: string;
-}) {
-  return (
-    <Link href={href} className={active ? "chip-active" : "chip"}>
-      {title}
-    </Link>
   );
 }

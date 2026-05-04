@@ -58,8 +58,8 @@ export default async function SearchPage({ searchParams }: Props) {
       <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
         Умный поиск
       </div>
-      <h1 className="heading-display text-3xl md:text-5xl mb-3">
-        Что мне делать? 🔎
+      <h1 className="heading-sans text-3xl md:text-5xl mb-3 text-ink-900 dark:text-white">
+        Что мне делать?
       </h1>
       <p className="text-ink-500 mb-6 md:text-lg max-w-2xl">
         Опишите ситуацию своими словами — поиск понимает разговорные формулировки
@@ -84,9 +84,7 @@ export default async function SearchPage({ searchParams }: Props) {
         <>
           {urgentTop && (
             <div className="mt-8 bg-accent-50 border border-accent-200 rounded-2xl p-5 flex gap-4 items-start">
-              <span className="flex-shrink-0 w-10 h-10 rounded-full bg-accent-500 text-white flex items-center justify-center text-lg">
-                ⚠️
-              </span>
+              <span className="flex-shrink-0 w-2 h-2 mt-1.5 rounded-full bg-accent-500" />
               <div>
                 <div className="font-bold text-accent-900">Срочная ситуация</div>
                 <p className="mt-1 text-ink-800 text-sm leading-relaxed">
@@ -102,7 +100,7 @@ export default async function SearchPage({ searchParams }: Props) {
             <div className="lg:col-span-2 space-y-4">
               <h2 className="font-bold text-lg text-ink-700">
                 {hits.length === 0
-                  ? "Ничего не нашлось 🤔"
+                  ? "Ничего не нашлось"
                   : `Найдено ответов: ${hits.length}`}
               </h2>
               {hits.length === 0 ? (
@@ -123,9 +121,8 @@ export default async function SearchPage({ searchParams }: Props) {
             </div>
 
             <aside className="space-y-4">
-              <div className="bg-gradient-to-br from-brand-50 to-sky-50 border border-brand-100 rounded-2xl p-6">
-                <div className="text-3xl mb-2">🤝</div>
-                <h3 className="font-bold text-xl mb-2 text-ink-900">
+              <div className="bg-brand-50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-900 rounded-2xl p-6">
+                <h3 className="font-bold text-xl mb-2 text-ink-900 dark:text-white">
                   Нужна помощь юриста?
                 </h3>
                 <p className="text-sm text-ink-600">
@@ -199,7 +196,7 @@ function HitCard({ hit, idx }: { hit: SearchHit; idx: number }) {
         <span className="text-ink-400">·</span>
         <span className="text-ink-500">{hit.doc.category.title}</span>
         {u >= 4 && (
-          <span className="badge bg-accent-500 text-white">⚠ срочно</span>
+          <span className="badge bg-accent-500 text-white">срочно</span>
         )}
       </div>
       <h3 className="font-bold text-xl md:text-2xl mt-2 text-ink-900 group-hover:text-brand-700 transition-colors">

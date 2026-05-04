@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
+import CategoryIcon from "@/components/CategoryIcon";
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
 
@@ -73,38 +74,35 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
       />
-      {/* Hero */}
-      <section className="relative overflow-hidden">
+
+      {/* ── Hero ── */}
+      <section className="relative overflow-hidden border-b border-ink-100 dark:border-ink-800">
         <div
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(ellipse 800px 400px at 80% 0%, rgba(31, 76, 245, 0.12), transparent), radial-gradient(ellipse 600px 400px at 0% 100%, rgba(255, 107, 61, 0.08), transparent)",
+              "radial-gradient(ellipse 900px 500px at 100% -10%, rgba(124,58,237,0.10), transparent)," +
+              "radial-gradient(ellipse 500px 400px at -5% 110%, rgba(220,38,38,0.06), transparent)",
           }}
         />
-        <div className="container-page pt-12 md:pt-20 pb-10 md:pb-16">
+        <div className="container-page pt-14 md:pt-24 pb-14 md:pb-20">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1.5 rounded-full text-sm font-semibold mb-6">
-              <span className="inline-block w-2 h-2 bg-brand-500 rounded-full animate-pulse" />
-              Юридическая помощь онлайн — 24/7
-            </div>
-            <h1 className="heading-display text-4xl md:text-6xl lg:text-7xl mb-6">
+            <p className="font-display text-brand-600 dark:text-brand-400 text-xl md:text-2xl mb-3 tracking-wide">
+              Право имею
+            </p>
+            <h1 className="heading-sans text-4xl md:text-6xl lg:text-7xl mb-6 text-ink-900 dark:text-white">
               Что вам делать —{" "}
-              <span className="text-brand-600">мы знаем</span>
+              <span className="text-brand-600 dark:text-brand-400">мы знаем</span>
             </h1>
-            <p className="text-ink-600 text-lg md:text-xl mb-8 max-w-2xl">
+            <p className="text-ink-500 dark:text-ink-400 text-lg md:text-xl mb-8 max-w-xl leading-relaxed">
               Опишите ситуацию своими словами. Найдём готовый ответ из правовой
-              базы, а если случай сложный — подберём юриста с нужным опытом.
+              базы, а если случай сложный — подберём юриста.
             </p>
             <SearchBar />
-            <div className="flex flex-wrap gap-2 mt-5">
-              <span className="text-sm text-ink-500 mr-2 self-center">Часто ищут:</span>
+            <div className="flex flex-wrap gap-2 mt-5 items-center">
+              <span className="text-sm text-ink-400 mr-1">Часто ищут:</span>
               {POPULAR_QUERIES.map((q) => (
-                <Link
-                  key={q}
-                  href={`/search?q=${encodeURIComponent(q)}`}
-                  className="chip"
-                >
+                <Link key={q} href={`/search?q=${encodeURIComponent(q)}`} className="chip">
                   {q}
                 </Link>
               ))}
@@ -113,46 +111,54 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="container-page grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-16 md:mb-20">
-        <Stat number={articlesCount} label="Готовых ответов" emoji="📋" tint="brand" />
-        <Stat number={categories.length} label="Категорий ситуаций" emoji="🧭" tint="sky" />
-        <Stat number={specialistsCount} label="Проверенных юристов" emoji="⚖️" tint="mint" />
-        <Stat number="24/7" label="Доступ онлайн" emoji="⚡" tint="accent" />
+      {/* ── Stats bar ── */}
+      <section className="border-b border-ink-100 dark:border-ink-800 bg-white dark:bg-ink-950">
+        <div className="container-page py-6">
+          <dl className="grid grid-cols-2 md:grid-cols-4 divide-x divide-ink-100 dark:divide-ink-800">
+            <StatItem value={articlesCount}     label="готовых ответов" />
+            <StatItem value={categories.length} label="категорий" />
+            <StatItem value={specialistsCount}  label="проверенных юристов" />
+            <StatItem value="24 / 7"            label="доступ онлайн" />
+          </dl>
+        </div>
       </section>
 
-      {/* Categories */}
-      <section className="container-page pb-16 md:pb-20">
-        <div className="flex items-end justify-between mb-8 md:mb-10">
+      {/* ── Категории ── */}
+      <section className="container-page py-16 md:py-20">
+        <div className="flex items-end justify-between mb-10">
           <div>
-            <h2 className="heading-display text-3xl md:text-4xl">Жизненные ситуации</h2>
+            <h2 className="heading-sans text-3xl md:text-4xl text-ink-900 dark:text-white">
+              Жизненные ситуации
+            </h2>
             <p className="text-ink-500 mt-2 text-base md:text-lg">
               Выберите категорию — внутри готовые ответы и юристы.
             </p>
           </div>
-          <Link href="/situations" className="hidden md:inline-flex btn-outline">
+          <Link href="/situations" className="hidden md:inline-flex btn-outline text-sm">
             Все ситуации →
           </Link>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {categories.map((c) => (
             <Link
               key={c.id}
               href={`/knowledge?category=${c.slug}`}
-              className="card-hover group flex gap-4 items-start"
+              className="group flex items-start gap-4 p-5 rounded-2xl border border-ink-100 dark:border-ink-800 bg-white dark:bg-ink-900 hover:border-brand-300 dark:hover:border-brand-700 hover:shadow-lift transition-all duration-200"
             >
-              <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center text-2xl group-hover:bg-brand-100 group-hover:scale-110 transition-all">
-                {c.icon}
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950 flex items-center justify-center text-brand-600 dark:text-brand-400 group-hover:bg-brand-100 dark:group-hover:bg-brand-900 transition-colors">
+                <CategoryIcon slug={c.slug} size={18} />
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="font-bold text-lg text-ink-900 group-hover:text-brand-700 transition-colors">
+              <div className="min-w-0">
+                <p className="font-semibold text-ink-900 dark:text-white group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors leading-snug">
                   {c.title}
-                </div>
-                <p className="text-sm text-ink-500 mt-1">{c.description}</p>
+                </p>
+                <p className="text-sm text-ink-500 dark:text-ink-400 mt-0.5 leading-snug">{c.description}</p>
               </div>
             </Link>
           ))}
         </div>
+
         <div className="mt-6 md:hidden">
           <Link href="/situations" className="btn-outline w-full justify-center">
             Все ситуации →
@@ -160,66 +166,52 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="bg-gradient-to-br from-brand-50 via-white to-sky-50 dark:from-ink-900 dark:via-ink-950 dark:to-ink-900 border-y border-ink-100 dark:border-ink-800">
+      {/* ── Как это работает ── */}
+      <section className="border-t border-b border-ink-100 dark:border-ink-800 bg-ink-50 dark:bg-ink-950/60">
         <div className="container-page py-16 md:py-20">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-block bg-white text-brand-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 shadow-sm">
-              За 3 шага
-            </div>
-            <h2 className="heading-display text-3xl md:text-4xl">
+          <div className="mb-12">
+            <p className="text-sm font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest mb-2">
+              Три шага
+            </p>
+            <h2 className="heading-sans text-3xl md:text-4xl text-ink-900 dark:text-white">
               Как это работает
             </h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-            <Step
-              n="1"
-              emoji="✍️"
-              title="Опишите ситуацию"
-              text="Обычным языком, как другу. «Попал в ДТП, не виноват», «Не платят зарплату», «Закрыли въезд»."
-            />
-            <Step
-              n="2"
-              emoji="⚡"
-              title="Получите ответ"
-              text="Умный поиск выдаст подсказку из базы — со ссылками на статьи закона. Бесплатно."
-            />
-            <Step
-              n="3"
-              emoji="🤝"
-              title="Выберите юриста"
-              text="Если вопрос сложный — подберём специалиста с нужным опытом. Только проверенные."
-            />
+          <div className="grid md:grid-cols-3 gap-px bg-ink-200 dark:bg-ink-700 rounded-2xl overflow-hidden">
+            <Step n="01" title="Опишите ситуацию"
+              text="Обычным языком — как рассказали бы другу. «Попал в ДТП», «не платят зарплату», «закрыли въезд»." />
+            <Step n="02" title="Получите ответ"
+              text="Поиск выдаст подсказку из правовой базы со ссылками на статьи закона. Бесплатно." />
+            <Step n="03" title="Выберите юриста"
+              text="Если вопрос сложный — подберём специалиста с нужным профилем и опытом. Только проверенные." />
           </div>
         </div>
       </section>
 
-      {/* CTA для юристов */}
+      {/* ── CTA для юристов ── */}
       <section className="container-page py-16 md:py-20">
-        <div className="relative overflow-hidden bg-ink-900 rounded-3xl p-8 md:p-12 text-white">
+        <div className="relative overflow-hidden rounded-3xl gradient-brand p-8 md:p-12 text-white">
           <div
-            className="absolute inset-0 opacity-30"
+            className="absolute inset-0 opacity-20"
             style={{
               background:
-                "radial-gradient(ellipse 600px 300px at 100% 0%, rgba(31, 76, 245, 0.6), transparent), radial-gradient(ellipse 400px 200px at 0% 100%, rgba(255, 107, 61, 0.4), transparent)",
+                "radial-gradient(ellipse 500px 300px at 110% 0%, rgba(220,38,38,0.8), transparent)",
             }}
           />
           <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6">
             <div className="flex-1">
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur text-white/90 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
-                Юристам
-              </div>
-              <h3 className="heading-display text-2xl md:text-3xl text-white mb-2">
+              <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-2">Юристам</p>
+              <h3 className="heading-sans text-2xl md:text-3xl text-white mb-2">
                 Подключитесь к платформе
               </h3>
               <p className="text-white/70 text-base md:text-lg max-w-xl">
-                Получайте обращения по своей специализации, ведите кабинет,
-                набирайте отзывы.
+                Получайте обращения по своей специализации, ведите личный кабинет,
+                набирайте рейтинг и отзывы.
               </p>
             </div>
             <Link
               href="/register?role=SPECIALIST"
-              className="bg-white text-ink-900 hover:bg-brand-50 hover:text-brand-700 px-6 py-3.5 rounded-xl font-semibold shadow-lg active:scale-[0.98] transition-all whitespace-nowrap"
+              className="shrink-0 bg-white text-brand-700 hover:bg-brand-50 px-6 py-3.5 rounded-xl font-semibold shadow-lg active:scale-[0.98] transition-all whitespace-nowrap"
             >
               Стать юристом →
             </Link>
@@ -230,56 +222,27 @@ export default async function HomePage() {
   );
 }
 
-const tintClasses: Record<string, string> = {
-  brand: "bg-brand-50 border-brand-100",
-  sky: "bg-sky-50 border-sky-100",
-  mint: "bg-mint-50 border-mint-100",
-  accent: "bg-accent-50 border-accent-100",
-};
-
-function Stat({
-  number,
-  label,
-  emoji,
-  tint,
-}: {
-  number: number | string;
-  label: string;
-  emoji: string;
-  tint: keyof typeof tintClasses;
-}) {
+function StatItem({ value, label }: { value: number | string; label: string }) {
   return (
-    <div className={`rounded-2xl border ${tintClasses[tint]} p-4 md:p-5`}>
-      <div className="text-2xl mb-1.5">{emoji}</div>
-      <div className="font-extrabold text-2xl md:text-3xl text-ink-900 tracking-tight">
-        {number}
-      </div>
-      <div className="text-xs md:text-sm text-ink-500 mt-0.5 font-medium">{label}</div>
+    <div className="px-6 py-4 first:pl-0 last:pr-0 text-center md:text-left">
+      <dd className="text-2xl md:text-3xl font-extrabold text-ink-900 dark:text-white tracking-tight">
+        {value}
+      </dd>
+      <dt className="text-xs md:text-sm text-ink-500 dark:text-ink-400 mt-0.5 font-medium">
+        {label}
+      </dt>
     </div>
   );
 }
 
-function Step({
-  n,
-  emoji,
-  title,
-  text,
-}: {
-  n: string;
-  emoji: string;
-  title: string;
-  text: string;
-}) {
+function Step({ n, title, text }: { n: string; title: string; text: string }) {
   return (
-    <div className="bg-white dark:bg-ink-900 rounded-2xl p-6 shadow-card border border-ink-100 dark:border-ink-800">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
-          {n}
-        </div>
-        <span className="text-3xl">{emoji}</span>
-      </div>
-      <h3 className="font-bold text-xl mb-2 text-ink-900">{title}</h3>
-      <p className="text-ink-600 leading-relaxed">{text}</p>
+    <div className="bg-white dark:bg-ink-900 p-8">
+      <p className="font-display text-5xl text-brand-200 dark:text-brand-900 mb-4 select-none">
+        {n}
+      </p>
+      <h3 className="font-bold text-xl text-ink-900 dark:text-white mb-2">{title}</h3>
+      <p className="text-ink-500 dark:text-ink-400 leading-relaxed text-sm md:text-base">{text}</p>
     </div>
   );
 }

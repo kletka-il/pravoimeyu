@@ -1,17 +1,28 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+@font-face {
+  font-family: "Aveline Eleganza";
+  src: url("/fonts/AvelineEleganza.woff2") format("woff2"),
+       url("/fonts/AvelineEleganza.woff")  format("woff");
+  font-weight: normal;
+  font-style:  normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg: #fafbfd;
-  --ink: #11142a;
-  --brand: #1f4cf5;
+  --bg:    #fafaf9;
+  --ink:   #0f0f1a;
+  --brand: #7c3aed;
+  --accent: #dc2626;
 }
 
 .dark {
-  --bg: #0f1117;
-  --ink: #f0f2f8;
+  --bg:  #0c0c14;
+  --ink: #f0f0f5;
 }
 
 html, body {
@@ -26,100 +37,134 @@ html, body {
   .container-page {
     @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
   }
-  .heading-serif {
-    font-family: "Cormorant Garamond", Georgia, serif;
-    @apply font-semibold text-ink-900 dark:text-white leading-tight tracking-tight;
-  }
+
+  /* Display font — Aveline Eleganza, только для крупных заголовков */
   .heading-display {
-    @apply font-extrabold text-ink-900 dark:text-white leading-[1.05] tracking-tight;
+    font-family: "Aveline Eleganza", Georgia, serif;
+    @apply text-ink-900 dark:text-white leading-[1.1];
+    letter-spacing: -0.01em;
+  }
+  /* Secondary headings — Inter bold */
+  .heading-sans {
+    @apply font-extrabold text-ink-900 dark:text-white leading-tight tracking-tight;
     letter-spacing: -0.02em;
   }
+
+  /* Buttons */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-brand-600 text-white px-6 py-3.5 rounded-xl font-semibold shadow-sm hover:bg-brand-700 hover:shadow-lift active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100;
+    @apply inline-flex items-center justify-center gap-2
+           bg-brand-600 text-white px-6 py-3.5 rounded-xl font-semibold
+           shadow-sm hover:bg-brand-700 hover:shadow-lift
+           active:scale-[0.98] transition-all
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100;
   }
   .btn-accent {
-    @apply inline-flex items-center justify-center gap-2 bg-accent-500 text-white px-6 py-3.5 rounded-xl font-semibold shadow-sm hover:bg-accent-600 hover:shadow-lift active:scale-[0.98] transition-all;
+    @apply inline-flex items-center justify-center gap-2
+           bg-accent-600 text-white px-6 py-3.5 rounded-xl font-semibold
+           shadow-sm hover:bg-accent-700 hover:shadow-red
+           active:scale-[0.98] transition-all;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 bg-white dark:bg-ink-800 text-ink-900 dark:text-white px-5 py-3 rounded-xl font-semibold border border-ink-200 dark:border-ink-700 hover:border-ink-400 dark:hover:border-ink-500 hover:bg-ink-50 dark:hover:bg-ink-700 transition-all;
+    @apply inline-flex items-center justify-center gap-2
+           bg-white dark:bg-ink-800 text-ink-900 dark:text-white
+           px-5 py-3 rounded-xl font-semibold
+           border border-ink-200 dark:border-ink-700
+           hover:border-ink-400 dark:hover:border-ink-500
+           hover:bg-ink-50 dark:hover:bg-ink-700 transition-all;
   }
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 bg-white dark:bg-transparent text-brand-600 dark:text-brand-400 px-5 py-2.5 rounded-xl font-semibold border-2 border-brand-100 dark:border-brand-900 hover:border-brand-300 dark:hover:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-950 transition-all;
+    @apply inline-flex items-center justify-center gap-2
+           bg-white dark:bg-transparent
+           text-brand-700 dark:text-brand-400
+           px-5 py-2.5 rounded-xl font-semibold
+           border-2 border-brand-200 dark:border-brand-900
+           hover:border-brand-400 dark:hover:border-brand-700
+           hover:bg-brand-50 dark:hover:bg-brand-950 transition-all;
   }
+
+  /* Cards */
   .card {
-    @apply bg-white dark:bg-ink-900 rounded-2xl shadow-card border border-ink-100/80 dark:border-ink-800 p-6 transition-shadow;
+    @apply bg-white dark:bg-ink-900 rounded-2xl shadow-card
+           border border-ink-100/80 dark:border-ink-800 p-6 transition-shadow;
   }
   .card-hover {
-    @apply card hover:shadow-lift hover:border-brand-200 dark:hover:border-brand-800 hover:-translate-y-0.5 transition-all duration-200;
+    @apply card hover:shadow-lift hover:border-brand-200 dark:hover:border-brand-800
+           hover:-translate-y-0.5 transition-all duration-200;
   }
+
+  /* Forms */
   .input {
-    @apply w-full bg-white dark:bg-ink-800 border-2 border-ink-100 dark:border-ink-700 rounded-xl px-4 py-3 text-ink-900 dark:text-white placeholder:text-ink-400 dark:placeholder:text-ink-500 focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-100 dark:focus:ring-brand-900 transition-colors;
+    @apply w-full bg-white dark:bg-ink-800
+           border-2 border-ink-100 dark:border-ink-700
+           rounded-xl px-4 py-3
+           text-ink-900 dark:text-white
+           placeholder:text-ink-400 dark:placeholder:text-ink-500
+           focus:border-brand-500 focus:outline-none
+           focus:ring-4 focus:ring-brand-100 dark:focus:ring-brand-900
+           transition-colors;
   }
   .label {
     @apply block text-sm font-semibold text-ink-700 dark:text-ink-300 mb-1.5;
   }
+
+  /* Chips & badges */
   .badge {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold;
   }
   .chip {
-    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-ink-800 border border-ink-200 dark:border-ink-700 text-ink-700 dark:text-ink-300 hover:border-brand-300 hover:text-brand-700 dark:hover:text-brand-300 hover:bg-brand-50 dark:hover:bg-brand-950 transition-colors;
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium
+           bg-white dark:bg-ink-800
+           border border-ink-200 dark:border-ink-700
+           text-ink-700 dark:text-ink-300
+           hover:border-brand-300 hover:text-brand-700
+           dark:hover:text-brand-300 hover:bg-brand-50
+           dark:hover:bg-brand-950 transition-colors;
   }
   .chip-active {
-    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-brand-600 text-white border border-brand-600 hover:bg-brand-700 transition-colors;
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold
+           bg-brand-600 text-white border border-brand-600
+           hover:bg-brand-700 transition-colors;
   }
+
+  /* Prose (legal pages) */
   .prose-legal {
     @apply max-w-none text-ink-800 dark:text-ink-200 leading-relaxed;
   }
-  .prose-legal h2 {
-    @apply heading-display text-2xl mt-8 mb-3;
-  }
-  .prose-legal h3 {
-    @apply heading-display text-xl mt-6 mb-2;
-  }
-  .prose-legal p {
-    @apply my-3;
-  }
-  .prose-legal ul, .prose-legal ol {
-    @apply my-3 pl-6;
-  }
-  .prose-legal ul { @apply list-disc; }
-  .prose-legal ol { @apply list-decimal; }
-  .prose-legal li {
-    @apply my-1;
-  }
-  .prose-legal a {
-    @apply text-brand-600 dark:text-brand-400 underline underline-offset-2 hover:text-brand-700;
-  }
-  .prose-legal strong {
-    @apply text-ink-900 dark:text-white font-semibold;
-  }
-  .prose-legal table {
-    @apply w-full border-collapse my-4 text-sm;
-  }
-  .prose-legal th {
-    @apply bg-ink-50 dark:bg-ink-800 px-3 py-2 text-left font-semibold border border-ink-200 dark:border-ink-700;
-  }
-  .prose-legal td {
-    @apply px-3 py-2 border border-ink-200 dark:border-ink-700;
-  }
+  .prose-legal h2  { @apply heading-sans text-2xl mt-8 mb-3; }
+  .prose-legal h3  { @apply heading-sans text-xl mt-6 mb-2; }
+  .prose-legal p   { @apply my-3; }
+  .prose-legal ul, .prose-legal ol { @apply my-3 pl-6; }
+  .prose-legal ul  { @apply list-disc; }
+  .prose-legal ol  { @apply list-decimal; }
+  .prose-legal li  { @apply my-1; }
+  .prose-legal a   { @apply text-brand-600 dark:text-brand-400 underline underline-offset-2 hover:text-brand-700; }
+  .prose-legal strong { @apply text-ink-900 dark:text-white font-semibold; }
+  .prose-legal table  { @apply w-full border-collapse my-4 text-sm; }
+  .prose-legal th { @apply bg-ink-50 dark:bg-ink-800 px-3 py-2 text-left font-semibold border border-ink-200 dark:border-ink-700; }
+  .prose-legal td { @apply px-3 py-2 border border-ink-200 dark:border-ink-700; }
+
+  /* Gradient utilities */
   .gradient-brand {
-    background: linear-gradient(135deg, #1f4cf5 0%, #0c9ce4 50%, #36b8f3 100%);
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #4c1d95 100%);
   }
-  .gradient-warm {
-    background: linear-gradient(135deg, #ff6b3d 0%, #ffbe1f 100%);
+  .gradient-accent {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  }
+  .gradient-hero {
+    background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 40%, #2563eb 100%);
   }
 
-  /* Dark mode: muted text shades remapped to readable values */
-  .dark .text-ink-600 { color: #b6bccb; }
-  .dark .text-ink-500 { color: #b6bccb; }
+  /* Dark mode text adjustments */
+  .dark .text-ink-600 { color: #b8b8c2; }
+  .dark .text-ink-500 { color: #b8b8c2; }
 }
 
 mark {
-  background: linear-gradient(180deg, transparent 60%, #ffe788 60%);
+  background: linear-gradient(180deg, transparent 55%, rgba(220, 38, 38, 0.18) 55%);
   padding: 0 2px;
   border-radius: 2px;
 }
 
 ::selection {
-  background: rgba(31, 76, 245, 0.2);
+  background: rgba(124, 58, 237, 0.2);
 }
