@@ -4,12 +4,12 @@ import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Права имей — юридическая помощь, когда она нужна срочно",
+  title: "Право имею — юридическая помощь, когда она нужна срочно",
   description:
     "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы. Бесплатно для общих вопросов, платно для сложных дел.",
   alternates: { canonical: "https://pravaimeu.ru" },
   openGraph: {
-    title: "Права имей — юридическая помощь, когда она нужна срочно",
+    title: "Право имею — юридическая помощь, когда она нужна срочно",
     description:
       "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы.",
     url: "https://pravaimeu.ru",
@@ -31,7 +31,7 @@ const POPULAR_QUERIES = [
 const orgSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Права имей",
+  name: "Право имею",
   url: "https://pravaimeu.ru",
   logo: "https://pravaimeu.ru/icons/icon-512.png",
   description:
@@ -47,7 +47,7 @@ const orgSchema = {
 const siteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Права имей",
+  name: "Право имею",
   url: "https://pravaimeu.ru",
   potentialAction: {
     "@type": "SearchAction",

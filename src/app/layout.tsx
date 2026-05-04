@@ -6,7 +6,7 @@ import { getSession } from "@/lib/session";
 import RegisterSW from "@/components/RegisterSW";
 
 const BASE_URL = "https://pravaimeu.ru";
-const DEFAULT_TITLE = "Права имей — юридическая помощь, когда она нужна срочно";
+const DEFAULT_TITLE = "Право имею — юридическая помощь, когда она нужна срочно";
 const DEFAULT_DESC =
   "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы. Бесплатно для общих вопросов, платно для сложных дел.";
 
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
     default: DEFAULT_TITLE,
-    template: "%s · Права имей",
+    template: "%s · Право имею",
   },
   description: DEFAULT_DESC,
   keywords: [
@@ -24,19 +24,19 @@ export const metadata: Metadata = {
     "юрист онлайн",
     "правовые ситуации",
     "юридические вопросы",
-    "права имей",
+    "право имею",
   ],
-  authors: [{ name: "Права имей", url: BASE_URL }],
-  creator: "Права имей",
-  publisher: "Права имей",
+  authors: [{ name: "Право имею", url: BASE_URL }],
+  creator: "Право имею",
+  publisher: "Право имею",
   manifest: "/manifest.json",
-  applicationName: "Права имей",
+  applicationName: "Право имею",
   alternates: { canonical: BASE_URL },
   openGraph: {
     type: "website",
     locale: "ru_RU",
     url: BASE_URL,
-    siteName: "Права имей",
+    siteName: "Право имею",
     title: DEFAULT_TITLE,
     description: DEFAULT_DESC,
   },
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Права имей",
+    title: "Право имею",
   },
   formatDetection: { telephone: false },
   icons: {
