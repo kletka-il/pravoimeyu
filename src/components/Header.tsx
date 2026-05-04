@@ -31,7 +31,7 @@ export default function Header({
             П!
           </span>
           <span className="font-extrabold text-xl tracking-tight">
-            Права <span className="text-brand-600 dark:text-brand-400">имей</span>
+            Право <span className="text-brand-600 dark:text-brand-400">имею</span>
           </span>
         </Link>
         <nav className="hidden lg:flex items-center gap-1 text-sm font-medium text-ink-700 dark:text-ink-300 ml-2">
