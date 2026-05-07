@@ -2,6 +2,9 @@ import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import CategoryIcon, { CATEGORY_COLOR } from "@/components/CategoryIcon";
 import { prisma } from "@/lib/prisma";
+import {
+  CheckCircle2, Clock, ShieldCheck, Users, Star, ArrowRight,
+} from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -26,7 +29,6 @@ const POPULAR_QUERIES = [
   "Затопили соседи",
   "Хочу подать на развод",
   "Вернуть товар в магазин",
-  "Задержали в полиции",
 ];
 
 const orgSchema = {
@@ -58,10 +60,16 @@ const siteSchema = {
 };
 
 export default async function HomePage() {
-  const [categories, articlesCount, specialistsCount] = await Promise.all([
+  const [categories, articlesCount, specialistsCount, topSpecialists] = await Promise.all([
     prisma.category.findMany({ orderBy: { order: "asc" } }),
     prisma.article.count({ where: { isPublished: true } }),
     prisma.specialistProfile.count({ where: { status: "APPROVED" } }),
+    prisma.specialistProfile.findMany({
+      where: { status: "APPROVED" },
+      orderBy: [{ rating: "desc" }, { reviewsCount: "desc" }],
+      take: 4,
+      include: { user: { select: { name: true } } },
+    }),
   ]);
 
   return (
@@ -75,87 +83,106 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
       />
 
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden border-b border-ink-100 dark:border-ink-800">
-        {/* Базовый градиент */}
-        <div
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(ellipse 900px 500px at 100% -10%, rgba(124,58,237,0.10), transparent)," +
-              "radial-gradient(ellipse 500px 400px at -5% 110%, rgba(220,38,38,0.06), transparent)",
-          }}
-        />
-        {/* Декоративный blob справа-вверху */}
-        <div
-          className="absolute -right-32 -top-32 w-[600px] h-[600px] rounded-full -z-10 opacity-[0.07]"
-          style={{ background: "radial-gradient(circle, #7c3aed 0%, transparent 70%)" }}
-          aria-hidden="true"
-        />
-        {/* Декоративный blob снизу-по-центру */}
-        <div
-          className="absolute left-[60%] bottom-0 w-[300px] h-[300px] rounded-full -z-10 opacity-[0.05]"
-          style={{ background: "radial-gradient(circle, #dc2626 0%, transparent 70%)" }}
-          aria-hidden="true"
-        />
-
-        <div className="container-page pt-14 md:pt-24 pb-14 md:pb-20">
-          <div className="max-w-3xl">
-            {/* Декор-черта слева от подзаголовка */}
-            <p className="font-display text-brand-600 dark:text-brand-400 text-xl md:text-2xl mb-3 tracking-wide flex items-center gap-3">
-              <span className="w-8 h-[2px] rounded-full bg-brand-400 dark:bg-brand-600" aria-hidden="true" />
-              Права имею
-            </p>
-            <h1 className="heading-sans text-4xl md:text-6xl lg:text-7xl mb-6 text-ink-900 dark:text-white">
-              Что вам делать —{" "}
-              {/* Градиентное подчёркивание на ключевом слове */}
-              <span className="relative inline-block text-brand-600 dark:text-brand-400">
-                мы знаем
-                <span
-                  className="absolute -bottom-1 left-0 right-0 h-[3px] rounded-full bg-gradient-to-r from-brand-400 to-brand-600 opacity-60"
-                  aria-hidden="true"
-                />
+      {/* ── Hero — две колонки: слева текст+поиск, справа фото счастливого клиента ── */}
+      <section className="border-b border-ink-100 dark:border-ink-800 bg-white dark:bg-ink-950">
+        <div className="container-page py-10 md:py-16 grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-14 items-center">
+          {/* Левая колонка — текст и поиск */}
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sun-100 text-sun-800 text-xs font-bold uppercase tracking-wider mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-sun-500" />
+              Юридический маркетплейс
+            </div>
+            <h1 className="heading-sans text-4xl md:text-5xl lg:text-6xl mb-5 text-ink-900 dark:text-white">
+              Юридическая помощь —{" "}
+              <span className="text-brand-700 dark:text-brand-400">
+                просто и понятно
               </span>
             </h1>
-            <p className="text-ink-500 dark:text-ink-400 text-lg md:text-xl mb-8 max-w-xl leading-relaxed">
-              Опишите ситуацию своими словами. Найдём готовый ответ из правовой
-              базы, а если случай сложный — подберём юриста.
+            <p className="text-ink-600 dark:text-ink-400 text-lg md:text-xl mb-7 max-w-xl leading-relaxed">
+              Опишите ситуацию своими словами. Найдём готовый ответ из базы знаний,
+              а если случай сложный — подберём проверенного юриста.
             </p>
-            {/* Ореол-блик под поисковой строкой */}
-            <div className="relative max-w-2xl">
-              <div
-                className="absolute -inset-2 rounded-3xl bg-brand-600/10 blur-xl -z-10"
-                aria-hidden="true"
-              />
-              <SearchBar />
-            </div>
+            <SearchBar />
             <div className="flex flex-wrap gap-2 mt-5 items-center">
-              <span className="text-sm text-ink-400 mr-1">Часто ищут:</span>
+              <span className="text-sm text-ink-500 mr-1">Часто ищут:</span>
               {POPULAR_QUERIES.map((q) => (
-                <Link key={q} href={`/search?q=${encodeURIComponent(q)}`} className="chip">
+                <Link
+                  key={q}
+                  href={`/search?q=${encodeURIComponent(q)}`}
+                  className="chip"
+                >
                   {q}
                 </Link>
               ))}
             </div>
           </div>
+
+          {/* Правая колонка — слот под фото счастливого клиента */}
+          <div className="relative hidden lg:block">
+            <div
+              className="photo-slot aspect-[4/5] w-full rounded-3xl shadow-card border border-ink-100 dark:border-ink-800 overflow-hidden"
+              data-label="Сюда — стоковое фото клиента"
+            />
+
+            {/* Карточка-отзыв поверх фото снизу-слева */}
+            <div className="absolute -left-4 bottom-6 max-w-[260px] bg-white dark:bg-ink-900 rounded-2xl shadow-lift border border-ink-100 dark:border-ink-800 p-4">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center text-rose-700 font-bold shrink-0">
+                  А
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1 mb-0.5">
+                    {[0,1,2,3,4].map((i) => (
+                      <Star key={i} size={12} className="fill-sun-400 text-sun-400" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-ink-800 dark:text-ink-200 leading-snug font-medium">
+                    «Вернула 47 000 ₽ за просрочку — за 2 недели»
+                  </p>
+                  <p className="text-xs text-ink-500 mt-1">Анна, Москва</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Стикер trust справа-сверху */}
+            <div className="absolute -top-3 -right-2 bg-success-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-soft">
+              ✓ Проверенные юристы
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── Stats bar ── */}
-      <section className="border-b border-ink-100 dark:border-ink-800 bg-ink-50/60 dark:bg-ink-950">
-        <div className="container-page py-8">
-          <dl className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-            <StatItem value={articlesCount}     label="готовых ответов"     color="brand" />
-            <StatItem value={categories.length} label="категорий права"     color="cobalt" />
-            <StatItem value={specialistsCount}  label="проверенных юристов" color="accent" />
-            <StatItem value="24 / 7"            label="доступ онлайн"       color="ink" />
-          </dl>
+      {/* ── Trust-полоса: 4 факта с иконками ── */}
+      <section className="border-b border-ink-100 dark:border-ink-800 bg-ink-50 dark:bg-ink-950/60">
+        <div className="container-page py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            <TrustItem
+              icon={<CheckCircle2 size={22} className="text-success-600" strokeWidth={2} />}
+              big={articlesCount.toString()}
+              small="готовых ответов"
+            />
+            <TrustItem
+              icon={<Clock size={22} className="text-brand-700" strokeWidth={2} />}
+              big="5 мин"
+              small="среднее время ответа"
+            />
+            <TrustItem
+              icon={<Users size={22} className="text-sun-600" strokeWidth={2} />}
+              big={specialistsCount > 0 ? `${specialistsCount}+` : "Подбираем"}
+              small="проверенных юристов"
+            />
+            <TrustItem
+              icon={<ShieldCheck size={22} className="text-rose-600" strokeWidth={2} />}
+              big="100%"
+              small="конфиденциально"
+            />
+          </div>
         </div>
       </section>
 
-      {/* ── Категории ── */}
-      <section className="container-page py-16 md:py-20">
-        <div className="flex items-end justify-between mb-10">
+      {/* ── Категории как товарные плитки ── */}
+      <section className="container-page py-14 md:py-20">
+        <div className="flex items-end justify-between mb-8">
           <div>
             <h2 className="heading-sans text-3xl md:text-4xl text-ink-900 dark:text-white">
               Жизненные ситуации
@@ -164,106 +191,178 @@ export default async function HomePage() {
               Выберите категорию — внутри готовые ответы и юристы.
             </p>
           </div>
-          <Link href="/situations" className="hidden md:inline-flex btn-outline text-sm">
-            Все ситуации →
+          <Link href="/situations" className="hidden md:inline-flex items-center gap-1.5 text-brand-700 dark:text-brand-400 font-semibold text-sm hover:gap-2.5 transition-all">
+            Все ситуации <ArrowRight size={16} />
           </Link>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {categories.map((c) => {
-            const col = CATEGORY_COLOR[c.slug] ?? { icon: "text-brand-600", bg: "bg-brand-50", darkBg: "dark:bg-brand-950" };
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+          {categories.map((c, idx) => {
+            const col = CATEGORY_COLOR[c.slug] ?? {
+              icon: "text-brand-700",
+              bg: "bg-brand-50",
+              darkBg: "dark:bg-brand-950",
+            };
+            // Помечаем первые две и одну особую — стикерами для разнообразия
+            const sticker =
+              c.slug === "dtp-i-gibdd"     ? { cls: "sticker-urgent",  text: "Срочно" } :
+              c.slug === "krediti-i-dolgi" ? { cls: "sticker-popular", text: "Популярно" } :
+              c.slug === "trudovye-spory"  ? { cls: "sticker-free",    text: "Бесплатно" } :
+              null;
+
             return (
-            <Link
-              key={c.id}
-              href={`/knowledge?category=${c.slug}`}
-              className="group flex items-start gap-4 p-5 rounded-2xl card-premium border border-ink-100/80 dark:border-ink-700 hover:border-brand-300 dark:hover:border-brand-700 hover:shadow-lift transition-all duration-200"
-            >
-              <div className={`flex-shrink-0 w-11 h-11 rounded-xl ${col.bg} ${col.darkBg} flex items-center justify-center ${col.icon} shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_2px_6px_rgba(15,15,26,0.08)] transition-transform group-hover:scale-110`}>
-                <CategoryIcon slug={c.slug} size={18} />
-              </div>
-              <div className="min-w-0">
-                <p className="font-semibold text-ink-900 dark:text-white group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors leading-snug">
-                  {c.title}
-                </p>
-                <p className="text-sm text-ink-500 dark:text-ink-400 mt-0.5 leading-snug">{c.description}</p>
-              </div>
-            </Link>
-          );})}
+              <Link
+                key={c.id}
+                href={`/knowledge?category=${c.slug}`}
+                className="tile p-5 flex items-start gap-4 group"
+              >
+                <div
+                  className={`flex-shrink-0 w-14 h-14 rounded-2xl ${col.bg} ${col.darkBg} flex items-center justify-center ${col.icon} transition-transform group-hover:scale-110`}
+                >
+                  <CategoryIcon slug={c.slug} size={26} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="font-bold text-ink-900 dark:text-white group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors leading-snug">
+                      {c.title}
+                    </p>
+                    {sticker && (
+                      <span className={`sticker ${sticker.cls}`}>{sticker.text}</span>
+                    )}
+                  </div>
+                  <p className="text-sm text-ink-500 dark:text-ink-400 leading-snug">
+                    {c.description}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
 
         <div className="mt-6 md:hidden">
           <Link href="/situations" className="btn-outline w-full justify-center">
-            Все ситуации →
+            Все ситуации <ArrowRight size={16} />
           </Link>
         </div>
       </section>
 
-      {/* ── Как это работает ── */}
-      <section className="relative overflow-hidden border-t border-b border-ink-100 dark:border-ink-800 bg-gradient-to-br from-ink-50 to-white dark:from-ink-950 dark:to-ink-900">
-        {/* Центральный декоративный блик */}
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] opacity-[0.04] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(ellipse, #7c3aed 0%, transparent 70%)" }}
-          aria-hidden="true"
-        />
-        <div className="container-page py-16 md:py-20 relative">
-          <div className="mb-12">
-            <p className="text-sm font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest mb-2">
-              Три шага
-            </p>
-            <h2 className="heading-sans text-3xl md:text-4xl text-ink-900 dark:text-white">
-              Как это работает
-            </h2>
+      {/* ── Юристы — карточки, как товары на маркетплейсе ── */}
+      {topSpecialists.length > 0 && (
+        <section className="section-soft border-y border-ink-100 dark:border-ink-800">
+          <div className="container-page py-14 md:py-20">
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <h2 className="heading-sans text-3xl md:text-4xl text-ink-900 dark:text-white">
+                  Проверенные юристы
+                </h2>
+                <p className="text-ink-500 mt-2 text-base md:text-lg">
+                  Лицензия, опыт, реальные отзывы клиентов.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+              {topSpecialists.map((s) => (
+                <article key={s.id} className="tile">
+                  {/* Photo-slot вместо аватара */}
+                  <div
+                    className="photo-slot aspect-square w-full"
+                    data-label="Фото юриста"
+                  />
+                  <div className="p-4">
+                    <div className="flex items-center gap-1 mb-1">
+                      {[0,1,2,3,4].map((i) => (
+                        <Star
+                          key={i}
+                          size={13}
+                          className={
+                            i < Math.round(s.rating || 0)
+                              ? "fill-sun-400 text-sun-400"
+                              : "text-ink-200"
+                          }
+                        />
+                      ))}
+                      {s.reviewsCount > 0 && (
+                        <span className="text-xs text-ink-500 ml-1">
+                          ({s.reviewsCount})
+                        </span>
+                      )}
+                    </div>
+                    <p className="font-bold text-ink-900 dark:text-white leading-snug truncate">
+                      {s.user?.name ?? "Юрист"}
+                    </p>
+                    <p className="text-xs text-ink-500 mt-0.5 mb-2 line-clamp-1">
+                      {s.city || "Онлайн"} · опыт {s.yearsExperience} {pluralYears(s.yearsExperience)}
+                    </p>
+                    {s.pricePerHour > 0 && (
+                      <div className="text-base font-extrabold text-ink-900 dark:text-white mb-3">
+                        от {s.pricePerHour.toLocaleString("ru-RU")} ₽
+                        <span className="text-xs text-ink-500 font-medium">/час</span>
+                      </div>
+                    )}
+                    <Link
+                      href="/situations"
+                      className="block w-full text-center bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-900 font-semibold text-sm py-2 rounded-lg transition-colors"
+                    >
+                      Связаться
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
-          <div className="grid md:grid-cols-3 gap-5 md:gap-6 relative">
-            {/* Пунктирная соединительная линия между шагами */}
-            <div
-              className="hidden md:block absolute top-11 left-[calc(33.33%+2.5rem)] right-[calc(33.33%+2.5rem)] h-px border-t-2 border-dashed border-brand-200 dark:border-brand-900 pointer-events-none"
-              aria-hidden="true"
-            />
-            <Step n="01" title="Опишите ситуацию"
-              text="Обычным языком — как рассказали бы другу. «Попал в ДТП», «не платят зарплату», «закрыли въезд»." />
-            <Step n="02" title="Получите ответ"
-              text="Поиск выдаст подсказку из правовой базы со ссылками на статьи закона. Бесплатно." />
-            <Step n="03" title="Выберите юриста"
-              text="Если вопрос сложный — подберём специалиста с нужным профилем и опытом. Только проверенные." />
-          </div>
+        </section>
+      )}
+
+      {/* ── Как это работает — три дружелюбных шага ── */}
+      <section className="container-page py-14 md:py-20">
+        <div className="text-center mb-12">
+          <p className="text-xs font-bold text-brand-700 dark:text-brand-400 uppercase tracking-widest mb-2">
+            Как это работает
+          </p>
+          <h2 className="heading-sans text-3xl md:text-4xl text-ink-900 dark:text-white">
+            Три шага до решения
+          </h2>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+          <Step
+            n="1"
+            title="Опишите ситуацию"
+            text="Обычным языком — как другу. «Попал в ДТП», «не платят зарплату», «закрыли въезд»."
+          />
+          <Step
+            n="2"
+            title="Получите ответ"
+            text="Поиск выдаст готовый ответ из базы со ссылками на статьи закона. Бесплатно."
+          />
+          <Step
+            n="3"
+            title="Выберите юриста"
+            text="Если случай сложный — подберём специалиста с нужным профилем. Только проверенные."
+          />
         </div>
       </section>
 
       {/* ── CTA для юристов ── */}
-      <section className="container-page py-16 md:py-20">
-        <div className="relative overflow-hidden rounded-3xl gradient-brand p-8 md:p-12 text-white texture-noise">
-          <div
-            className="absolute inset-0 opacity-20"
-            style={{
-              background:
-                "radial-gradient(ellipse 500px 300px at 110% 0%, rgba(220,38,38,0.8), transparent)",
-            }}
-          />
-          {/* Декоративный фоновый текст */}
-          <div
-            className="absolute -right-4 -bottom-8 font-display text-[130px] leading-none text-white/[0.04] select-none pointer-events-none"
-            aria-hidden="true"
-          >
-            Юрист
-          </div>
+      <section className="container-page pb-16 md:pb-20">
+        <div className="rounded-3xl gradient-brand p-8 md:p-12 text-white relative overflow-hidden">
           <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6">
             <div className="flex-1">
-              <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-2">Юристам</p>
+              <p className="text-sun-300 text-xs font-bold uppercase tracking-widest mb-2">
+                Юристам
+              </p>
               <h3 className="heading-sans text-2xl md:text-3xl text-white mb-2">
                 Подключитесь к платформе
               </h3>
-              <p className="text-white/70 text-base md:text-lg max-w-xl">
-                Получайте обращения по своей специализации, ведите личный кабинет,
-                набирайте рейтинг и отзывы.
+              <p className="text-white/80 text-base md:text-lg max-w-xl">
+                Получайте обращения по своей специализации, ведите кабинет, набирайте рейтинг.
               </p>
             </div>
             <Link
               href="/register?role=SPECIALIST"
-              className="shrink-0 bg-white text-brand-700 hover:bg-brand-50 px-6 py-3.5 rounded-xl font-semibold shadow-[0_4px_16px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.9)] active:scale-[0.98] transition-all whitespace-nowrap"
+              className="shrink-0 bg-sun-400 hover:bg-sun-500 text-ink-900 px-6 py-3.5 rounded-xl font-bold shadow-cta active:scale-[0.98] transition-all whitespace-nowrap inline-flex items-center gap-2"
             >
-              Стать юристом →
+              Стать юристом <ArrowRight size={18} />
             </Link>
           </div>
         </div>
@@ -272,56 +371,51 @@ export default async function HomePage() {
   );
 }
 
-const statColors: Record<string, string> = {
-  brand:  "text-brand-600 dark:text-brand-400",
-  cobalt: "text-cobalt-600 dark:text-cobalt-400",
-  accent: "text-accent-600 dark:text-accent-400",
-  ink:    "text-ink-700 dark:text-ink-300",
-};
-
-const statBg: Record<string, string> = {
-  brand:  "bg-brand-50 dark:bg-brand-950/60 border-brand-100 dark:border-brand-900",
-  cobalt: "bg-cobalt-50 dark:bg-cobalt-950/60 border-cobalt-100 dark:border-cobalt-900",
-  accent: "bg-accent-50 dark:bg-accent-950/40 border-accent-100 dark:border-accent-900",
-  ink:    "bg-white dark:bg-ink-900 border-ink-100 dark:border-ink-800",
-};
-
-function StatItem({ value, label, color = "brand" }: { value: number | string; label: string; color?: string }) {
+function TrustItem({
+  icon,
+  big,
+  small,
+}: {
+  icon: React.ReactNode;
+  big: string;
+  small: string;
+}) {
   return (
-    <div className={`card-premium rounded-2xl p-5 border ${statBg[color]} relative overflow-hidden`}>
-      {/* Угловой блик */}
-      <div
-        className="absolute -top-4 -right-4 w-16 h-16 rounded-full opacity-[0.08] pointer-events-none"
-        style={{ background: "radial-gradient(circle, white 0%, transparent 70%)" }}
-        aria-hidden="true"
-      />
-      <dd className={`text-2xl md:text-3xl font-extrabold tracking-tight ${statColors[color]}`}>
-        {typeof value === "number" ? value.toLocaleString("ru-RU") : value}
-      </dd>
-      <dt className="text-xs md:text-sm text-ink-500 dark:text-ink-400 mt-0.5 font-medium">
-        {label}
-      </dt>
+    <div className="flex items-center gap-3">
+      <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-white dark:bg-ink-900 border border-ink-100 dark:border-ink-800 flex items-center justify-center shadow-soft">
+        {icon}
+      </div>
+      <div className="min-w-0">
+        <div className="font-extrabold text-ink-900 dark:text-white text-base md:text-lg leading-tight">
+          {big}
+        </div>
+        <div className="text-xs md:text-sm text-ink-500 leading-tight">{small}</div>
+      </div>
     </div>
   );
 }
 
-const stepStyle: Record<string, { ring: string; dot: string; text: string }> = {
-  "01": { ring: "border-brand-200 dark:border-brand-800",  dot: "bg-brand-500",  text: "text-brand-600 dark:text-brand-400" },
-  "02": { ring: "border-cobalt-200 dark:border-cobalt-800", dot: "bg-cobalt-500", text: "text-cobalt-600 dark:text-cobalt-400" },
-  "03": { ring: "border-accent-200 dark:border-accent-800", dot: "bg-accent-500", text: "text-accent-600 dark:text-accent-400" },
-};
-
 function Step({ n, title, text }: { n: string; title: string; text: string }) {
-  const s = stepStyle[n] ?? stepStyle["01"];
   return (
-    <div className="card-premium rounded-2xl p-8 border border-ink-100 dark:border-ink-700">
-      {/* Медальон с номером */}
-      <div className={`relative mb-6 w-14 h-14 rounded-2xl border-2 ${s.ring} flex items-center justify-center`}>
-        <span className={`font-display text-2xl font-bold select-none ${s.text}`}>{n}</span>
-        <div className={`absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full ${s.dot} shadow-md`} aria-hidden="true" />
+    <div className="relative bg-white dark:bg-ink-900 rounded-2xl border border-ink-100 dark:border-ink-800 p-6 shadow-card hover:shadow-lift transition-shadow">
+      <div className="absolute -top-3 -left-3 w-9 h-9 rounded-xl bg-sun-400 text-ink-900 font-extrabold text-base flex items-center justify-center shadow-cta">
+        {n}
       </div>
-      <h3 className="font-bold text-xl text-ink-900 dark:text-white mb-2">{title}</h3>
-      <p className="text-ink-500 dark:text-ink-400 leading-relaxed text-sm md:text-base">{text}</p>
+      <h3 className="font-bold text-lg text-ink-900 dark:text-white mb-2 mt-2">
+        {title}
+      </h3>
+      <p className="text-ink-500 dark:text-ink-400 leading-relaxed text-sm md:text-base">
+        {text}
+      </p>
     </div>
   );
+}
+
+function pluralYears(n: number): string {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod100 >= 11 && mod100 <= 14) return "лет";
+  if (mod10 === 1) return "год";
+  if (mod10 >= 2 && mod10 <= 4) return "года";
+  return "лет";
 }

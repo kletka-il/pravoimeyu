@@ -19,19 +19,35 @@ const config: Config = {
           900: "#0f0f1a",
           950: "#07070e",
         },
+        // Главный цвет бренда — глубокий cobalt-blue.
+        // Доверие, банковская/маркетплейсная классика, ничего общего с AI-фиолетовым.
         brand: {
-          50:  "#f5f3ff",
-          100: "#ede9fe",
-          200: "#ddd6fe",
-          300: "#c4b5fd",
-          400: "#a78bfa",
-          500: "#8b5cf6",
-          600: "#7c3aed",
-          700: "#6d28d9",
-          800: "#5b21b6",
-          900: "#4c1d95",
-          950: "#2e1065",
+          50:  "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#3b82f6",
+          600: "#2563eb",
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
+          950: "#172554",
         },
+        // Жёлтое солнце — CTA-цвет, как «Найти» в Озоне.
+        sun: {
+          50:  "#fffbeb",
+          100: "#fef3c7",
+          200: "#fde68a",
+          300: "#fcd34d",
+          400: "#fbbf24",
+          500: "#f59e0b",
+          600: "#d97706",
+          700: "#b45309",
+          800: "#92400e",
+          900: "#78350f",
+        },
+        // Красный — только для urgent-меток.
         accent: {
           DEFAULT: "#dc2626",
           50:  "#fef2f2",
@@ -47,6 +63,17 @@ const config: Config = {
           dark:  "#b91c1c",
           light: "#f87171",
         },
+        // Зелёный — успех/trust-индикаторы.
+        success: {
+          50:  "#f0fdf4",
+          100: "#dcfce7",
+          200: "#bbf7d0",
+          400: "#4ade80",
+          500: "#22c55e",
+          600: "#16a34a",
+          700: "#15803d",
+        },
+        // Cobalt оставлен как алиас на случай старых ссылок.
         cobalt: {
           50:  "#eff6ff",
           100: "#dbeafe",
@@ -63,7 +90,7 @@ const config: Config = {
           DEFAULT: "#a17c3c",
           light:   "#c49b52",
         },
-        cream: "#fafaf9",
+        cream: "#f7f7f9",
       },
       fontFamily: {
         display: ["'Aveline Eleganza'", "Georgia", "serif"],
@@ -74,14 +101,13 @@ const config: Config = {
         "4xl": "2rem",
       },
       boxShadow: {
-        soft:     "0 4px 20px rgba(15, 15, 26, 0.06)",
-        card:     "0 1px 2px rgba(15, 15, 26, 0.04), 0 4px 16px rgba(15, 15, 26, 0.06)",
-        lift:     "0 10px 30px rgba(124, 58, 237, 0.18), 0 4px 12px rgba(15, 15, 26, 0.06)",
-        glow:     "0 0 0 4px rgba(124, 58, 237, 0.18)",
-        red:      "0 10px 30px rgba(220, 38, 38, 0.18)",
+        // Marketplace-shadows — мягкие, без цветных glow.
+        soft:     "0 2px 8px rgba(15,15,26,0.05)",
+        card:     "0 1px 2px rgba(15,15,26,0.04), 0 4px 12px rgba(15,15,26,0.06)",
+        lift:     "0 4px 10px rgba(15,15,26,0.06), 0 14px 28px rgba(15,15,26,0.10)",
+        cta:      "0 6px 16px rgba(245,158,11,0.32), 0 1px 2px rgba(15,15,26,0.06)",
         deep:     "0 2px 4px rgba(15,15,26,0.04), 0 8px 24px rgba(15,15,26,0.08), 0 20px 48px rgba(15,15,26,0.06)",
-        gold:     "0 4px 20px rgba(161,124,60,0.20), 0 1px 4px rgba(15,15,26,0.08)",
-        "inset-t": "inset 0 1px 0 rgba(255,255,255,0.10)",
+        gold:     "0 4px 16px rgba(161,124,60,0.20), 0 1px 4px rgba(15,15,26,0.08)",
       },
       animation: {
         "fade-in":  "fadeIn 0.4s ease-out",
