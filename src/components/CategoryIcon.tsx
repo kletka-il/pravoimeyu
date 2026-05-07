@@ -19,20 +19,21 @@ const MAP: Record<string, React.FC<LucideProps>> = {
   "konstituciya-rf":    BookOpen,
 };
 
-// Цвет иконки и фона для каждой категории
+// Каждой категории — собственный «маркетплейсный» цветовой акцент.
+// Используем встроенные tailwind-палитры (sky/emerald/rose/amber/indigo/red/slate/cyan).
 export const CATEGORY_COLOR: Record<string, { icon: string; bg: string; darkBg: string }> = {
-  "dtp-i-gibdd":        { icon: "text-cobalt-600",  bg: "bg-cobalt-50",  darkBg: "dark:bg-cobalt-950" },
-  "trudovye-spory":     { icon: "text-brand-600",   bg: "bg-brand-50",   darkBg: "dark:bg-brand-950" },
-  "semya-i-deti":       { icon: "text-accent-600",  bg: "bg-accent-50",  darkBg: "dark:bg-accent-950/40" },
-  "prava-potrebitelya": { icon: "text-cobalt-600",  bg: "bg-cobalt-50",  darkBg: "dark:bg-cobalt-950" },
-  "zhile-i-zhkh":       { icon: "text-brand-600",   bg: "bg-brand-50",   darkBg: "dark:bg-brand-950" },
-  "krediti-i-dolgi":    { icon: "text-accent-600",  bg: "bg-accent-50",  darkBg: "dark:bg-accent-950/40" },
-  "ugolovnoe-pravo":    { icon: "text-ink-600",     bg: "bg-ink-100",    darkBg: "dark:bg-ink-800" },
-  "administrativka":    { icon: "text-cobalt-600",  bg: "bg-cobalt-50",  darkBg: "dark:bg-cobalt-950" },
-  "nasledstvo":         { icon: "text-brand-600",   bg: "bg-brand-50",   darkBg: "dark:bg-brand-950" },
-  "migraciya":          { icon: "text-cobalt-600",  bg: "bg-cobalt-50",  darkBg: "dark:bg-cobalt-950" },
-  "armiya-i-priziv":    { icon: "text-accent-600",  bg: "bg-accent-50",  darkBg: "dark:bg-accent-950/40" },
-  "konstituciya-rf":    { icon: "text-brand-600",   bg: "bg-brand-50",   darkBg: "dark:bg-brand-950" },
+  "dtp-i-gibdd":        { icon: "text-sky-700",     bg: "bg-sky-50",     darkBg: "dark:bg-sky-950/50" },
+  "trudovye-spory":     { icon: "text-emerald-700", bg: "bg-emerald-50", darkBg: "dark:bg-emerald-950/50" },
+  "semya-i-deti":       { icon: "text-rose-700",    bg: "bg-rose-50",    darkBg: "dark:bg-rose-950/50" },
+  "prava-potrebitelya": { icon: "text-amber-700",   bg: "bg-amber-50",   darkBg: "dark:bg-amber-950/50" },
+  "zhile-i-zhkh":       { icon: "text-indigo-700",  bg: "bg-indigo-50",  darkBg: "dark:bg-indigo-950/50" },
+  "krediti-i-dolgi":    { icon: "text-red-700",     bg: "bg-red-50",     darkBg: "dark:bg-red-950/50" },
+  "ugolovnoe-pravo":    { icon: "text-slate-700",   bg: "bg-slate-100",  darkBg: "dark:bg-slate-800" },
+  "administrativka":    { icon: "text-cyan-700",    bg: "bg-cyan-50",    darkBg: "dark:bg-cyan-950/50" },
+  "nasledstvo":         { icon: "text-amber-800",   bg: "bg-amber-50",   darkBg: "dark:bg-amber-950/50" },
+  "migraciya":          { icon: "text-sky-700",     bg: "bg-sky-50",     darkBg: "dark:bg-sky-950/50" },
+  "armiya-i-priziv":    { icon: "text-emerald-800", bg: "bg-emerald-50", darkBg: "dark:bg-emerald-950/50" },
+  "konstituciya-rf":    { icon: "text-indigo-700",  bg: "bg-indigo-50",  darkBg: "dark:bg-indigo-950/50" },
 };
 
 export default function CategoryIcon({

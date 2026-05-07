@@ -25,9 +25,9 @@ export default function SearchBar({
   return (
     <form
       onSubmit={onSubmit}
-      className={`flex items-stretch gap-0 bg-white rounded-2xl ${
-        isLg ? "shadow-lift p-1.5" : "shadow-soft p-1 border border-ink-100"
-      }`}
+      className={`flex items-stretch gap-0 bg-white rounded-2xl border-2 border-ink-100 ${
+        isLg ? "shadow-card p-1.5" : "shadow-soft p-1"
+      } focus-within:border-brand-500 focus-within:shadow-lift transition-all`}
     >
       <div className="flex-1 flex items-center gap-3 px-4">
         <svg
@@ -55,11 +55,11 @@ export default function SearchBar({
       </div>
       <button
         type="submit"
-        className={`bg-brand-600 text-white font-semibold rounded-xl ${
+        className={`bg-sun-400 text-ink-900 font-bold rounded-xl ${
           isLg ? "px-7 text-base" : "px-5 text-sm"
-        } hover:bg-brand-700 active:scale-[0.98] transition-all whitespace-nowrap`}
+        } hover:bg-sun-500 active:scale-[0.98] transition-all whitespace-nowrap shadow-cta`}
       >
-        Найти ответ
+        Найти
       </button>
     </form>
   );

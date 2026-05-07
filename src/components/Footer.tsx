@@ -2,26 +2,17 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-ink-900 text-ink-300 mt-20">
-      {/* Градиентная линия сверху */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-700 to-transparent opacity-50" />
-
-      {/* Декоративный блик — правый верхний угол */}
-      <div
-        className="absolute top-0 right-0 w-[500px] h-[300px] pointer-events-none opacity-[0.06]"
-        style={{ background: "radial-gradient(ellipse at 100% 0%, #7c3aed 0%, transparent 70%)" }}
-        aria-hidden="true"
-      />
-
-      <div className="container-page pt-14 pb-10 grid md:grid-cols-4 gap-8 relative">
+    <footer className="bg-ink-900 text-ink-300 mt-20 border-t-4 border-sun-400">
+      <div className="container-page pt-14 pb-10 grid md:grid-cols-4 gap-8">
 
         {/* Brand */}
         <div>
           <Link href="/" className="flex items-center gap-2.5 mb-4 group">
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl gradient-brand text-white text-sm font-bold shadow-[0_4px_12px_rgba(124,58,237,0.4)]">
-              П!
+            <span className="relative inline-flex items-center justify-center w-10 h-10 rounded-xl bg-brand-700 text-white text-sm font-extrabold shadow-soft group-hover:bg-brand-800 transition-colors">
+              П
+              <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-sun-400 border-2 border-ink-900" />
             </span>
-            <span className="font-display text-lg text-white tracking-wide">
+            <span className="font-extrabold text-lg text-white tracking-tight">
               Права имею
             </span>
           </Link>
@@ -30,7 +21,7 @@ export default function Footer() {
           </p>
           {/* Pulse-индикатор «онлайн» */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ink-800 border border-ink-700">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-success-400 animate-pulse" />
             <span className="text-xs text-ink-400">Онлайн 24 / 7</span>
           </div>
           <div className="mt-3 text-xs text-ink-600 space-y-0.5">

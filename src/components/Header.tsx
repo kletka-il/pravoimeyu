@@ -23,18 +23,26 @@ export default function Header({
         : "/dashboard/client";
 
   return (
-    <header className="sticky top-0 z-30 bg-white/90 dark:bg-ink-950/90 backdrop-blur-md border-b border-ink-100 dark:border-ink-800">
-      {/* Topbar — двухуровневый хедер как на advokatdavidov.ru */}
-      <div className="hidden lg:block bg-ink-900 dark:bg-ink-950 border-b border-ink-800">
-        <div className="container-page flex items-center justify-between h-8 text-xs text-ink-400">
-          <span>Юридическая помощь онлайн — быстро, понятно, без бюрократии</span>
-          <div className="flex items-center gap-4">
-            <Link href="/contacts" className="hover:text-brand-400 transition-colors">Контакты</Link>
-            <Link href="/about"    className="hover:text-brand-400 transition-colors">О нас</Link>
+    <header className="sticky top-0 z-30 bg-white dark:bg-ink-950 border-b border-ink-100 dark:border-ink-800">
+      {/* Trust-полоса вместо тёмного topbar — дружелюбные факты, как у Озон/WB */}
+      <div className="hidden lg:block bg-brand-50 dark:bg-brand-950/40 border-b border-brand-100 dark:border-brand-900">
+        <div className="container-page flex items-center justify-between h-9 text-xs">
+          <div className="flex items-center gap-5 text-ink-700 dark:text-ink-300">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-success-500 animate-pulse" />
+              <span>Юристы онлайн 24 / 7</span>
+            </span>
+            <span>·</span>
+            <span>Бесплатный поиск ответа</span>
+            <span>·</span>
+            <span>Ответ юриста — от 5 минут</span>
+          </div>
+          <div className="flex items-center gap-4 text-ink-600 dark:text-ink-400">
+            <Link href="/contacts" className="hover:text-brand-700 transition-colors">Контакты</Link>
+            <Link href="/about"    className="hover:text-brand-700 transition-colors">О нас</Link>
             <Link
               href="/register?role=SPECIALIST"
-              className="font-semibold transition-colors hover:text-yellow-300"
-              style={{ color: "#c49b52" }}
+              className="font-semibold text-gold hover:text-gold-light transition-colors"
             >
               Юристам →
             </Link>
@@ -44,21 +52,22 @@ export default function Header({
 
       <div className="container-page flex items-center gap-4 h-16">
 
-        {/* Logo */}
+        {/* Logo — синяя плитка с жёлтым акцентом, без violet glow */}
         <Link
           href="/"
           className="flex items-center gap-2.5 text-ink-900 dark:text-white group shrink-0"
         >
-          <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl gradient-brand text-white text-sm font-bold shadow-[0_2px_8px_rgba(124,58,237,0.35),inset_0_1px_0_rgba(255,255,255,0.2)] group-hover:shadow-lift transition-shadow">
-            П!
+          <span className="relative inline-flex items-center justify-center w-9 h-9 rounded-xl bg-brand-700 text-white text-sm font-extrabold shadow-soft group-hover:bg-brand-800 transition-colors">
+            П
+            <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-sun-400 border-2 border-white dark:border-ink-950" />
           </span>
-          <span className="font-display text-lg text-brand-700 dark:text-brand-400 tracking-wide">
+          <span className="font-extrabold text-lg text-ink-900 dark:text-white tracking-tight">
             Права имею
           </span>
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-1 text-sm font-medium text-ink-600 dark:text-ink-300 ml-4">
+        <nav className="hidden lg:flex items-center gap-1 text-sm font-medium text-ink-700 dark:text-ink-300 ml-4">
           {navItems.map((n) => (
             <Link
               key={n.href}
@@ -88,7 +97,7 @@ export default function Header({
             <>
               <Link
                 href="/login"
-                className="text-sm font-semibold text-ink-600 dark:text-ink-300 hover:text-brand-700 dark:hover:text-brand-300 px-3 py-2 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-950 transition-colors"
+                className="text-sm font-semibold text-ink-700 dark:text-ink-300 hover:text-brand-700 dark:hover:text-brand-300 px-3 py-2 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-950 transition-colors"
               >
                 Войти
               </Link>
@@ -100,9 +109,9 @@ export default function Header({
         </div>
       </div>
 
-      {/* Mobile nav */}
+      {/* Mobile nav — горизонтальный скролл с категориями, как в маркетплейсе */}
       <nav className="lg:hidden border-t border-ink-100 dark:border-ink-800 overflow-x-auto">
-        <div className="container-page flex gap-1 text-xs font-medium text-ink-600 dark:text-ink-400 py-2 whitespace-nowrap">
+        <div className="container-page flex gap-1 text-xs font-medium text-ink-700 dark:text-ink-400 py-2 whitespace-nowrap">
           {navItems.map((n) => (
             <Link
               key={n.href}
