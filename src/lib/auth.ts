@@ -58,7 +58,7 @@ export async function registerUser(input: RegisterInput, baseUrl: string) {
             yearsExperience: input.yearsExperience ?? 0,
             phone: input.phone ?? "",
             city: input.city ?? "",
-            specializations: JSON.stringify(input.specializations ?? []),
+            specializations: input.specializations ?? [],
           },
         }),
       ]);
@@ -84,7 +84,7 @@ export async function registerUser(input: RegisterInput, baseUrl: string) {
                 yearsExperience: input.yearsExperience ?? 0,
                 phone: input.phone ?? "",
                 city: input.city ?? "",
-                specializations: JSON.stringify(input.specializations ?? []),
+                specializations: input.specializations ?? [],
               },
             },
           }
@@ -103,14 +103,14 @@ export async function registerUser(input: RegisterInput, baseUrl: string) {
 
   const link = `${baseUrl.replace(/\/$/, "")}/verify?token=${token}`;
   const { text, html } = buildVerifyEmail(input.name, link);
-  await sendEmail({
+  const mail = await sendEmail({
     to: input.email,
     subject: "Подтверждение почты — Права имею",
     text,
     html,
   });
 
-  return { userId: user.id, role };
+  return { userId: user.id, role, emailSent: mail.ok };
 }
 
 export async function resendVerification(email: string, baseUrl: string) {
@@ -135,13 +135,14 @@ export async function resendVerification(email: string, baseUrl: string) {
 
   const link = `${baseUrl.replace(/\/$/, "")}/verify?token=${token}`;
   const { text, html } = buildVerifyEmail(user.name, link);
-  await sendEmail({
+  const mail = await sendEmail({
     to: user.email,
     subject: "Подтверждение почты — Права имею",
     text,
     html,
   });
 
+  if (!mail.ok) return { ok: false as const, status: "email_failed" as const };
   return { ok: true as const, status: "sent" as const };
 }
 

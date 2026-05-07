@@ -24,7 +24,13 @@ export async function POST(req: Request) {
   }
   try {
     const baseUrl = process.env.APP_URL ?? new URL(req.url).origin;
-    await resendVerification(parsed.data.email, baseUrl);
+    const result = await resendVerification(parsed.data.email, baseUrl);
+    if (!result.ok) {
+      return NextResponse.json(
+        { error: "Не удалось отправить письмо. Попробуйте позже." },
+        { status: 502 },
+      );
+    }
     return NextResponse.json({ ok: true });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Не удалось отправить письмо";

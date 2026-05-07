@@ -3,6 +3,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+// Защита от open redirect: разрешаем только относительные пути,
+// исключая protocol-relative ("//evil.com") и URL со схемой.
+function safeRedirect(value: string | undefined | null): string | null {
+  if (!value || typeof value !== "string") return null;
+  if (!value.startsWith("/")) return null;
+  if (value.startsWith("//") || value.startsWith("/\\")) return null;
+  return value;
+}
+
 function EyeIcon({ open }: { open: boolean }) {
   return open ? (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -48,7 +57,8 @@ export default function LoginForm({ next }: { next?: string }) {
       }
       return;
     }
-    const target = next || data.dashboard || "/dashboard";
+    const target =
+      safeRedirect(next) ?? safeRedirect(data.dashboard) ?? "/dashboard";
     router.push(target);
     router.refresh();
   }

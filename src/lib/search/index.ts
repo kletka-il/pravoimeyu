@@ -2,12 +2,10 @@ import { prisma } from "@/lib/prisma";
 import { buildIndex, isIndexBuilt, search, type SearchHit } from "./engine";
 
 let lastBuilt = 0;
+let buildingPromise: Promise<void> | null = null;
 const TTL = 60_000; // пересобирать индекс не чаще раза в минуту
 
-export async function ensureIndex(): Promise<void> {
-  const now = Date.now();
-  if (isIndexBuilt() && now - lastBuilt < TTL) return;
-
+async function rebuild(): Promise<void> {
   const articles = await prisma.article.findMany({
     where: { isPublished: true },
     include: { category: { select: { slug: true, title: true } } },
@@ -26,7 +24,17 @@ export async function ensureIndex(): Promise<void> {
     })),
   );
 
-  lastBuilt = now;
+  lastBuilt = Date.now();
+}
+
+export async function ensureIndex(): Promise<void> {
+  const now = Date.now();
+  if (isIndexBuilt() && now - lastBuilt < TTL) return;
+  if (buildingPromise) return buildingPromise;
+  buildingPromise = rebuild().finally(() => {
+    buildingPromise = null;
+  });
+  return buildingPromise;
 }
 
 export async function searchArticles(

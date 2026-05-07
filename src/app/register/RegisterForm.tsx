@@ -24,6 +24,7 @@ export default function RegisterForm({ role }: { role: Role }) {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [specs, setSpecs] = useState<string[]>([]);
+  const [customSpecs, setCustomSpecs] = useState<string>("");
   const [consented, setConsented] = useState(false);
 
   function toggleSpec(key: string) {
@@ -48,7 +49,13 @@ export default function RegisterForm({ role }: { role: Role }) {
     setError(null);
     const body: Record<string, unknown> = Object.fromEntries(fd.entries());
     body.role = role;
-    if (role === ROLE.SPECIALIST) body.specializations = specs;
+    if (role === ROLE.SPECIALIST) {
+      const custom = customSpecs
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0 && s.length <= 60);
+      body.specializations = [...specs, ...custom];
+    }
     const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -60,7 +67,8 @@ export default function RegisterForm({ role }: { role: Role }) {
       setError(data?.error ?? "Ошибка регистрации");
       return;
     }
-    router.push("/login?registered=1");
+    const emailFlag = data?.emailSent === false ? "&email=failed" : "";
+    router.push(`/login?registered=1${emailFlag}`);
   }
 
   return (
@@ -126,10 +134,10 @@ export default function RegisterForm({ role }: { role: Role }) {
                   type="button"
                   key={key}
                   onClick={() => toggleSpec(key)}
-                  className={`px-3 py-1.5 rounded-full text-sm border transition ${
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
                     specs.includes(key)
-                      ? "bg-accent text-white border-accent"
-                      : "bg-white dark:bg-ink-800 border-ink-200 dark:border-ink-700 text-ink-700 dark:text-ink-300 hover:border-accent"
+                      ? "bg-brand-700 text-white border-brand-700"
+                      : "bg-white dark:bg-ink-800 border-ink-200 dark:border-ink-700 text-ink-700 dark:text-ink-300 hover:border-brand-400 hover:text-brand-700"
                   }`}
                 >
                   {label}
@@ -138,6 +146,19 @@ export default function RegisterForm({ role }: { role: Role }) {
             </div>
             <p className="text-xs text-ink-500 dark:text-ink-400 mt-2">
               Можно выбрать несколько. Профиль будет проверен модератором перед публикацией.
+            </p>
+          </div>
+          <div>
+            <label className="label">Своя специализация (опционально)</label>
+            <input
+              className="input"
+              value={customSpecs}
+              onChange={(e) => setCustomSpecs(e.target.value)}
+              placeholder="Например: банкротство физлиц, споры с застройщиком"
+              maxLength={300}
+            />
+            <p className="text-xs text-ink-500 dark:text-ink-400 mt-1.5">
+              Если вашей специализации нет в списке — впишите через запятую.
             </p>
           </div>
         </>

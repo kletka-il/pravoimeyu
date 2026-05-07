@@ -19,8 +19,8 @@ export async function POST(req: Request) {
   }
   try {
     const baseUrl = process.env.APP_URL ?? new URL(req.url).origin;
-    const { userId, role } = await registerUser(parsed.data, baseUrl);
-    return NextResponse.json({ ok: true, userId, role });
+    const { userId, role, emailSent } = await registerUser(parsed.data, baseUrl);
+    return NextResponse.json({ ok: true, userId, role, emailSent });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Ошибка регистрации";
     return NextResponse.json({ error: msg }, { status: 400 });

@@ -9,6 +9,19 @@ export type SessionData = {
   role?: Role;
 };
 
+// Fail-fast в production. На этапе сборки (NEXT_PHASE=phase-production-build)
+// и в dev-режиме оставляем мягкую проверку при первом запросе.
+const SESSION_PASSWORD = process.env.SESSION_PASSWORD;
+if (
+  process.env.NODE_ENV === "production" &&
+  process.env.NEXT_PHASE !== "phase-production-build" &&
+  (!SESSION_PASSWORD || SESSION_PASSWORD.length < 32)
+) {
+  throw new Error(
+    "SESSION_PASSWORD не задан или короче 32 символов. Установите переменную окружения перед запуском.",
+  );
+}
+
 function getSessionOptions(): SessionOptions {
   const sessionPassword = process.env.SESSION_PASSWORD;
   if (!sessionPassword || sessionPassword.length < 32) {

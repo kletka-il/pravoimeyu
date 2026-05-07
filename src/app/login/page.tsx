@@ -6,10 +6,16 @@ export const metadata = { title: "Вход" };
 export default function LoginPage({
   searchParams,
 }: {
-  searchParams: { next?: string; verified?: string; registered?: string };
+  searchParams: {
+    next?: string;
+    verified?: string;
+    registered?: string;
+    email?: string;
+  };
 }) {
   const isNewUser = searchParams.registered === "1";
   const isVerified = searchParams.verified === "1";
+  const emailFailed = searchParams.email === "failed";
 
   const heading = isNewUser
     ? "Почти готово! 📬"
@@ -36,13 +42,21 @@ export default function LoginPage({
           <span>Почта подтверждена. Можно входить.</span>
         </div>
       )}
-      {isNewUser && (
+      {isNewUser && !emailFailed && (
         <div className="mb-4 bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 rounded-2xl px-4 py-3 text-sm text-ink-800 dark:text-sky-200 flex items-start gap-3">
           <span className="text-lg">📬</span>
-          <span>                                                     
-      Регистрация прошла! Письмо для подтверждения отправлено на почту.{" "}
-      <strong>Если не видите — проверьте папку «Спам».</strong>
-        </span>                                                                      
+          <span>
+            Регистрация прошла! Письмо для подтверждения отправлено на почту.{" "}
+            <strong>Если не видите — проверьте папку «Спам».</strong>
+          </span>
+        </div>
+      )}
+      {isNewUser && emailFailed && (
+        <div className="mb-4 bg-sun-50 dark:bg-sun-900/20 border border-sun-200 dark:border-sun-800 rounded-2xl px-4 py-3 text-sm text-ink-800 dark:text-sun-200 flex items-start gap-3">
+          <span className="text-lg">⚠️</span>
+          <span>
+            Аккаунт создан, но письмо не удалось отправить. Войдите и нажмите «Отправить ещё раз», или обратитесь в поддержку.
+          </span>
         </div>
       )}
       <LoginForm next={searchParams.next} />

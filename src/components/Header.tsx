@@ -58,7 +58,7 @@ export default function Header({
           className="flex items-center gap-2.5 text-ink-900 dark:text-white group shrink-0"
         >
           <span className="relative inline-flex items-center justify-center w-9 h-9 rounded-xl bg-brand-700 text-white text-sm font-extrabold shadow-soft group-hover:bg-brand-800 transition-colors">
-            П
+            П!
             <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-sun-400 border-2 border-white dark:border-ink-950" />
           </span>
           <span className="font-extrabold text-lg text-ink-900 dark:text-white tracking-tight">

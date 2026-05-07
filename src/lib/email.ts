@@ -25,17 +25,33 @@ function getTransport(): nodemailer.Transporter | null {
   return cachedTransport;
 }
 
-export async function sendEmail({ to, subject, text, html }: SendArgs) {
+export type SendEmailResult =
+  | { ok: true }
+  | { ok: false; reason: "not_configured" | "send_failed"; error?: unknown };
+
+export async function sendEmail({
+  to,
+  subject,
+  text,
+  html,
+}: SendArgs): Promise<SendEmailResult> {
   const transport = getTransport();
   const from = process.env.SMTP_FROM || "Права имею <noreply@localhost>";
 
   if (!transport) {
-    console.error(`[email] SMTP не настроен. Письмо не отправлено → ${to} | ${subject}`);
-    throw new Error("Сервис отправки писем не настроен. Обратитесь к администратору.");
+    console.warn(
+      `[email] SMTP не настроен. Письмо не отправлено → ${to} | ${subject}`,
+    );
+    return { ok: false, reason: "not_configured" };
   }
 
-  await transport.sendMail({ from, to, subject, text, html });
-  return { ok: true };
+  try {
+    await transport.sendMail({ from, to, subject, text, html });
+    return { ok: true };
+  } catch (error) {
+    console.error(`[email] sendMail failed → ${to} | ${subject}`, error);
+    return { ok: false, reason: "send_failed", error };
+  }
 }
 
 export function buildBookingStatusEmail(
