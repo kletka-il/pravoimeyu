@@ -105,7 +105,7 @@ export async function registerUser(input: RegisterInput, baseUrl: string) {
   const { text, html } = buildVerifyEmail(input.name, link);
   await sendEmail({
     to: input.email,
-    subject: "Подтверждение почты — Право имею",
+    subject: "Подтверждение почты — Права имею",
     text,
     html,
   });
@@ -137,7 +137,7 @@ export async function resendVerification(email: string, baseUrl: string) {
   const { text, html } = buildVerifyEmail(user.name, link);
   await sendEmail({
     to: user.email,
-    subject: "Подтверждение почты — Право имею",
+    subject: "Подтверждение почты — Права имею",
     text,
     html,
   });

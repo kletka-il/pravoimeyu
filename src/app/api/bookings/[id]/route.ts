@@ -62,7 +62,7 @@ export async function PATCH(
     );
     sendEmail({
       to: booking.client.email,
-      subject: `Обращение «Право имею»: статус изменён`,
+      subject: `Обращение «Права имею»: статус изменён`,
       text,
       html,
     }).catch(() => {});

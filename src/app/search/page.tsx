@@ -15,9 +15,9 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   if (q) {
     return {
       title: `${q} — поиск`,
-      description: `Юридические ответы на вопрос: «${q}». Найдите решение своей правовой ситуации на портале «Право имею».`,
+      description: `Юридические ответы на вопрос: «${q}». Найдите решение своей правовой ситуации на портале «Права имею».`,
       openGraph: {
-        title: `${q} — поиск · Право имею`,
+        title: `${q} — поиск · Права имею`,
         description: `Юридические ответы на вопрос: «${q}».`,
         url: `https://pravaimeu.ru/search?q=${encodeURIComponent(q)}`,
       },
@@ -30,7 +30,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
       "Опишите свою ситуацию — умный поиск найдёт готовые юридические ответы и подберёт специалиста с нужным опытом.",
     alternates: { canonical: "https://pravaimeu.ru/search" },
     openGraph: {
-      title: "Поиск юридических ответов · Право имею",
+      title: "Поиск юридических ответов · Права имею",
       description: "Опишите ситуацию своими словами — поиск найдёт готовый ответ из правовой базы.",
       url: "https://pravaimeu.ru/search",
       type: "website",

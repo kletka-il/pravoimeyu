@@ -162,6 +162,23 @@ function snippet(body: string, queryTokens: string[]): string {
   return s;
 }
 
+// Находит все термины индекса, которые начинаются с данного префикса (и наоборот).
+// Возвращает массив [indexTerm, weight] — вес убывает с разницей длин.
+function prefixMatches(term: string, df: Map<string, number>): Array<[string, number]> {
+  if (term.length < 4) return [];
+  const results: Array<[string, number]> = [];
+  for (const indexTerm of df.keys()) {
+    if (indexTerm === term) continue;
+    const longer = indexTerm.length > term.length ? indexTerm : term;
+    const shorter = indexTerm.length <= term.length ? indexTerm : term;
+    if (longer.startsWith(shorter) && longer.length - shorter.length <= 4) {
+      const weight = shorter.length / longer.length; // 0.5–1.0
+      results.push([indexTerm, weight * 0.6]); // prefix match = 60% от полного
+    }
+  }
+  return results;
+}
+
 export function search(query: string, limit = 8): SearchHit[] {
   if (!INDEX || !query.trim()) return [];
   const rawTokens = tokenize(query);
@@ -170,13 +187,26 @@ export function search(query: string, limit = 8): SearchHit[] {
   const stems = [...new Set(stemTokens(expanded))];
 
   const { docs, df, avgFieldLen, N } = INDEX;
+
+  // Строим расширенный список (stem -> effectiveWeight): точные + prefix
+  const termWeights = new Map<string, number>();
+  for (const s of stems) {
+    termWeights.set(s, 1.0);
+    for (const [pTerm, pWeight] of prefixMatches(s, df)) {
+      const cur = termWeights.get(pTerm) ?? 0;
+      if (pWeight > cur) termWeights.set(pTerm, pWeight);
+    }
+  }
+
   const hits: SearchHit[] = [];
 
   for (const doc of docs) {
     let score = 0;
     let matchedTerms = 0;
+    // Бонус: совпадение с названием категории
+    const catTokens = stemTokens(tokenize(doc.category.title));
 
-    for (const term of stems) {
+    for (const [term, weight] of termWeights) {
       const dfVal = df.get(term) || 0;
       if (!dfVal) continue;
       let termScore = 0;
@@ -193,15 +223,18 @@ export function search(query: string, limit = 8): SearchHit[] {
           FIELD_WEIGHTS[fieldName] *
           bm25Term(tf, fieldLen, avgFieldLen[fieldName], dfVal, N);
       }
+      // Мягкий бонус за совпадение с категорией
+      if (catTokens.includes(term)) termScore += 0.3;
+
       if (termScore > 0) {
         matchedTerms += 1;
-        score += termScore;
+        score += termScore * weight;
       }
     }
 
     // Бонус за покрытие — много токенов запроса нашлись в документе
     if (matchedTerms > 0) {
-      const coverage = matchedTerms / stems.length;
+      const coverage = matchedTerms / termWeights.size;
       score *= 0.6 + coverage * 0.6;
       // мягкий буст по urgency: при равенстве score — выше всплывают срочные темы
       score += doc.urgency * 0.05;

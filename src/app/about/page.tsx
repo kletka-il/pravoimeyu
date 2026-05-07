@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "О компании — Право имею",
-  description: "Реквизиты и информация о портале «Право имею»",
+  title: "О компании — Права имею",
+  description: "Реквизиты и информация о портале «Права имею»",
 };
 
 export default function AboutPage() {
@@ -20,7 +20,7 @@ export default function AboutPage() {
         <div className="card space-y-4">
           <h2 className="heading-serif text-2xl">Миссия</h2>
           <p className="text-ink-700 dark:text-ink-300 leading-relaxed">
-            «Право имею» — юридический портал для граждан России, которые оказались
+            «Права имею» — юридический портал для граждан России, которые оказались
             в сложной жизненной ситуации и не знают, как действовать по закону.
             Мы даём доступ к проверенной правовой информации и связываем пользователей
             с опытными юристами.

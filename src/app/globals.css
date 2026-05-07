@@ -157,6 +157,37 @@ html, body {
   /* Dark mode text adjustments */
   .dark .text-ink-600 { color: #b8b8c2; }
   .dark .text-ink-500 { color: #b8b8c2; }
+
+  /* Premium card — многослойная тень + блик-линия сверху */
+  .card-premium {
+    background: white;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.9),
+      0 2px 4px rgba(15,15,26,0.04),
+      0 8px 24px rgba(15,15,26,0.08);
+  }
+  .dark .card-premium {
+    background: #0f0f1a;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.05),
+      0 2px 4px rgba(0,0,0,0.30),
+      0 8px 24px rgba(0,0,0,0.20);
+  }
+}
+
+/* Noise-текстура поверх фона — создаёт ощущение материала */
+.texture-noise {
+  position: relative;
+}
+.texture-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  border-radius: inherit;
 }
 
 mark {

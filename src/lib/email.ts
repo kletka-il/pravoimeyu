@@ -27,7 +27,7 @@ function getTransport(): nodemailer.Transporter | null {
 
 export async function sendEmail({ to, subject, text, html }: SendArgs) {
   const transport = getTransport();
-  const from = process.env.SMTP_FROM || "Право имею <noreply@localhost>";
+  const from = process.env.SMTP_FROM || "Права имею <noreply@localhost>";
 
   if (!transport) {
     console.error(`[email] SMTP не настроен. Письмо не отправлено → ${to} | ${subject}`);
@@ -51,7 +51,7 @@ export function buildBookingStatusEmail(
     CANCELLED: "отменено",
   };
   const label = statusLabels[status] ?? status.toLowerCase();
-  const text = `Здравствуйте, ${clientName}!\n\nСтатус вашего обращения к юристу ${specialistName} изменился: ${label}.\n\nВаш вопрос: ${question}\n\nОткройте личный кабинет, чтобы узнать подробности:\n${process.env.APP_URL}/dashboard/client/bookings\n\n— Команда «Право имею»`;
+  const text = `Здравствуйте, ${clientName}!\n\nСтатус вашего обращения к юристу ${specialistName} изменился: ${label}.\n\nВаш вопрос: ${question}\n\nОткройте личный кабинет, чтобы узнать подробности:\n${process.env.APP_URL}/dashboard/client/bookings\n\n— Команда «Права имею»`;
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#11142a">
       <h1 style="font-family:Georgia,serif;color:#11142a;margin:0 0 12px">Обновление по вашему обращению</h1>
@@ -63,25 +63,25 @@ export function buildBookingStatusEmail(
         <a href="${process.env.APP_URL}/dashboard/client/bookings" style="background:#8a1538;color:#fff;text-decoration:none;padding:12px 22px;border-radius:6px;display:inline-block">Открыть кабинет</a>
       </p>
       <hr style="border:none;border-top:1px solid #e8ebf0;margin:24px 0" />
-      <p style="color:#9ea8ba;font-size:12px">— Команда «Право имею»</p>
+      <p style="color:#9ea8ba;font-size:12px">— Команда «Права имею»</p>
     </div>
   `;
   return { text, html };
 }
 
 export function buildVerifyEmail(name: string, link: string) {
-  const text = `Здравствуйте, ${name}!\n\nВы регистрируетесь на портале «Право имею».\nПодтвердите почту, перейдя по ссылке:\n\n${link}\n\nСсылка действует 24 часа.\nЕсли вы не регистрировались — просто проигнорируйте письмо.\n\n— Команда «Право имею»`;
+  const text = `Здравствуйте, ${name}!\n\nВы регистрируетесь на портале «Права имею».\nПодтвердите почту, перейдя по ссылке:\n\n${link}\n\nСсылка действует 24 часа.\nЕсли вы не регистрировались — просто проигнорируйте письмо.\n\n— Команда «Права имею»`;
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#11142a">
       <h1 style="font-family:Georgia,serif;color:#11142a;margin:0 0 12px">Здравствуйте, ${name}!</h1>
-      <p>Вы регистрируетесь на портале <b>«Право имею»</b>. Подтвердите почту, чтобы активировать аккаунт:</p>
+      <p>Вы регистрируетесь на портале <b>«Права имею»</b>. Подтвердите почту, чтобы активировать аккаунт:</p>
       <p style="margin:24px 0">
         <a href="${link}" style="background:#8a1538;color:#fff;text-decoration:none;padding:12px 22px;border-radius:6px;display:inline-block">Подтвердить почту</a>
       </p>
       <p style="color:#4d5870;font-size:13px">Или скопируйте ссылку: <br>${link}</p>
       <p style="color:#4d5870;font-size:13px">Ссылка действительна 24 часа.</p>
       <hr style="border:none;border-top:1px solid #e8ebf0;margin:24px 0" />
-      <p style="color:#9ea8ba;font-size:12px">Если вы не регистрировались на «Право имею» — просто проигнорируйте это письмо.</p>
+      <p style="color:#9ea8ba;font-size:12px">Если вы не регистрировались на «Права имею» — просто проигнорируйте это письмо.</p>
     </div>
   `;
   return { text, html };

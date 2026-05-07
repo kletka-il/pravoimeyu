@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Политика конфиденциальности — Право имею",
-  description: "Политика обработки персональных данных портала «Право имею»",
+  title: "Политика конфиденциальности — Права имею",
+  description: "Политика обработки персональных данных портала «Права имею»",
 };
 
 export default function PrivacyPage() {
@@ -20,10 +20,10 @@ export default function PrivacyPage() {
         <section>
           <h2>1. Оператор персональных данных</h2>
           <p>
-            Оператором персональных данных является ООО «Право имею» (далее — «Оператор», «мы»).
+            Оператором персональных данных является ООО «Права имею» (далее — «Оператор», «мы»).
           </p>
           <ul>
-            <li><strong>Полное наименование:</strong> Общество с ограниченной ответственностью «Право имею»</li>
+            <li><strong>Полное наименование:</strong> Общество с ограниченной ответственностью «Права имею»</li>
             <li><strong>Email для запросов:</strong> p1ava.imeu@gmail.com</li>
           </ul>
           <p className="text-sm text-ink-500">

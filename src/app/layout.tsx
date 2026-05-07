@@ -6,7 +6,7 @@ import { getSession } from "@/lib/session";
 import RegisterSW from "@/components/RegisterSW";
 
 const BASE_URL = "https://pravaimeu.ru";
-const DEFAULT_TITLE = "Право имею — юридическая помощь, когда она нужна срочно";
+const DEFAULT_TITLE = "Права имею — юридическая помощь, когда она нужна срочно";
 const DEFAULT_DESC =
   "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы. Бесплатно для общих вопросов, платно для сложных дел.";
 
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
     default: DEFAULT_TITLE,
-    template: "%s · Право имею",
+    template: "%s · Права имею",
   },
   description: DEFAULT_DESC,
   keywords: [
@@ -24,19 +24,19 @@ export const metadata: Metadata = {
     "юрист онлайн",
     "правовые ситуации",
     "юридические вопросы",
-    "право имею",
+    "права имею",
   ],
-  authors: [{ name: "Право имею", url: BASE_URL }],
-  creator: "Право имею",
-  publisher: "Право имею",
+  authors: [{ name: "Права имею", url: BASE_URL }],
+  creator: "Права имею",
+  publisher: "Права имею",
   manifest: "/manifest.json",
-  applicationName: "Право имею",
+  applicationName: "Права имею",
   alternates: { canonical: BASE_URL },
   openGraph: {
     type: "website",
     locale: "ru_RU",
     url: BASE_URL,
-    siteName: "Право имею",
+    siteName: "Права имею",
     title: DEFAULT_TITLE,
     description: DEFAULT_DESC,
   },
@@ -53,21 +53,17 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Право имею",
+    title: "Права имею",
   },
   formatDetection: { telephone: false },
   icons: {
-    icon: [
-      { url: "/icons/favicon-32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-    ],
-    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],
-    shortcut: ["/icons/favicon-32.png"],
+    icon: [{ url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }],
+    shortcut: ["/icon"],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1f4cf5",
+  themeColor: "#7c3aed",
   width: "device-width",
   initialScale: 1,
 };

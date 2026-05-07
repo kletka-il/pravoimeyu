@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: a.shortAnswer,
     alternates: { canonical: url },
     openGraph: {
-      title: `${a.title} · Право имею`,
+      title: `${a.title} · Права имею`,
       description: a.shortAnswer,
       url,
       type: "article",
@@ -81,7 +81,7 @@ export default async function ArticlePage({ params }: Props) {
     inLanguage: "ru",
     publisher: {
       "@type": "Organization",
-      name: "Право имею",
+      name: "Права имею",
       logo: { "@type": "ImageObject", url: "https://pravaimeu.ru/icons/icon-512.png" },
     },
     breadcrumb: {

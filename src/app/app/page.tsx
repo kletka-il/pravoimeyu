@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export const metadata = { title: "Приложение «Право имею»" };
+export const metadata = { title: "Приложение «Права имею»" };
 
 export default function AppPage() {
   return (
@@ -11,7 +11,7 @@ export default function AppPage() {
             PWA приложение
           </div>
           <h1 className="heading-serif text-4xl md:text-5xl mt-3">
-            «Право имею» в кармане
+            «Права имею» в кармане
           </h1>
           <p className="text-ink-600 mt-4 text-lg leading-relaxed">
             Установите портал как приложение — иконка появится на главном экране,

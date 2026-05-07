@@ -1,5 +1,5 @@
 import Link from "next/link";
-import CategoryIcon from "@/components/CategoryIcon";
+import CategoryIcon, { CATEGORY_COLOR } from "@/components/CategoryIcon";
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Юридические ситуации по категориям: трудовые споры, ДТП, семейное право, жильё, защита прав потребителей и другие. Пошаговые подсказки и юристы по каждой теме.",
   alternates: { canonical: "https://pravaimeu.ru/situations" },
   openGraph: {
-    title: "Жизненные ситуации · Право имею",
+    title: "Жизненные ситуации · Права имею",
     description:
       "Юридические ситуации по категориям: трудовые споры, ДТП, семейное право, жильё, защита прав потребителей и другие.",
     url: "https://pravaimeu.ru/situations",
@@ -43,14 +43,16 @@ export default async function SituationsPage() {
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {categories.map((c) => (
+        {categories.map((c) => {
+          const col = CATEGORY_COLOR[c.slug] ?? { icon: "text-brand-600", bg: "bg-brand-50", darkBg: "dark:bg-brand-950" };
+          return (
           <Link
             key={c.id}
             href={`/knowledge?category=${c.slug}`}
             className="group flex flex-col gap-3 p-5 rounded-2xl border border-ink-100 dark:border-ink-800 bg-white dark:bg-ink-900 hover:border-brand-300 dark:hover:border-brand-700 hover:shadow-lift transition-all duration-200"
           >
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950 flex items-center justify-center text-brand-600 dark:text-brand-400 group-hover:bg-brand-100 dark:group-hover:bg-brand-900 transition-colors">
+              <div className={`w-10 h-10 rounded-xl ${col.bg} ${col.darkBg} flex items-center justify-center ${col.icon} transition-colors`}>
                 <CategoryIcon slug={c.slug} size={18} />
               </div>
               <span className="badge bg-ink-100 dark:bg-ink-800 text-ink-500 dark:text-ink-400 text-xs">
@@ -64,7 +66,7 @@ export default async function SituationsPage() {
               <p className="text-sm text-ink-500 dark:text-ink-400 mt-1 leading-snug">{c.description}</p>
             </div>
           </Link>
-        ))}
+        );})}
       </div>
     </div>
   );

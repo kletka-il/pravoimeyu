@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Право имею — юридическая помощь онлайн";
+export const alt = "Права имею — юридическая помощь онлайн";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

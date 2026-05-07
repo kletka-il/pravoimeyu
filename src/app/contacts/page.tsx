@@ -21,7 +21,7 @@ export default function ContactsPage() {
               специалист — мы свяжемся для верификации.
             </p>
             <a href="/register?role=SPECIALIST" className="btn-outline mt-3">
-              Стать юристом «Право имею»
+              Стать юристом «Права имею»
             </a>
           </div>
         </div>
