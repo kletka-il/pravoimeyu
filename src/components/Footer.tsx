@@ -8,9 +8,8 @@ export default function Footer() {
         {/* Brand */}
         <div>
           <Link href="/" className="flex items-center gap-2.5 mb-4 group">
-            <span className="relative inline-flex items-center justify-center w-10 h-10 rounded-xl bg-brand-700 text-white text-sm font-extrabold shadow-soft group-hover:bg-brand-800 transition-colors">
-              П
-              <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-sun-400 border-2 border-ink-900" />
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-brand-700 text-white text-xs font-extrabold shadow-soft group-hover:bg-brand-800 transition-colors">
+              П!
             </span>
             <span className="font-extrabold text-lg text-white tracking-tight">
               Права имею
