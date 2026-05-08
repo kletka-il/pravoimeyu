@@ -24,12 +24,20 @@ export default function RegisterForm({ role }: { role: Role }) {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [specs, setSpecs] = useState<string[]>([]);
+  const [customSpec, setCustomSpec] = useState("");
   const [consented, setConsented] = useState(false);
 
   function toggleSpec(key: string) {
     setSpecs((curr) =>
       curr.includes(key) ? curr.filter((x) => x !== key) : [...curr, key],
     );
+  }
+
+  function addCustomSpec() {
+    const val = customSpec.trim();
+    if (!val || specs.includes(val)) return;
+    setSpecs((curr) => [...curr, val]);
+    setCustomSpec("");
   }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -136,8 +144,44 @@ export default function RegisterForm({ role }: { role: Role }) {
                 </button>
               ))}
             </div>
+            {specs.filter((s) => !Object.keys(SPECIALIZATIONS).includes(s)).length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {specs.filter((s) => !Object.keys(SPECIALIZATIONS).includes(s)).map((s) => (
+                  <span
+                    key={s}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-brand-600 text-white border border-brand-600"
+                  >
+                    {s}
+                    <button
+                      type="button"
+                      onClick={() => setSpecs((curr) => curr.filter((x) => x !== s))}
+                      className="hover:text-brand-200 transition-colors leading-none"
+                      aria-label="Удалить"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+            <div className="flex gap-2 mt-3">
+              <input
+                className="input flex-1"
+                placeholder="Своя специализация…"
+                value={customSpec}
+                onChange={(e) => setCustomSpec(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomSpec(); } }}
+              />
+              <button
+                type="button"
+                onClick={addCustomSpec}
+                className="btn-ghost text-sm px-4 py-2 shrink-0"
+              >
+                Добавить
+              </button>
+            </div>
             <p className="text-xs text-ink-500 dark:text-ink-400 mt-2">
-              Можно выбрать несколько. Профиль будет проверен модератором перед публикацией.
+              Можно выбрать несколько или написать свою. Профиль будет проверен модератором перед публикацией.
             </p>
           </div>
         </>
