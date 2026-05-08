@@ -119,9 +119,10 @@ export default async function HomePage() {
 
           {/* Правая колонка — слот под фото счастливого клиента */}
           <div className="relative hidden lg:block">
-            <div
-              className="photo-slot aspect-[4/5] w-full rounded-3xl shadow-card border border-ink-100 dark:border-ink-800 overflow-hidden"
-              data-label="Сюда — стоковое фото клиента"
+            <img
+              src="/images/hero-client.png"
+              alt="Юрист за работой"
+              className="aspect-[4/5] w-full rounded-3xl shadow-card border border-ink-100 dark:border-ink-800 overflow-hidden object-cover object-top"
             />
 
             {/* Карточка-отзыв поверх фото снизу-слева */}
