@@ -158,6 +158,67 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── ИИ-помощник промо-блок ── */}
+      <section className="container-page py-8 md:py-10">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 text-white px-6 py-8 md:px-10 md:py-10">
+          {/* Декор */}
+          <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 w-32 h-32 rounded-full bg-white/5 pointer-events-none" />
+
+          <div className="relative flex flex-col md:flex-row md:items-center gap-6 md:gap-10">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 bg-white/15 px-3 py-1 rounded-full text-xs font-semibold mb-3">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-300 animate-pulse" />
+                ИИ на базе Claude · Онлайн 24/7
+              </div>
+              <h2 className="font-extrabold text-2xl md:text-3xl leading-tight mb-2">
+                Спросите правового<br className="hidden sm:block" /> ИИ-помощника
+              </h2>
+              <p className="text-white/75 text-sm md:text-base max-w-md">
+                Опишите ситуацию своими словами — объясним ваши права, порядок действий и что делать дальше. Бесплатно.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 md:w-72 shrink-0">
+              {/* Примеры вопросов */}
+              <div className="flex flex-col gap-2">
+                {["Меня уволили без причины", "Попал в ДТП, я не виноват", "Управляйка не делает ремонт"].map(q => (
+                  <button
+                    key={q}
+                    data-chat-hint={q}
+                    className="text-left text-sm bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl px-4 py-2.5 transition-colors flex items-center justify-between gap-2 group"
+                    onClick={() => {
+                      const btn = document.querySelector('[aria-label="Открыть правового помощника"]') as HTMLButtonElement;
+                      if (btn) btn.click();
+                      setTimeout(() => {
+                        const ta = document.querySelector('textarea[placeholder]') as HTMLTextAreaElement;
+                        if (ta) { ta.value = q; ta.dispatchEvent(new Event('input', { bubbles: true })); ta.focus(); }
+                      }, 300);
+                    }}
+                  >
+                    <span>{q}</span>
+                    <svg className="shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </button>
+                ))}
+              </div>
+              <button
+                data-open-chat
+                className="bg-white text-brand-700 font-bold text-sm px-5 py-3 rounded-xl hover:bg-brand-50 transition-colors flex items-center justify-center gap-2"
+                onClick={() => {
+                  const btn = document.querySelector('[aria-label="Открыть правового помощника"]') as HTMLButtonElement;
+                  if (btn) btn.click();
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                Задать вопрос бесплатно
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Trust-полоса: 4 факта с иконками ── */}
       <section className="border-b border-ink-100 dark:border-ink-800 bg-ink-50 dark:bg-ink-950/60">
         <div className="container-page py-6">
