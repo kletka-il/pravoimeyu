@@ -1,5 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+  variable: "--font-inter",
+});
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getSession } from "@/lib/session";
@@ -78,7 +86,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     : null;
 
   return (
-    <html lang="ru" suppressHydrationWarning>
+    <html lang="ru" suppressHydrationWarning className={inter.variable}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
