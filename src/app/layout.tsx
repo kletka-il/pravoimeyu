@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getSession } from "@/lib/session";
 import RegisterSW from "@/components/RegisterSW";
+import LegalChat from "@/components/LegalChat";
 
 const BASE_URL = "https://pravaimeu.ru";
 const DEFAULT_TITLE = "Права имею — юридическая помощь, когда она нужна срочно";
@@ -86,6 +87,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <main className="flex-1 w-full">{children}</main>
         <Footer />
         <RegisterSW />
+        <LegalChat />
       </body>
     </html>
   );
