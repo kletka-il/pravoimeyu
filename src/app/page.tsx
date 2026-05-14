@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import SearchBar from "@/components/SearchBar";
 import CategoryIcon, { CATEGORY_COLOR } from "@/components/CategoryIcon";
 import { prisma } from "@/lib/prisma";
@@ -119,10 +120,14 @@ export default async function HomePage() {
 
           {/* Правая колонка — слот под фото счастливого клиента */}
           <div className="relative hidden lg:block">
-            <img
+            <Image
               src="/images/hero-client.png"
               alt="Юрист за работой"
+              width={600}
+              height={750}
               className="aspect-[4/5] w-full rounded-3xl shadow-card border border-ink-100 dark:border-ink-800 overflow-hidden object-cover object-top"
+              priority={false}
+              quality={80}
             />
 
             {/* Карточка-отзыв поверх фото снизу-слева */}
