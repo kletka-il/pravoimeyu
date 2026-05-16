@@ -1,6 +1,9 @@
-const CACHE_NAME = "pravoimeyu-v1";
+const CACHE_NAME = "pravoimeyu-v2";
+
+// Главная "/" намеренно убрана: она всегда динамическая (force-dynamic),
+// кешировать её в SW нельзя — иначе браузер отдаёт «мёртвый» HTML без
+// Next.js hydration и клики по <Link> вызывают "can't find server".
 const STATIC_ASSETS = [
-  "/",
   "/knowledge",
   "/situations",
   "/search",
@@ -26,7 +29,7 @@ self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Don't cache API calls, auth, or non-GET requests
+  // Не кешируем: POST/PUT/DELETE, API, авторизацию, дашборд
   if (
     request.method !== "GET" ||
     url.pathname.startsWith("/api/") ||
@@ -38,7 +41,18 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Knowledge base articles: cache-first
+  // Главная "/" — только сеть, без кеша (dynamic page, Next.js RSC навигация)
+  if (url.pathname === "/") {
+    event.respondWith(
+      fetch(request).catch(async () => {
+        const offlinePage = await caches.match("/offline");
+        return offlinePage ?? new Response("Нет подключения к интернету", { status: 503 });
+      })
+    );
+    return;
+  }
+
+  // Статьи базы знаний: cache-first (читаются повторно, редко меняются)
   if (url.pathname.startsWith("/knowledge/")) {
     event.respondWith(
       caches.open(CACHE_NAME).then(async (cache) => {
@@ -56,7 +70,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Everything else: network-first, fall back to cache
+  // Всё остальное: network-first, кеш как запасной вариант
   event.respondWith(
     fetch(request)
       .then((response) => {
