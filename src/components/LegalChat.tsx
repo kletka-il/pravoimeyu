@@ -3,6 +3,17 @@ import { useState, useRef, useEffect } from "react";
 
 type Message = { role: "user" | "assistant"; content: string };
 
+function renderMd(text: string) {
+  return text.split(/(\*\*[^*\n]+\*\*)/g).flatMap((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return [<strong key={i}>{part.slice(2, -2)}</strong>];
+    }
+    return part.split("\n").flatMap((line, j, arr) =>
+      j < arr.length - 1 ? [line, <br key={`${i}-${j}`} />] : [line]
+    );
+  });
+}
+
 const HINTS = [
   "Меня незаконно уволили",
   "Попал в ДТП, не виноват",
@@ -164,12 +175,12 @@ export default function LegalChat() {
                   {m.role === "assistant" && (
                     <div className="w-7 h-7 rounded-full gradient-brand flex items-center justify-center text-white text-[10px] font-bold mr-2 mt-0.5 shrink-0">П</div>
                   )}
-                  <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${
+                  <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                     m.role === "user"
-                      ? "bg-brand-600 text-white rounded-br-sm"
+                      ? "bg-brand-600 text-white rounded-br-sm whitespace-pre-wrap"
                       : "bg-ink-50 dark:bg-ink-800 text-ink-900 dark:text-ink-100 rounded-bl-sm"
                   }`}>
-                    {m.content}
+                    {m.role === "assistant" ? renderMd(m.content) : m.content}
                   </div>
                 </div>
               ))}
