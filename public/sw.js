@@ -1,19 +1,12 @@
-const CACHE_NAME = "pravoimeyu-v2";
-
-// Главная "/" намеренно убрана: она всегда динамическая (force-dynamic),
-// кешировать её в SW нельзя — иначе браузер отдаёт «мёртвый» HTML без
-// Next.js hydration и клики по <Link> вызывают "can't find server".
-const STATIC_ASSETS = [
-  "/knowledge",
-  "/situations",
-  "/search",
-  "/wins",
-  "/offline",
-];
+const CACHE_NAME = "pravoimeyu-v3";
 
 self.addEventListener("install", (event) => {
+  // Кешируем только статичную offline-страницу.
+  // Динамические страницы (/knowledge, /situations и др.) не кешируем при установке —
+  // они грузятся 1-2с каждая, и addAll падает если хоть одна не ответит,
+  // что на Android Chrome ломает весь SW и сайт перестаёт открываться.
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then((cache) => cache.add("/offline")).then(() => self.skipWaiting())
   );
 });
 
