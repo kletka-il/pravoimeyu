@@ -60,6 +60,7 @@ const config: Config = {
           700: "#b91c1c",
           800: "#991b1b",
           900: "#7f1d1d",
+          950: "#450a0a",
           dark:  "#b91c1c",
           light: "#f87171",
         },
@@ -85,6 +86,7 @@ const config: Config = {
           700: "#1d4ed8",
           800: "#1e40af",
           900: "#1e3a8a",
+          950: "#172554",
         },
         gold: {
           DEFAULT: "#a17c3c",
