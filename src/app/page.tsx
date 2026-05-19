@@ -6,6 +6,7 @@ import SearchBar from "@/components/SearchBar";
 import CategoryIcon, { CATEGORY_COLOR } from "@/components/CategoryIcon";
 import AiPromoButtons from "@/components/AiPromoButtons";
 import { prisma } from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 import {
   CheckCircle2, Clock, ShieldCheck, Users, Star, ArrowRight,
 } from "lucide-react";
@@ -63,18 +64,27 @@ const siteSchema = {
   },
 };
 
+const getHomePageData = unstable_cache(
+  async () => {
+    const [categories, articlesCount, specialistsCount, topSpecialists] = await Promise.all([
+      prisma.category.findMany({ orderBy: { order: "asc" } }),
+      prisma.article.count({ where: { isPublished: true } }),
+      prisma.specialistProfile.count({ where: { status: "APPROVED" } }),
+      prisma.specialistProfile.findMany({
+        where: { status: "APPROVED" },
+        orderBy: [{ rating: "desc" }, { reviewsCount: "desc" }],
+        take: 4,
+        include: { user: { select: { name: true } } },
+      }),
+    ]);
+    return { categories, articlesCount, specialistsCount, topSpecialists };
+  },
+  ["home-page-data"],
+  { revalidate: 3600 }
+);
+
 export default async function HomePage() {
-  const [categories, articlesCount, specialistsCount, topSpecialists] = await Promise.all([
-    prisma.category.findMany({ orderBy: { order: "asc" } }),
-    prisma.article.count({ where: { isPublished: true } }),
-    prisma.specialistProfile.count({ where: { status: "APPROVED" } }),
-    prisma.specialistProfile.findMany({
-      where: { status: "APPROVED" },
-      orderBy: [{ rating: "desc" }, { reviewsCount: "desc" }],
-      take: 4,
-      include: { user: { select: { name: true } } },
-    }),
-  ]);
+  const { categories, articlesCount, specialistsCount, topSpecialists } = await getHomePageData();
 
   return (
     <>
@@ -129,7 +139,6 @@ export default async function HomePage() {
               width={972}
               height={638}
               className="aspect-[3/2] w-full rounded-3xl shadow-card border border-ink-100 dark:border-ink-800 overflow-hidden object-cover object-center"
-              priority={true}
               quality={85}
             />
 
