@@ -21,10 +21,13 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
+  chatUsed         Int       @default(0)
+
   verifyTokens     VerifyToken[]
   resetTokens      PasswordResetToken[]
   searches         SearchLog[]
   specialist       SpecialistProfile?
+  ownedFirm        LawFirm?
   bookingsClient   Booking[]             @relation("BookingClient")
   authoredArticles Article[]             @relation("ArticleAuthor")
   messagesSent     Message[]             @relation("MessageSender")
@@ -69,10 +72,31 @@ model SpecialistProfile {
   reviewsCount    Int      @default(0)
   specializations Json     @default("[]")
   credentials     Json     @default("[]")
+  firmId          String?
+  firm            LawFirm? @relation(fields: [firmId], references: [id])
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   bookings Booking[] @relation("BookingSpecialist")
+
+  @@index([status])
+  @@index([firmId])
+}
+
+model LawFirm {
+  id          String   @id @default(cuid())
+  name        String
+  inn         String   @default("")
+  address     String   @default("")
+  phone       String   @default("")
+  website     String   @default("")
+  description String   @default("")
+  status      String   @default("PENDING")
+  ownerId     String   @unique
+  owner       User     @relation(fields: [ownerId], references: [id])
+  members     SpecialistProfile[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([status])
 }
@@ -131,6 +155,7 @@ model Booking {
   question     String
   contactPhone String            @default("")
   status       String            @default("NEW")
+  fromChat     Boolean           @default(false)
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
 
@@ -188,4 +213,11 @@ model Contact {
   message   String
   createdAt DateTime @default(now())
   isRead    Boolean  @default(false)
+}
+
+model TelegramSession {
+  chatId    BigInt   @id
+  step      String   @default("WAITING_NAME")
+  data      Json     @default("{}")
+  updatedAt DateTime @updatedAt
 }
