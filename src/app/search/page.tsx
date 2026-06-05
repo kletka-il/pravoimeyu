@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
+import AiSearchAnswer from "@/components/AiSearchAnswer";
 import { searchArticles, type SearchHit } from "@/lib/search/index";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
@@ -107,14 +108,20 @@ export default async function SearchPage({ searchParams }: Props) {
                   : `Найдено ответов: ${hits.length}`}
               </h2>
               {hits.length === 0 ? (
-                <div className="card">
-                  <p className="text-ink-700">
-                    Попробуйте переформулировать запрос или выбрать категорию
-                    вручную.
-                  </p>
-                  <div className="mt-4">
-                    <Link href="/situations" className="btn-outline">
-                      Все жизненные ситуации
+                <div className="card space-y-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-brand-600 text-lg">✦</span>
+                    <span className="font-bold text-ink-900 dark:text-white">
+                      Ответ ИИ-помощника
+                    </span>
+                  </div>
+                  <AiSearchAnswer query={q} />
+                  <div className="pt-3 border-t border-ink-100 dark:border-ink-800 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+                    <p className="text-xs text-ink-400">
+                      Ответ носит информационный характер. Для решения вашей ситуации рекомендуем проконсультироваться с юристом.
+                    </p>
+                    <Link href="/situations" className="btn-outline text-sm whitespace-nowrap">
+                      Все ситуации →
                     </Link>
                   </div>
                 </div>
