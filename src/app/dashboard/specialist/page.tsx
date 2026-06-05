@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
@@ -10,9 +11,10 @@ export default async function SpecialistDashboard() {
   const s = await getSession();
   if (!s.userId || s.role !== ROLE.SPECIALIST) redirect("/dashboard");
 
-  const profile = await prisma.specialistProfile.findUnique({
-    where: { userId: s.userId },
-  });
+  const [profile, articlesCount] = await Promise.all([
+    prisma.specialistProfile.findUnique({ where: { userId: s.userId } }),
+    prisma.article.count({ where: { authorId: s.userId } }),
+  ]);
 
   if (!profile) {
     return (
@@ -69,12 +71,32 @@ export default async function SpecialistDashboard() {
             {profile.reviewsCount} отзывов
           </div>
         </div>
+        <Link
+          href="/dashboard/specialist/articles"
+          className="card card-hover block group"
+        >
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">✍️</span>
+            <div>
+              <h3 className="heading-serif text-lg mb-0.5 group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">
+                Мои статьи
+              </h3>
+              <p className="text-sm text-ink-500">
+                {articlesCount > 0
+                  ? `${articlesCount} ${articlesCount === 1 ? "статья" : articlesCount < 5 ? "статьи" : "статей"}`
+                  : "Делитесь знаниями — помогайте людям"}
+              </p>
+            </div>
+          </div>
+        </Link>
+
         <div className="card">
           <h3 className="heading-serif text-xl mb-2">Что дальше</h3>
           <ul className="text-sm text-ink-600 list-disc pl-5 space-y-1">
             <li>Заполните регалии полностью — это повышает доверие.</li>
             <li>Укажите конкретные специализации.</li>
             <li>После одобрения профиль начнёт показываться в поиске.</li>
+            <li>Пишите статьи — они увеличивают видимость профиля.</li>
           </ul>
         </div>
       </aside>
