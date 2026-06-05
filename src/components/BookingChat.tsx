@@ -20,6 +20,7 @@ export default function BookingChat({
   const [sending, setSending] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const prevLenRef = useRef(0);
 
   const loadMessages = useCallback(async () => {
     try {
@@ -35,7 +36,10 @@ export default function BookingChat({
   }, [loadMessages]);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messages.length > prevLenRef.current) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+    prevLenRef.current = messages.length;
   }, [messages]);
 
   async function send(e: React.FormEvent) {

@@ -1,7 +1,9 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
 type Message = { role: "user" | "assistant"; content: string };
+const CHAT_REF_KEY = "chat_ref_ts";
 
 function renderMd(text: string) {
   return text.split(/(\*\*[^*\n]+\*\*)/g).flatMap((part, i) => {
@@ -27,6 +29,7 @@ export default function LegalChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [limitReached, setLimitReached] = useState(false);
   const [showBubble, setShowBubble] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -67,6 +70,9 @@ export default function LegalChat() {
         body: JSON.stringify({ messages: newMessages }),
       });
       const data = await res.json();
+      if (data.limitReached) {
+        setLimitReached(true);
+      }
       setMessages(prev => [...prev, {
         role: "assistant",
         content: data.reply ?? data.error ?? "Что-то пошло не так.",
@@ -214,6 +220,32 @@ export default function LegalChat() {
               </div>
             )}
 
+            {/* CTA найти юриста — показываем если уже был хоть один ответ */}
+            {hasUserMessages && !loading && (
+              <div className="px-4 pb-2">
+                <Link
+                  href="/search"
+                  onClick={() => localStorage.setItem(CHAT_REF_KEY, String(Date.now()))}
+                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-400 text-sm font-semibold hover:bg-brand-100 transition-colors"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  Найти юриста на сайте →
+                </Link>
+              </div>
+            )}
+
+            {/* Блок лимита исчерпан */}
+            {limitReached && (
+              <div className="mx-4 mb-3 p-3 rounded-xl bg-sun-50 border border-sun-200 text-sm text-ink-800">
+                Лимит бесплатных запросов исчерпан.{" "}
+                <Link href="/search" className="font-semibold text-brand-700 hover:underline">
+                  Найдите юриста на сайте →
+                </Link>
+              </div>
+            )}
+
             {/* Поле ввода */}
             <div className="px-3 pb-4 pt-2 border-t border-ink-100 dark:border-ink-800 flex gap-2 items-end shrink-0">
               <textarea
@@ -227,7 +259,7 @@ export default function LegalChat() {
               />
               <button
                 onClick={send}
-                disabled={!input.trim() || loading}
+                disabled={!input.trim() || loading || limitReached}
                 className="w-10 h-10 rounded-xl gradient-brand text-white flex items-center justify-center shrink-0 hover:opacity-90 disabled:opacity-40 transition-opacity"
                 aria-label="Отправить"
               >

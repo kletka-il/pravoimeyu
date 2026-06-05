@@ -3,6 +3,15 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/session";
 
+export async function GET() {
+  try {
+    const s = await requireSession();
+    return NextResponse.json({ userId: s.userId, role: s.role, name: s.name });
+  } catch {
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
+  }
+}
+
 export const runtime = "nodejs";
 
 const schema = z.object({

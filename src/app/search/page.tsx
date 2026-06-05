@@ -2,6 +2,7 @@ import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import { searchArticles, type SearchHit } from "@/lib/search/index";
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/session";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -40,6 +41,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 
 export default async function SearchPage({ searchParams }: Props) {
   const q = (searchParams.q || "").trim();
+  const session = await getSession();
+  const isAuthenticated = !!session.userId;
   let hits: SearchHit[] = [];
   if (q) hits = await searchArticles(q, 8);
 
@@ -65,7 +68,7 @@ export default async function SearchPage({ searchParams }: Props) {
         Опишите ситуацию своими словами — поиск понимает разговорные формулировки
         и юридические термины.
       </p>
-      <SearchBar initial={q} />
+      <SearchBar initial={q} enforceGuestLimit={!isAuthenticated} />
 
       {!q && (
         <div className="mt-12 grid md:grid-cols-2 gap-4">
@@ -141,7 +144,7 @@ export default async function SearchPage({ searchParams }: Props) {
                       >
                         <div className="font-bold text-ink-900">{s.user.name}</div>
                         <div className="text-xs text-ink-500 mt-0.5">
-                          {s.city} · стаж {s.yearsExperience} лет
+                          {s.city} · стаж {(() => { const n = s.yearsExperience; const m = n % 10; const h = n % 100; if (h >= 11 && h <= 14) return `${n} лет`; if (m === 1) return `${n} год`; if (m >= 2 && m <= 4) return `${n} года`; return `${n} лет`; })()}
                         </div>
                         <div className="text-xs text-sun-600 font-semibold mt-1">
                           ★ {s.rating.toFixed(1)} ({s.reviewsCount} отзывов)
@@ -156,7 +159,7 @@ export default async function SearchPage({ searchParams }: Props) {
                   </div>
                 )}
                 <Link
-                  href={`/login?next=${encodeURIComponent(`/search?q=${q}`)}`}
+                  href={isAuthenticated ? "/contacts" : `/login?next=${encodeURIComponent(`/search?q=${q}`)}`}
                   className="btn-primary w-full mt-4 text-sm"
                 >
                   Связаться с юристом
@@ -230,7 +233,12 @@ async function loadSpecialistsByCategory(categorySlugs: string[]) {
   });
   // отфильтруем по специализациям
   const matched = all.filter((s) => {
-    const list = (s.specializations as string[]) || [];
+    const raw = s.specializations;
+    const list: string[] = Array.isArray(raw)
+      ? raw
+      : typeof raw === "string"
+        ? (() => { try { return JSON.parse(raw); } catch { return []; } })()
+        : [];
     return list.some((x) => keys.includes(x));
   });
   return matched.length > 0 ? matched : all.slice(0, 3);

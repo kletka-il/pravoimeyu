@@ -18,6 +18,7 @@ const navByRole: Record<Role, { href: string; title: string }[]> = {
     { href: "/dashboard/admin/specialists", title: "Юристы" },
     { href: "/dashboard/admin/articles", title: "Статьи" },
     { href: "/dashboard/admin/contacts", title: "Обращения с сайта" },
+    { href: "/dashboard/admin/firms", title: "Конторы" },
   ],
 };
 

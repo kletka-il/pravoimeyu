@@ -3,11 +3,11 @@ import { ROLE, type Role } from "@/lib/constants";
 import ThemeToggle from "./ThemeToggle";
 
 const navItems = [
-  { href: "/search",      title: "Что мне делать?" },
-  { href: "/situations",  title: "Ситуации" },
-  { href: "/knowledge",   title: "База знаний" },
-  { href: "/calculators", title: "Калькуляторы" },
-  { href: "/wins",        title: "Победы" },
+  { href: "/search",       title: "Что мне делать?" },
+  { href: "/specialists",  title: "Юристы" },
+  { href: "/situations",   title: "Ситуации" },
+  { href: "/knowledge",    title: "База знаний" },
+  { href: "/calculators",  title: "Калькуляторы" },
 ];
 
 export default function Header({

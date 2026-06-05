@@ -77,7 +77,12 @@ export default function LoginForm({ next }: { next?: string }) {
         <input className="input" name="email" type="email" required autoFocus />
       </div>
       <div>
-        <label className="label">Пароль</label>
+        <div className="flex items-center justify-between mb-1">
+          <label className="label mb-0">Пароль</label>
+          <Link href="/forgot-password" className="text-xs text-ink-400 hover:text-accent transition-colors">
+            Забыли пароль?
+          </Link>
+        </div>
         <div className="relative">
           <input
             className="input pr-11"

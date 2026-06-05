@@ -2,14 +2,18 @@
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
+const SEARCH_COUNT_KEY = "guest_search_count";
+
 export default function SearchBar({
   initial = "",
   size = "lg",
   placeholder = "Например: попал в аварию, виноват не я — что делать?",
+  enforceGuestLimit = false,
 }: {
   initial?: string;
   size?: "lg" | "md";
   placeholder?: string;
+  enforceGuestLimit?: boolean;
 }) {
   const [q, setQ] = useState(initial);
   const router = useRouter();
@@ -17,6 +21,16 @@ export default function SearchBar({
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!q.trim()) return;
+
+    if (enforceGuestLimit) {
+      const count = parseInt(localStorage.getItem(SEARCH_COUNT_KEY) ?? "0", 10);
+      if (count >= 1) {
+        router.push(`/register?from=search&reason=limit&q=${encodeURIComponent(q.trim())}`);
+        return;
+      }
+      localStorage.setItem(SEARCH_COUNT_KEY, String(count + 1));
+    }
+
     router.push(`/search?q=${encodeURIComponent(q.trim())}`);
   }
 

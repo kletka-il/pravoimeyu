@@ -53,8 +53,8 @@ export default async function SpecialistDashboard() {
             city: profile.city,
             phone: profile.phone,
             pricePerHour: profile.pricePerHour,
-            specializations: (profile.specializations as string[]) || [],
-            credentials: (profile.credentials as string[]) || [],
+            specializations: (() => { const v = profile.specializations; return Array.isArray(v) ? v : typeof v === "string" ? (() => { try { return JSON.parse(v); } catch { return []; } })() : []; })() as string[],
+            credentials: (() => { const v = profile.credentials; return Array.isArray(v) ? v : typeof v === "string" ? (() => { try { return JSON.parse(v); } catch { return []; } })() : []; })() as string[],
           }}
         />
       </div>

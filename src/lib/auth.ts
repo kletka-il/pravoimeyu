@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { randomBytes } from "crypto";
 import { z } from "zod";
 import { ROLE, type Role } from "./constants";
-import { sendEmail, buildVerifyEmail } from "./email";
+import { sendEmail, buildVerifyEmail, buildPasswordResetEmail } from "./email";
 
 export const registerSchema = z.object({
   email: z.string().trim().toLowerCase().email("Некорректный email"),
@@ -54,7 +54,7 @@ export async function registerUser(input: RegisterInput, baseUrl: string) {
         prisma.specialistProfile.create({
           data: {
             userId: exists.id,
-            status: "PENDING",
+            status: "APPROVED",
             yearsExperience: input.yearsExperience ?? 0,
             phone: input.phone ?? "",
             city: input.city ?? "",
@@ -80,7 +80,7 @@ export async function registerUser(input: RegisterInput, baseUrl: string) {
         ? {
             specialist: {
               create: {
-                status: "PENDING",
+                status: "APPROVED",
                 yearsExperience: input.yearsExperience ?? 0,
                 phone: input.phone ?? "",
                 city: input.city ?? "",
@@ -155,6 +155,51 @@ export async function verifyToken(token: string) {
     prisma.user.update({ where: { id: t.userId }, data: { emailVerified: new Date() } }),
   ]);
   return { ok: true as const, userId: t.userId };
+}
+
+export async function requestPasswordReset(email: string, baseUrl: string) {
+  const normalized = email.trim().toLowerCase();
+  const user = await prisma.user.findUnique({ where: { email: normalized } });
+  if (!user) return { ok: true as const };
+
+  await prisma.passwordResetToken.updateMany({
+    where: { userId: user.id, usedAt: null, expiresAt: { gt: new Date() } },
+    data: { expiresAt: new Date() },
+  });
+
+  const token = randomBytes(32).toString("hex");
+  await prisma.passwordResetToken.create({
+    data: {
+      token,
+      userId: user.id,
+      expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+    },
+  });
+
+  const link = `${baseUrl.replace(/\/$/, "")}/reset-password?token=${token}`;
+  const { text, html } = buildPasswordResetEmail(user.name, link);
+  await sendEmail({
+    to: user.email,
+    subject: "Сброс пароля — Права имею",
+    text,
+    html,
+  });
+
+  return { ok: true as const };
+}
+
+export async function resetPassword(token: string, newPassword: string) {
+  const t = await prisma.passwordResetToken.findUnique({ where: { token } });
+  if (!t) return { ok: false as const, reason: "Ссылка недействительна" };
+  if (t.usedAt) return { ok: false as const, reason: "Ссылка уже использована" };
+  if (t.expiresAt < new Date()) return { ok: false as const, reason: "Ссылка устарела. Запросите новую." };
+
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  await prisma.$transaction([
+    prisma.passwordResetToken.update({ where: { id: t.id }, data: { usedAt: new Date() } }),
+    prisma.user.update({ where: { id: t.userId }, data: { passwordHash } }),
+  ]);
+  return { ok: true as const };
 }
 
 export async function authenticate(email: string, password: string) {

@@ -42,12 +42,16 @@ export default async function AdminSpecialistsPage() {
             </h2>
             <div className="space-y-3">
               {list.map((p) => {
+                const parseJson = (v: unknown): string[] => {
+                  if (Array.isArray(v)) return v as string[];
+                  if (typeof v === "string") { try { return JSON.parse(v); } catch { return []; } }
+                  return [];
+                };
                 const specs =
-                  ((p.specializations as string[]) || [])
+                  parseJson(p.specializations)
                     .map((k) => SPECIALIZATIONS[k] ?? k)
                     .join(", ") || "—";
-                const creds =
-                  ((p.credentials as string[]) || []).join(" · ") || "—";
+                const creds = parseJson(p.credentials).join(" · ") || "—";
                 return (
                   <SpecialistRow
                     key={p.id}

@@ -7,14 +7,20 @@ export const metadata = { title: "Регистрация" };
 export default function RegisterPage({
   searchParams,
 }: {
-  searchParams: { role?: string };
+  searchParams: { role?: string; reason?: string };
 }) {
   const role = searchParams.role === "SPECIALIST" ? ROLE.SPECIALIST : ROLE.CLIENT;
+  const isSearchLimit = searchParams.reason === "limit";
   return (
     <div className="container-page py-12 md:py-16 max-w-2xl">
       <div className="mb-2 inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
         Регистрация
       </div>
+      {isSearchLimit && (
+        <div className="mb-4 p-4 bg-sun-50 border border-sun-200 rounded-2xl text-sm text-ink-800">
+          Бесплатный запрос использован. Зарегистрируйтесь — это займёт минуту, и поиск станет безлимитным.
+        </div>
+      )}
       <h1 className="heading-display text-3xl md:text-4xl mb-2">
         {role === ROLE.SPECIALIST ? "Стать юристом" : "Создаём аккаунт"}
       </h1>

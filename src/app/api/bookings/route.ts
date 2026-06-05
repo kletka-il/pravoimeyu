@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
 import { ROLE } from "@/lib/constants";
+import { sendEmail, buildNewBookingEmail } from "@/lib/email";
 
 export const runtime = "nodejs";
 
@@ -10,6 +11,7 @@ const schema = z.object({
   specialistId: z.string().min(1),
   question: z.string().min(10).max(4000),
   contactPhone: z.string().max(40).optional(),
+  fromChat: z.boolean().optional(),
 });
 
 export async function POST(req: Request) {
@@ -34,10 +36,17 @@ export async function POST(req: Request) {
   }
   const profile = await prisma.specialistProfile.findUnique({
     where: { id: parsed.data.specialistId },
+    include: { user: { select: { name: true, email: true } } },
   });
   if (!profile || profile.status !== "APPROVED") {
     return NextResponse.json({ error: "Юрист недоступен" }, { status: 404 });
   }
+
+  const client = await prisma.user.findUnique({
+    where: { id: s.userId! },
+    select: { name: true },
+  });
+
   const booking = await prisma.booking.create({
     data: {
       clientId: s.userId!,
@@ -45,7 +54,27 @@ export async function POST(req: Request) {
       question: parsed.data.question,
       contactPhone: parsed.data.contactPhone ?? "",
       status: "NEW",
+      fromChat: parsed.data.fromChat ?? false,
     },
   });
+
+  // Уведомляем юриста — ошибка письма не блокирует ответ
+  try {
+    const { text, html } = buildNewBookingEmail(
+      profile.user.name,
+      client?.name ?? "Клиент",
+      parsed.data.question,
+      booking.id,
+    );
+    await sendEmail({
+      to: profile.user.email,
+      subject: "Новое обращение — Права имею",
+      text,
+      html,
+    });
+  } catch (e) {
+    console.error("Booking email error:", e);
+  }
+
   return NextResponse.json({ ok: true, id: booking.id });
 }

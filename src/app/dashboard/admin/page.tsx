@@ -24,6 +24,9 @@ export default async function AdminHome() {
     bookingsWeek,
     contactsUnread,
     searchesWeek,
+    firmsPending,
+    chatBookingsTotal,
+    chatBookingsWeek,
   ] = await Promise.all([
     prisma.user.count(),
     prisma.user.count({ where: { role: ROLE.CLIENT } }),
@@ -34,6 +37,9 @@ export default async function AdminHome() {
     prisma.booking.count({ where: { createdAt: { gte: day7 } } }),
     prisma.contact.count({ where: { isRead: false } }),
     prisma.searchLog.count({ where: { createdAt: { gte: day7 } } }),
+    prisma.lawFirm.count({ where: { status: "PENDING" } }),
+    prisma.booking.count({ where: { fromChat: true } }),
+    prisma.booking.count({ where: { fromChat: true, createdAt: { gte: day7 } } }),
   ]);
 
   const [bookingsByStatus, topArticles, topSearches, recentBookings] = await Promise.all([
@@ -84,6 +90,14 @@ export default async function AdminHome() {
           href="/dashboard/admin/contacts"
         />
         <Stat label="Поисков за 7 дней" value={searchesWeek} />
+        <Stat
+          label="Конторы на проверке"
+          value={firmsPending}
+          accent={firmsPending > 0}
+          href="/dashboard/admin/firms"
+        />
+        <Stat label="Обращений через ИИ (всего)" value={chatBookingsTotal} />
+        <Stat label="Обращений через ИИ (7 дней)" value={chatBookingsWeek} />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
