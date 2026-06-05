@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import AiSearchAnswer from "@/components/AiSearchAnswer";
+import OpenChatHint from "@/components/OpenChatHint";
 import { searchArticles, type SearchHit } from "@/lib/search/index";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
@@ -70,6 +71,7 @@ export default async function SearchPage({ searchParams }: Props) {
         и юридические термины.
       </p>
       <SearchBar initial={q} enforceGuestLimit={!isAuthenticated} />
+      {q && <OpenChatHint />}
 
       {!q && (
         <div className="mt-12 grid md:grid-cols-2 gap-4">

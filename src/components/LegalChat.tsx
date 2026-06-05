@@ -40,6 +40,12 @@ export default function LegalChat() {
   }, []);
 
   useEffect(() => {
+    const handler = () => setOpen(true);
+    window.addEventListener("open-legal-chat", handler);
+    return () => window.removeEventListener("open-legal-chat", handler);
+  }, []);
+
+  useEffect(() => {
     if (open) {
       setShowBubble(false);
       if (messages.length === 0) {
