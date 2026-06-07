@@ -4,6 +4,11 @@ const nextConfig = {
   experimental: {
     serverActions: { bodySizeLimit: "2mb" },
   },
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+    ],
+  },
   async headers() {
     return [
       {

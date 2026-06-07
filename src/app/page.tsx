@@ -310,10 +310,9 @@ export default async function HomePage() {
               {topSpecialists.map((s) => (
                 <article key={s.id} className="tile">
                   {/* Аватар */}
-                  <div className="aspect-square w-full bg-ink-100 dark:bg-ink-800 flex items-center justify-center overflow-hidden">
+                  <div className="relative aspect-square w-full bg-ink-100 dark:bg-ink-800 flex items-center justify-center overflow-hidden">
                     {s.avatarUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={s.avatarUrl} alt={s.user?.name ?? "Юрист"} className="w-full h-full object-cover" />
+                      <Image src={s.avatarUrl} alt={s.user?.name ?? "Юрист"} fill className="object-cover" sizes="(max-width:768px) 50vw, 25vw" />
                     ) : (
                       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" className="text-ink-300">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
@@ -352,7 +351,7 @@ export default async function HomePage() {
                       </div>
                     )}
                     <Link
-                      href="/situations"
+                      href={`/specialists/${s.id}`}
                       className="block w-full text-center bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 hover:bg-brand-100 dark:hover:bg-brand-900 font-semibold text-sm py-2 rounded-lg transition-colors"
                     >
                       Связаться
