@@ -146,9 +146,10 @@ function SpecialistCard({
     <div className="card-hover flex flex-col">
       <div className="flex items-start gap-3 mb-3">
         {/* Аватар */}
-        <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-700 dark:text-brand-300 font-bold text-sm shrink-0">
+        <div className="w-12 h-12 rounded-xl overflow-hidden bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-700 dark:text-brand-300 font-bold text-sm shrink-0">
           {avatarUrl ? (
-            <Image src={avatarUrl} alt={name} fill className="object-cover" sizes="48px" />
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
           ) : (
             initials
           )}

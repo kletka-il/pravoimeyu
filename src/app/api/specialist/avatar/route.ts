@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
 import { ROLE } from "@/lib/constants";
@@ -28,5 +29,6 @@ export async function POST(req: Request) {
     data: { avatarUrl: base64 },
   });
 
+  revalidateTag("specialists");
   return NextResponse.json({ ok: true });
 }
