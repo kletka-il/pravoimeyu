@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { ROLE, SPECIALIST_STATUS_LABEL, type SpecialistStatus } from "@/lib/constants";
 import SpecialistProfileForm from "./ProfileForm";
 import AvatarUpload from "@/components/AvatarUpload";
+import FirmJoin from "@/components/FirmJoin";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,10 @@ export default async function SpecialistDashboard() {
   if (!s.userId || s.role !== ROLE.SPECIALIST) redirect("/dashboard");
 
   const [profile, articlesCount] = await Promise.all([
-    prisma.specialistProfile.findUnique({ where: { userId: s.userId } }),
+    prisma.specialistProfile.findUnique({
+      where: { userId: s.userId },
+      include: { firm: { select: { name: true } } },
+    }),
     prisma.article.count({ where: { authorId: s.userId } }),
   ]);
 
@@ -50,6 +54,19 @@ export default async function SpecialistDashboard() {
           <div className="mt-4 pt-4 border-t border-ink-100 dark:border-ink-800">
             <AvatarUpload currentUrl={profile.avatarUrl || undefined} />
           </div>
+        </div>
+
+        {/* Юридическая контора */}
+        <div className="card">
+          <h3 className="heading-serif text-xl mb-1">Юридическая контора</h3>
+          <p className="text-sm text-ink-500 mb-4">
+            Присоединитесь к зарегистрированной конторе — это отображается в вашем профиле.
+          </p>
+          <FirmJoin
+            currentFirmId={profile.firmId}
+            currentFirmName={profile.firm?.name}
+            firmJoinStatus={profile.firmJoinStatus}
+          />
         </div>
 
         <SpecialistProfileForm

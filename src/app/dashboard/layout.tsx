@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
+import { prisma } from "@/lib/prisma";
 import { ROLE, type Role } from "@/lib/constants";
 
 const navByRole: Record<Role, { href: string; title: string }[]> = {
@@ -30,7 +31,16 @@ export default async function DashboardLayout({
   const s = await getSession();
   if (!s.userId || !s.role) redirect("/login?next=/dashboard");
   const role = s.role as Role;
-  const items = navByRole[role];
+  const baseItems = navByRole[role];
+
+  // Добавляем "Моя контора" если пользователь является владельцем фирмы
+  const ownedFirm = await prisma.lawFirm.findUnique({
+    where: { ownerId: s.userId! },
+    select: { id: true },
+  });
+  const items = ownedFirm
+    ? [...baseItems, { href: "/dashboard/firm", title: "Моя контора" }]
+    : baseItems;
 
   const roleLabel =
     role === ROLE.ADMIN

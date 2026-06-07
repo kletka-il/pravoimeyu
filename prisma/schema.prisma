@@ -75,6 +75,7 @@ model SpecialistProfile {
   avatarUrl       String   @default("")
   firmId          String?
   firm            LawFirm? @relation(fields: [firmId], references: [id])
+  firmJoinStatus  String   @default("")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
