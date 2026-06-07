@@ -3,6 +3,24 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+function compressImage(file: File, maxSide = 400, quality = 0.82): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d")!.drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL("image/jpeg", quality));
+    };
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
+}
+
 export default function AvatarUpload({ currentUrl }: { currentUrl?: string }) {
   const [preview, setPreview] = useState<string | null>(currentUrl || null);
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "err">("idle");
@@ -15,13 +33,16 @@ export default function AvatarUpload({ currentUrl }: { currentUrl?: string }) {
       setError("Нужно изображение (JPG, PNG, WebP)");
       return;
     }
-    setPreview(URL.createObjectURL(file));
     setStatus("loading");
     setError(null);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/specialist/avatar", { method: "POST", body: fd });
+      const base64 = await compressImage(file);
+      setPreview(base64);
+      const res = await fetch("/api/specialist/avatar", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ base64 }),
+      });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         setError(data.error ?? `Ошибка ${res.status}`);
@@ -31,14 +52,13 @@ export default function AvatarUpload({ currentUrl }: { currentUrl?: string }) {
       setStatus("ok");
       router.refresh();
     } catch {
-      setError("Ошибка соединения. Попробуйте ещё раз.");
+      setError("Ошибка. Попробуйте ещё раз.");
       setStatus("err");
     }
   }
 
   return (
     <div className="flex items-center gap-5">
-      {/* Превью */}
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
@@ -51,7 +71,6 @@ export default function AvatarUpload({ currentUrl }: { currentUrl?: string }) {
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
           </svg>
         )}
-        {/* Оверлей при ховере */}
         <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -60,10 +79,9 @@ export default function AvatarUpload({ currentUrl }: { currentUrl?: string }) {
         </div>
       </button>
 
-      {/* Текст и кнопка */}
       <div className="min-w-0">
         <div className="font-medium text-sm text-ink-800 dark:text-ink-200">Фото профиля</div>
-        <div className="text-xs text-ink-400 mt-0.5">JPG, PNG, WebP · до 3 МБ</div>
+        <div className="text-xs text-ink-400 mt-0.5">JPG, PNG, WebP · до 5 МБ</div>
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
@@ -71,15 +89,9 @@ export default function AvatarUpload({ currentUrl }: { currentUrl?: string }) {
         >
           {preview ? "Изменить фото" : "Загрузить фото"}
         </button>
-        {status === "loading" && (
-          <div className="text-xs text-ink-400 mt-1">Загружаю…</div>
-        )}
-        {status === "ok" && (
-          <div className="text-xs text-green-600 mt-1">Сохранено</div>
-        )}
-        {error && (
-          <div className="text-xs text-accent mt-1">{error}</div>
-        )}
+        {status === "loading" && <div className="text-xs text-ink-400 mt-1">Загружаю…</div>}
+        {status === "ok" && <div className="text-xs text-green-600 mt-1">Сохранено</div>}
+        {error && <div className="text-xs text-accent mt-1">{error}</div>}
       </div>
 
       <input
@@ -87,10 +99,7 @@ export default function AvatarUpload({ currentUrl }: { currentUrl?: string }) {
         type="file"
         accept="image/*"
         className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) handleFile(f);
-        }}
+        onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
       />
     </div>
   );
