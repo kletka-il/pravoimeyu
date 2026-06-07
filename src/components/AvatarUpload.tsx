@@ -18,17 +18,22 @@ export default function AvatarUpload({ currentUrl }: { currentUrl?: string }) {
     setPreview(URL.createObjectURL(file));
     setStatus("loading");
     setError(null);
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await fetch("/api/specialist/avatar", { method: "POST", body: fd });
-    const data = await res.json();
-    if (!res.ok) {
-      setError(data.error ?? "Ошибка загрузки");
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/specialist/avatar", { method: "POST", body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data.error ?? `Ошибка ${res.status}`);
+        setStatus("err");
+        return;
+      }
+      setStatus("ok");
+      router.refresh();
+    } catch {
+      setError("Ошибка соединения. Попробуйте ещё раз.");
       setStatus("err");
-      return;
     }
-    setStatus("ok");
-    router.refresh();
   }
 
   return (
