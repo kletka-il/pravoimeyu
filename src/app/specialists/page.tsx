@@ -37,6 +37,7 @@ export default async function SpecialistsPage({ searchParams }: Props) {
     where: { status: "APPROVED" },
     include: { user: { select: { name: true } } },
     orderBy: [{ rating: "desc" }, { yearsExperience: "desc" }],
+    // avatarUrl is on the profile record itself
   });
 
   const specialists = activeSpec
@@ -120,6 +121,7 @@ export default async function SpecialistsPage({ searchParams }: Props) {
                 bio={s.bio}
                 specializations={specs}
                 isAuthenticated={isAuthenticated}
+                avatarUrl={s.avatarUrl || undefined}
               />
             );
           })}
@@ -130,11 +132,11 @@ export default async function SpecialistsPage({ searchParams }: Props) {
 }
 
 function SpecialistCard({
-  id, name, city, yearsExperience, pricePerHour, rating, reviewsCount, bio, specializations, isAuthenticated,
+  id, name, city, yearsExperience, pricePerHour, rating, reviewsCount, bio, specializations, isAuthenticated, avatarUrl,
 }: {
   id: string; name: string; city: string; yearsExperience: number;
   pricePerHour: number; rating: number; reviewsCount: number;
-  bio: string; specializations: string[]; isAuthenticated: boolean;
+  bio: string; specializations: string[]; isAuthenticated: boolean; avatarUrl?: string;
 }) {
   const initials = name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
   const specLabels = specializations.slice(0, 2).map(k => SPECIALIZATIONS[k] ?? k);
@@ -143,8 +145,13 @@ function SpecialistCard({
     <div className="card-hover flex flex-col">
       <div className="flex items-start gap-3 mb-3">
         {/* Аватар */}
-        <div className="w-12 h-12 rounded-xl bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-700 dark:text-brand-300 font-bold text-sm shrink-0">
-          {initials}
+        <div className="w-12 h-12 rounded-xl overflow-hidden bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-700 dark:text-brand-300 font-bold text-sm shrink-0">
+          {avatarUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+          ) : (
+            initials
+          )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="font-bold text-ink-900 dark:text-white truncate">{name}</div>

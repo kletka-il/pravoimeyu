@@ -72,6 +72,7 @@ model SpecialistProfile {
   reviewsCount    Int      @default(0)
   specializations Json     @default("[]")
   credentials     Json     @default("[]")
+  avatarUrl       String   @default("")
   firmId          String?
   firm            LawFirm? @relation(fields: [firmId], references: [id])
   createdAt       DateTime @default(now())

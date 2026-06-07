@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
 import { ROLE, SPECIALIST_STATUS } from "@/lib/constants";
+import { revalidateTag } from "next/cache";
 
 export const runtime = "nodejs";
 
@@ -35,5 +36,6 @@ export async function PATCH(
     where: { id: params.id },
     data: { status: parsed.data.status },
   });
+  revalidateTag("specialists");
   return NextResponse.json({ ok: true });
 }

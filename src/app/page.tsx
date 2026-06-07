@@ -75,12 +75,13 @@ const getHomePageData = unstable_cache(
         orderBy: [{ rating: "desc" }, { reviewsCount: "desc" }],
         take: 4,
         include: { user: { select: { name: true } } },
+        // avatarUrl is on the profile itself
       }),
     ]);
     return { categories, articlesCount, specialistsCount, topSpecialists };
   },
   ["home-page-data"],
-  { revalidate: 3600 }
+  { revalidate: 300, tags: ["specialists"] }
 );
 
 export default async function HomePage() {
@@ -308,11 +309,17 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {topSpecialists.map((s) => (
                 <article key={s.id} className="tile">
-                  {/* Photo-slot вместо аватара */}
-                  <div
-                    className="photo-slot aspect-square w-full"
-                    data-label="Фото юриста"
-                  />
+                  {/* Аватар */}
+                  <div className="aspect-square w-full bg-ink-100 dark:bg-ink-800 flex items-center justify-center overflow-hidden">
+                    {s.avatarUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={s.avatarUrl} alt={s.user?.name ?? "Юрист"} className="w-full h-full object-cover" />
+                    ) : (
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" className="text-ink-300">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                      </svg>
+                    )}
+                  </div>
                   <div className="p-4">
                     <div className="flex items-center gap-1 mb-1">
                       {[0,1,2,3,4].map((i) => (

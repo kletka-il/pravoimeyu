@@ -4,6 +4,7 @@ import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { ROLE, SPECIALIST_STATUS_LABEL, type SpecialistStatus } from "@/lib/constants";
 import SpecialistProfileForm from "./ProfileForm";
+import AvatarUpload from "@/components/AvatarUpload";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +47,9 @@ export default async function SpecialistDashboard() {
             Информация ниже отображается клиентам в карточке поиска и на странице
             статей по вашей специализации.
           </p>
+          <div className="mt-4 pt-4 border-t border-ink-100 dark:border-ink-800">
+            <AvatarUpload currentUrl={profile.avatarUrl || undefined} />
+          </div>
         </div>
 
         <SpecialistProfileForm
