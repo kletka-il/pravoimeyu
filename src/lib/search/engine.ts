@@ -15,6 +15,9 @@ export type IndexedDoc = {
   keywords: string[];
   category: { slug: string; title: string };
   urgency: number;
+  authorId?: string;
+  authorName?: string;
+  specialistProfileId?: string;
   // pre-stemmed token frequency maps per field
   fields: {
     title: Map<string, number>;
@@ -76,6 +79,9 @@ export function buildIndex(
     keywords: string[];
     category: { slug: string; title: string };
     urgency: number;
+    authorId?: string;
+    authorName?: string;
+    specialistProfileId?: string;
   }>,
 ): void {
   const docs: IndexedDoc[] = raw.map((r) => {
@@ -89,7 +95,14 @@ export function buildIndex(
       (acc, m) => acc + [...m.values()].reduce((a, b) => a + b, 0),
       0,
     );
-    return { ...r, fields, totalLen };
+    return {
+      ...r,
+      fields,
+      totalLen,
+      authorId: r.authorId,
+      authorName: r.authorName,
+      specialistProfileId: r.specialistProfileId,
+    };
   });
 
   const df = new Map<string, number>();

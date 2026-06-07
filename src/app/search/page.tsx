@@ -58,6 +58,10 @@ export default async function SearchPage({ searchParams }: Props) {
   // Самый срочный хит — если urgency >= 4
   const urgentTop = hits[0]?.doc.urgency >= 4 ? hits[0] : null;
 
+  // Хит от специалиста — первый найденный, идёт над обычной выдачей
+  const expertHit = hits.find((h) => h.doc.specialistProfileId) ?? null;
+  const regularHits = expertHit ? hits.filter((h) => h !== expertHit) : hits;
+
   return (
     <div className="container-page py-10 md:py-12">
       <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
@@ -104,6 +108,12 @@ export default async function SearchPage({ searchParams }: Props) {
 
           <div className="mt-8 grid lg:grid-cols-3 gap-6 md:gap-8">
             <div className="lg:col-span-2 space-y-4">
+
+              {/* Карточка эксперта — если статья написана юристом */}
+              {expertHit && (
+                <ExpertCard hit={expertHit} isAuthenticated={isAuthenticated} q={q} />
+              )}
+
               <h2 className="font-bold text-lg text-ink-700">
                 {hits.length === 0
                   ? "Ничего не нашлось"
@@ -128,7 +138,7 @@ export default async function SearchPage({ searchParams }: Props) {
                   </div>
                 </div>
               ) : (
-                hits.map((h, i) => <HitCard key={h.doc.id} hit={h} idx={i} />)
+                regularHits.map((h, i) => <HitCard key={h.doc.id} hit={h} idx={i} />)
               )}
             </div>
 
@@ -178,6 +188,69 @@ export default async function SearchPage({ searchParams }: Props) {
           </div>
         </>
       )}
+    </div>
+  );
+}
+
+function ExpertCard({
+  hit,
+  isAuthenticated,
+  q,
+}: {
+  hit: SearchHit;
+  isAuthenticated: boolean;
+  q: string;
+}) {
+  const profileHref = hit.doc.specialistProfileId
+    ? `/specialists/${hit.doc.specialistProfileId}`
+    : isAuthenticated
+      ? "/contacts"
+      : `/login?next=${encodeURIComponent(`/search?q=${q}`)}`;
+
+  return (
+    <div className="rounded-2xl border-2 border-brand-200 dark:border-brand-800 bg-brand-50/60 dark:bg-brand-950/30 overflow-hidden">
+      {/* Шапка */}
+      <div className="flex items-center gap-2 px-5 pt-4 pb-2">
+        <span className="inline-flex items-center gap-1.5 bg-brand-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 3.9 2.4-7.4L2 9.4h7.6z"/>
+          </svg>
+          Ответ эксперта
+        </span>
+        <span className="text-sm text-ink-500 dark:text-ink-400">
+          {hit.doc.authorName}
+          <span className="mx-1.5 text-ink-300">·</span>
+          {hit.doc.category.title}
+        </span>
+      </div>
+
+      {/* Контент */}
+      <div className="px-5 pb-5">
+        <Link
+          href={`/knowledge/${hit.doc.slug}`}
+          className="font-bold text-xl md:text-2xl text-ink-900 dark:text-white hover:text-brand-700 transition-colors block mt-1"
+        >
+          {hit.doc.title}
+        </Link>
+        <p className="text-ink-700 dark:text-ink-300 mt-2 leading-relaxed">
+          {hit.doc.shortAnswer.length > 220
+            ? hit.doc.shortAnswer.slice(0, 220) + "…"
+            : hit.doc.shortAnswer}
+        </p>
+
+        {/* Кнопки */}
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link href={`/knowledge/${hit.doc.slug}`} className="btn-outline text-sm">
+            Читать полностью →
+          </Link>
+          <Link
+            href={profileHref}
+            className="btn-primary text-sm"
+          >
+            Написать специалисту
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

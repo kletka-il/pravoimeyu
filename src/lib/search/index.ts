@@ -10,7 +10,16 @@ export async function ensureIndex(): Promise<void> {
 
   const articles = await prisma.article.findMany({
     where: { isPublished: true },
-    include: { category: { select: { slug: true, title: true } } },
+    include: {
+      category: { select: { slug: true, title: true } },
+      author: {
+        select: {
+          name: true,
+          role: true,
+          specialist: { select: { id: true } },
+        },
+      },
+    },
   });
 
   buildIndex(
@@ -23,6 +32,9 @@ export async function ensureIndex(): Promise<void> {
       keywords: (a.keywords as string[]) || [],
       category: a.category,
       urgency: a.urgency,
+      authorId: a.authorId ?? undefined,
+      authorName: a.author?.role === "SPECIALIST" ? (a.author.name ?? undefined) : undefined,
+      specialistProfileId: a.author?.role === "SPECIALIST" ? (a.author.specialist?.id ?? undefined) : undefined,
     })),
   );
 
