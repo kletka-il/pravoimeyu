@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -7,6 +7,14 @@ const inter = Inter({
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
   variable: "--font-inter",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin", "cyrillic"],
+  weight: ["500", "600", "700", "800"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-display",
 });
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -71,7 +79,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#7c3aed",
+  themeColor: "#141f4d",
   width: "device-width",
   initialScale: 1,
 };
@@ -85,13 +93,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     : null;
 
   return (
-    <html lang="ru" suppressHydrationWarning className={inter.variable}>
+    <html lang="ru" suppressHydrationWarning className={`${inter.variable} ${playfair.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         {/* Манифест без crossorigin="use-credentials" — иначе конфликт с ACAO:* на Android */}
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className="min-h-screen flex flex-col bg-white dark:bg-ink-950 text-ink-900 dark:text-white transition-colors">
+      <body className="min-h-screen flex flex-col bg-paper dark:bg-ink-950 text-ink-900 dark:text-white transition-colors">
         <Header session={sessionInfo} />
         <main className="flex-1 w-full">{children}</main>
         <Footer />

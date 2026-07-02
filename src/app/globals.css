@@ -1,34 +1,28 @@
-
-@font-face {
-  font-family: "Aveline Eleganza";
-  src: url("/fonts/AvelineEleganza.woff2") format("woff2"),
-       url("/fonts/AvelineEleganza.woff")  format("woff");
-  font-weight: normal;
-  font-style:  normal;
-  font-display: swap;
-}
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg:     #f7f7f9;
-  --ink:    #0f0f1a;
-  --brand:  #1d4ed8;
+  --bg:     #f8f7f4;
+  --ink:    #131318;
+  --brand:  #1d40cf;
   --sun:    #f59e0b;
   --accent: #dc2626;
 }
 
 .dark {
-  --bg:  #0c0c14;
-  --ink: #f0f0f5;
+  --bg:  #0a0a0f;
+  --ink: #f0f0f2;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html, body {
   background: var(--bg);
   color: var(--ink);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -38,85 +32,115 @@ html, body {
     @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
-  /* Заголовки — Inter bold, без декоративного засечного. */
+  /* Заголовки — Inter, плотные и контрастные. */
   .heading-sans {
-    @apply font-extrabold text-ink-900 dark:text-white leading-tight tracking-tight;
-    letter-spacing: -0.02em;
+    @apply font-extrabold text-ink-900 dark:text-white leading-[1.08] tracking-tight;
+    letter-spacing: -0.025em;
   }
-  /* Display-вариант для нечастых акцентов */
+  /* Display — элегантный сериф для крупных акцентов. */
   .heading-display {
-    font-family: "Aveline Eleganza", Georgia, serif;
-    @apply text-ink-900 dark:text-white leading-[1.1];
+    font-family: var(--font-display), Georgia, serif;
+    @apply font-bold text-ink-900 dark:text-white leading-[1.12];
+    letter-spacing: -0.015em;
+  }
+  /* Алиас: часть страниц исторически использует heading-serif. */
+  .heading-serif {
+    font-family: var(--font-display), Georgia, serif;
+    @apply font-bold text-ink-900 dark:text-white leading-[1.12];
+    letter-spacing: -0.015em;
+  }
+  /* Серифный курсивный акцент внутри заголовка — фирменный приём. */
+  .serif-accent {
+    font-family: var(--font-display), Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
     letter-spacing: -0.01em;
   }
 
+  /* Подпись-надзаголовок секции */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em]
+           text-brand-700 dark:text-brand-300;
+  }
+
   /* ── Кнопки ──────────────────────────────────────────────── */
-  /* Primary CTA — жёлтый, как «Найти» в Озоне. */
+  /* Primary — глубокий сапфир, главный цвет действия. */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2
-           bg-sun-400 text-ink-900 px-6 py-3.5 rounded-xl font-semibold
-           shadow-cta hover:bg-sun-500 hover:shadow-lift
-           active:scale-[0.98] transition-all
+           bg-brand-700 text-white px-6 py-3.5 rounded-2xl font-semibold
+           shadow-cta hover:bg-brand-800 hover:shadow-lift hover:-translate-y-px
+           active:translate-y-0 active:scale-[0.99] transition-all duration-200
            disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100;
   }
-  /* Brand-кнопка — синяя, для второстепенных действий, ссылок «подробнее» */
+  /* Алиас — там, где нужна явная «брендовая» кнопка. */
   .btn-brand {
+    @apply btn-primary;
+  }
+  /* Золотой CTA — один на экран: поиск, ключевая конверсия. */
+  .btn-gold {
     @apply inline-flex items-center justify-center gap-2
-           bg-brand-700 text-white px-6 py-3.5 rounded-xl font-semibold
-           shadow-soft hover:bg-brand-800 hover:shadow-lift
-           active:scale-[0.98] transition-all;
+           text-ink-900 px-6 py-3.5 rounded-2xl font-bold
+           shadow-gold hover:shadow-lift hover:-translate-y-px
+           active:translate-y-0 active:scale-[0.99] transition-all duration-200;
+    background: linear-gradient(160deg, #fcd34d 0%, #fbbf24 55%, #f59e0b 100%);
+  }
+  .btn-gold:hover {
+    background: linear-gradient(160deg, #fbbf24 0%, #f59e0b 60%, #d97706 100%);
   }
   /* Срочное действие — красный (только когда уместно). */
   .btn-accent {
     @apply inline-flex items-center justify-center gap-2
-           bg-accent-600 text-white px-6 py-3.5 rounded-xl font-semibold
+           bg-accent-600 text-white px-6 py-3.5 rounded-2xl font-semibold
            shadow-soft hover:bg-accent-700
-           active:scale-[0.98] transition-all;
+           active:scale-[0.99] transition-all;
   }
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2
-           bg-white dark:bg-ink-800 text-ink-900 dark:text-white
-           px-5 py-3 rounded-xl font-semibold
-           border border-ink-200 dark:border-ink-700
-           hover:border-ink-400 dark:hover:border-ink-500
-           hover:bg-ink-50 dark:hover:bg-ink-700 transition-all;
+           bg-white/70 dark:bg-white/[0.06] backdrop-blur
+           text-ink-900 dark:text-white
+           px-5 py-3 rounded-2xl font-semibold
+           border border-ink-200/80 dark:border-white/10
+           hover:border-ink-300 dark:hover:border-white/20
+           hover:bg-white dark:hover:bg-white/[0.1] transition-all;
   }
   .btn-outline {
     @apply inline-flex items-center justify-center gap-2
-           bg-white dark:bg-transparent
-           text-brand-700 dark:text-brand-400
-           px-5 py-2.5 rounded-xl font-semibold
-           border-2 border-brand-200 dark:border-brand-800
-           hover:border-brand-400 dark:hover:border-brand-700
-           hover:bg-brand-50 dark:hover:bg-brand-950 transition-all;
+           bg-transparent
+           text-brand-700 dark:text-brand-300
+           px-5 py-2.5 rounded-2xl font-semibold
+           border border-brand-300/70 dark:border-brand-700
+           hover:border-brand-500 hover:bg-brand-50/60
+           dark:hover:bg-brand-950/60 transition-all;
   }
 
   /* ── Карточки ──────────────────────────────────────────── */
   .card {
-    @apply bg-white dark:bg-ink-900 rounded-2xl shadow-card
-           border border-ink-100 dark:border-ink-800 p-6 transition-all;
+    @apply bg-white dark:bg-ink-900 rounded-3xl shadow-card
+           border border-ink-100 dark:border-white/[0.07] p-6 transition-all duration-200;
   }
   .card-hover {
-    @apply card hover:shadow-lift hover:-translate-y-0.5;
+    @apply card hover:shadow-lift hover:-translate-y-1 hover:border-brand-200/70
+           dark:hover:border-brand-800;
   }
-  /* Маркетплейс-плитка: белая, минимально-плоская, мягкий hover-lift */
+  /* Плитка каталога: чистая, с мягким подъёмом на hover. */
   .tile {
-    @apply relative bg-white dark:bg-ink-900 rounded-2xl shadow-card
-           border border-ink-100 dark:border-ink-800
-           hover:shadow-lift hover:-translate-y-0.5
+    @apply relative bg-white dark:bg-ink-900 rounded-3xl shadow-card
+           border border-ink-100 dark:border-white/[0.07]
+           hover:shadow-lift hover:-translate-y-1 hover:border-brand-200/70
+           dark:hover:border-brand-800
            transition-all duration-200 overflow-hidden;
   }
 
   /* ── Формы ────────────────────────────────────────────── */
   .input {
     @apply w-full bg-white dark:bg-ink-800
-           border-2 border-ink-100 dark:border-ink-700
-           rounded-xl px-4 py-3
+           border border-ink-200 dark:border-ink-700
+           rounded-2xl px-4 py-3
            text-ink-900 dark:text-white
            placeholder:text-ink-400 dark:placeholder:text-ink-500
            focus:border-brand-500 focus:outline-none
-           focus:ring-4 focus:ring-brand-100 dark:focus:ring-brand-900
-           transition-colors;
+           focus:ring-4 focus:ring-brand-500/15
+           transition-all;
   }
   .label {
     @apply block text-sm font-semibold text-ink-700 dark:text-ink-300 mb-1.5;
@@ -127,28 +151,29 @@ html, body {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold;
   }
   .chip {
-    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium
-           bg-white dark:bg-ink-800
-           border border-ink-200 dark:border-ink-700
-           text-ink-700 dark:text-ink-300
-           hover:border-brand-300 hover:text-brand-700
-           dark:hover:text-brand-300 hover:bg-brand-50
-           dark:hover:bg-brand-950 transition-colors;
+    @apply inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium
+           bg-white dark:bg-white/[0.06]
+           border border-ink-200/80 dark:border-white/10
+           text-ink-600 dark:text-ink-300
+           hover:border-brand-400 hover:text-brand-700
+           dark:hover:text-brand-300
+           hover:shadow-soft hover:-translate-y-px
+           transition-all duration-150;
   }
   .chip-active {
-    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold
-           bg-brand-700 text-white border border-brand-700
+    @apply inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-semibold
+           bg-brand-700 text-white border border-brand-700 shadow-soft
            hover:bg-brand-800 transition-colors;
   }
 
-  /* Стикеры-метки на карточках — как «новинка», «-30%», «хит» в маркетплейсах. */
+  /* Стикеры-метки на карточках — тихие, без крика. */
   .sticker {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wide;
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold tracking-wide;
   }
-  .sticker-free    { @apply bg-success-100 text-success-700; }
-  .sticker-urgent  { @apply bg-accent-100 text-accent-700; }
-  .sticker-pro     { @apply bg-brand-100 text-brand-700; }
-  .sticker-popular { @apply bg-sun-100 text-sun-700; }
+  .sticker-free    { @apply bg-success-50 text-success-700 dark:bg-success-700/20 dark:text-success-400; }
+  .sticker-urgent  { @apply bg-accent-50 text-accent-700 dark:bg-accent-700/20 dark:text-accent-400; }
+  .sticker-pro     { @apply bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300; }
+  .sticker-popular { @apply bg-sun-50 text-sun-700 dark:bg-sun-700/20 dark:text-sun-400; }
 
   /* Trust-плашка: «иконка + краткий факт». */
   .trust-pill {
@@ -173,48 +198,92 @@ html, body {
   .prose-legal th { @apply bg-ink-50 dark:bg-ink-800 px-3 py-2 text-left font-semibold border border-ink-200 dark:border-ink-700; }
   .prose-legal td { @apply px-3 py-2 border border-ink-200 dark:border-ink-700; }
 
-  /* ── Градиенты-фоны (без AI-violet) ───────────────────── */
+  /* ── Фоны ─────────────────────────────────────────────── */
   .gradient-brand {
-    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 60%, #1e3a8a 100%);
+    background: linear-gradient(140deg, #1c3182 0%, #1d40cf 55%, #2450e6 100%);
   }
   .gradient-hero {
-    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%);
+    background: linear-gradient(140deg, #141f4d 0%, #1c3182 50%, #1d40cf 100%);
   }
   .gradient-sun {
     background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
   }
 
-  /* Контрастный фон секций — как чередование на маркетплейсах */
+  /* Фон hero-секции: тёплая бумага + два мягких цветовых пятна. */
+  .hero-surface {
+    position: relative;
+    background:
+      radial-gradient(52rem 30rem at 82% -12%, rgba(36, 80, 230, 0.09), transparent 60%),
+      radial-gradient(40rem 26rem at -8% 108%, rgba(245, 158, 11, 0.08), transparent 55%),
+      var(--bg);
+  }
+  .dark .hero-surface {
+    background:
+      radial-gradient(52rem 30rem at 82% -12%, rgba(58, 107, 242, 0.14), transparent 60%),
+      radial-gradient(40rem 26rem at -8% 108%, rgba(245, 158, 11, 0.06), transparent 55%),
+      var(--bg);
+  }
+
+  /* Тёмная панель с сапфировым свечением (ИИ-блок, CTA). */
+  .panel-night {
+    @apply relative overflow-hidden rounded-[2rem] text-white;
+    background:
+      radial-gradient(38rem 22rem at 88% -20%, rgba(95, 143, 248, 0.35), transparent 60%),
+      radial-gradient(30rem 18rem at 0% 120%, rgba(29, 64, 207, 0.5), transparent 60%),
+      linear-gradient(150deg, #10173a 0%, #141f4d 55%, #1c3182 100%);
+  }
+
+  /* Стеклянная шапка */
+  .glass-nav {
+    @apply bg-white/80 dark:bg-ink-950/80 backdrop-blur-xl
+           border-b border-ink-900/[0.06] dark:border-white/[0.07];
+  }
+
+  /* Контрастный фон секций */
   .section-soft {
-    @apply bg-ink-50 dark:bg-ink-950;
+    @apply bg-white dark:bg-ink-900/40;
+  }
+
+  /* Тонкая разделительная линия с затуханием по краям */
+  .divider-fade {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(19,19,24,0.10), transparent);
+  }
+  .dark .divider-fade {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
   }
 
   /* Dark-mode подкрутка */
-  .dark .text-ink-600 { color: #b8b8c2; }
-  .dark .text-ink-500 { color: #b8b8c2; }
+  .dark .text-ink-600 { color: #b9b9b4; }
+  .dark .text-ink-500 { color: #b9b9b4; }
 }
 
 mark {
-  background: linear-gradient(180deg, transparent 55%, rgba(245, 158, 11, 0.30) 55%);
+  background: linear-gradient(180deg, transparent 55%, rgba(245, 158, 11, 0.32) 55%);
   padding: 0 2px;
   border-radius: 2px;
 }
 
 ::selection {
-  background: rgba(29, 78, 216, 0.18);
+  background: rgba(29, 64, 207, 0.16);
 }
 
-/* Placeholder-плитка под фото человека (пока стоковое не вставлено).
-   Видимая, дружелюбная, чтобы было сразу понятно, куда положить лицо. */
+/* Аккуратный скроллбар в фирменном тоне */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(108, 108, 106, 0.35) transparent;
+}
+
+/* Placeholder-плитка под фото человека (пока стоковое не вставлено). */
 .photo-slot {
   position: relative;
   background:
     repeating-linear-gradient(
       45deg,
-      rgba(29, 78, 216, 0.04) 0 8px,
-      rgba(29, 78, 216, 0.08) 8px 16px
+      rgba(29, 64, 207, 0.04) 0 8px,
+      rgba(29, 64, 207, 0.08) 8px 16px
     ),
-    linear-gradient(135deg, #eff6ff 0%, #fef3c7 100%);
+    linear-gradient(135deg, #f0f5ff 0%, #fef3c7 100%);
 }
 .photo-slot::after {
   content: "Фото клиента";
@@ -223,7 +292,7 @@ mark {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(29, 78, 216, 0.55);
+  color: rgba(29, 64, 207, 0.55);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.02em;

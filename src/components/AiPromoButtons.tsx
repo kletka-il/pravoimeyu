@@ -24,7 +24,7 @@ export default function AiPromoButtons() {
         {HINTS.map(q => (
           <button
             key={q}
-            className="text-left text-sm bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl px-4 py-2.5 transition-colors flex items-center justify-between gap-2 group"
+            className="text-left text-sm bg-white/[0.08] hover:bg-white/[0.16] border border-white/15 hover:border-white/30 rounded-2xl px-4 py-2.5 transition-all flex items-center justify-between gap-2 group"
             onClick={() => openChat(q)}
           >
             <span>{q}</span>
@@ -35,7 +35,7 @@ export default function AiPromoButtons() {
         ))}
       </div>
       <button
-        className="bg-white text-brand-700 font-bold text-sm px-5 py-3 rounded-xl hover:bg-brand-50 transition-colors flex items-center justify-center gap-2"
+        className="bg-white text-brand-800 font-bold text-sm px-5 py-3.5 rounded-2xl hover:bg-sun-50 hover:-translate-y-px shadow-lift transition-all flex items-center justify-center gap-2"
         onClick={() => openChat()}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

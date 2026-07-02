@@ -39,11 +39,11 @@ export default function SearchBar({
   return (
     <form
       onSubmit={onSubmit}
-      className={`flex items-stretch gap-0 bg-white rounded-2xl border-2 border-ink-100 ${
-        isLg ? "shadow-card p-1.5" : "shadow-soft p-1"
-      } focus-within:border-brand-500 focus-within:shadow-lift transition-all`}
+      className={`flex items-stretch gap-0 bg-white dark:bg-ink-900 rounded-[1.25rem] border border-ink-200/90 dark:border-white/10 ${
+        isLg ? "shadow-deep p-1.5" : "shadow-card p-1"
+      } focus-within:border-brand-500 focus-within:ring-4 focus-within:ring-brand-500/12 transition-all`}
     >
-      <div className="flex-1 flex items-center gap-3 px-4">
+      <div className="flex-1 flex items-center gap-3 px-4 min-w-0">
         <svg
           className={`flex-shrink-0 ${isLg ? "w-6 h-6" : "w-5 h-5"} text-ink-400`}
           fill="none"
@@ -53,7 +53,7 @@ export default function SearchBar({
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="2.2"
+            strokeWidth="2"
             d="M21 21l-4.35-4.35M11 19a8 8 0 110-16 8 8 0 010 16z"
           />
         </svg>
@@ -63,15 +63,15 @@ export default function SearchBar({
           onChange={(e) => setQ(e.target.value)}
           placeholder={placeholder}
           className={`w-full bg-transparent ${
-            isLg ? "py-4 text-lg" : "py-2.5 text-base"
-          } text-ink-900 placeholder:text-ink-400 focus:outline-none`}
+            isLg ? "py-4 text-base md:text-lg" : "py-2.5 text-base"
+          } text-ink-900 dark:text-white placeholder:text-ink-400 dark:placeholder:text-ink-500 focus:outline-none`}
         />
       </div>
       <button
         type="submit"
-        className={`bg-sun-400 text-ink-900 font-bold rounded-xl ${
-          isLg ? "px-7 text-base" : "px-5 text-sm"
-        } hover:bg-sun-500 active:scale-[0.98] transition-all whitespace-nowrap shadow-cta`}
+        className={`btn-gold rounded-2xl ${
+          isLg ? "px-7 text-base py-0" : "px-5 text-sm py-0"
+        } whitespace-nowrap`}
       >
         Найти
       </button>

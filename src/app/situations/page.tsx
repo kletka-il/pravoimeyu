@@ -30,7 +30,7 @@ export default async function SituationsPage() {
   return (
     <div className="container-page py-12 md:py-16">
       <div className="max-w-2xl mb-10">
-        <p className="text-sm font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest mb-2">
+        <p className="eyebrow mb-3">
           Категории
         </p>
         <h1 className="heading-sans text-4xl md:text-5xl mb-3 text-ink-900 dark:text-white">

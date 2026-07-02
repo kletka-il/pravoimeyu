@@ -6,35 +6,37 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Нейтрали — тёплый графит: светлые тона чуть кремовые, тёмные глубокие.
         ink: {
-          50:  "#f7f7f8",
-          100: "#eeeef0",
-          200: "#d9d9de",
-          300: "#b8b8c2",
-          400: "#8e8e9e",
-          500: "#6b6b7e",
-          600: "#525263",
-          700: "#3a3a49",
-          800: "#222230",
-          900: "#0f0f1a",
-          950: "#07070e",
+          50:  "#f7f7f5",
+          100: "#ededea",
+          200: "#dbdbd7",
+          300: "#b9b9b4",
+          400: "#8f8f8c",
+          500: "#6c6c6a",
+          600: "#525252",
+          700: "#3b3b3d",
+          800: "#232327",
+          900: "#131318",
+          950: "#0a0a0f",
         },
-        // Главный цвет бренда — глубокий cobalt-blue.
-        // Доверие, банковская/маркетплейсная классика, ничего общего с AI-фиолетовым.
+        // Главный цвет бренда — глубокий сапфир. Дороже и спокойнее кобальта,
+        // без AI-фиолетового.
         brand: {
-          50:  "#eff6ff",
-          100: "#dbeafe",
-          200: "#bfdbfe",
-          300: "#93c5fd",
-          400: "#60a5fa",
-          500: "#3b82f6",
-          600: "#2563eb",
-          700: "#1d4ed8",
-          800: "#1e40af",
-          900: "#1e3a8a",
-          950: "#172554",
+          50:  "#f0f5ff",
+          100: "#e0eaff",
+          200: "#c3d7fe",
+          300: "#95b7fc",
+          400: "#5f8ff8",
+          500: "#3a6bf2",
+          600: "#2450e6",
+          700: "#1d40cf",
+          800: "#1d37a6",
+          900: "#1c3182",
+          950: "#141f4d",
         },
-        // Жёлтое солнце — CTA-цвет, как «Найти» в Озоне.
+        // Тёплое золото — единственный тёплый акцент. Используется дозированно:
+        // главный CTA, звёзды рейтинга, серифные акценты.
         sun: {
           50:  "#fffbeb",
           100: "#fef3c7",
@@ -75,49 +77,57 @@ const config: Config = {
         },
         // Cobalt оставлен как алиас на случай старых ссылок.
         cobalt: {
-          50:  "#eff6ff",
-          100: "#dbeafe",
-          200: "#bfdbfe",
-          300: "#93c5fd",
-          400: "#60a5fa",
-          500: "#3b82f6",
-          600: "#2563eb",
-          700: "#1d4ed8",
-          800: "#1e40af",
-          900: "#1e3a8a",
+          50:  "#f0f5ff",
+          100: "#e0eaff",
+          200: "#c3d7fe",
+          300: "#95b7fc",
+          400: "#5f8ff8",
+          500: "#3a6bf2",
+          600: "#2450e6",
+          700: "#1d40cf",
+          800: "#1d37a6",
+          900: "#1c3182",
         },
         gold: {
           DEFAULT: "#a17c3c",
           light:   "#c49b52",
         },
-        cream: "#f7f7f9",
+        // Тёплая «бумага» — фон светлой темы.
+        paper: "#f8f7f4",
+        cream: "#f8f7f4",
       },
       fontFamily: {
-        display: ["'Aveline Eleganza'", "Georgia", "serif"],
-        serif:   ["Georgia", "serif"],
+        display: ["var(--font-display)", "Georgia", "serif"],
+        serif:   ["var(--font-display)", "Georgia", "serif"],
         sans:    ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       borderRadius: {
         "4xl": "2rem",
       },
       boxShadow: {
-        // Marketplace-shadows — мягкие, без цветных glow.
-        soft:     "0 2px 8px rgba(15,15,26,0.05)",
-        card:     "0 1px 2px rgba(15,15,26,0.04), 0 4px 12px rgba(15,15,26,0.06)",
-        lift:     "0 4px 10px rgba(15,15,26,0.06), 0 14px 28px rgba(15,15,26,0.10)",
-        cta:      "0 6px 16px rgba(245,158,11,0.32), 0 1px 2px rgba(15,15,26,0.06)",
-        deep:     "0 2px 4px rgba(15,15,26,0.04), 0 8px 24px rgba(15,15,26,0.08), 0 20px 48px rgba(15,15,26,0.06)",
-        gold:     "0 4px 16px rgba(161,124,60,0.20), 0 1px 4px rgba(15,15,26,0.08)",
+        // Мягкие многослойные тени с лёгким тёплым подтоном.
+        soft:  "0 1px 2px rgba(19,19,24,0.04), 0 2px 8px rgba(19,19,24,0.04)",
+        card:  "0 1px 2px rgba(19,19,24,0.03), 0 6px 16px rgba(19,19,24,0.05)",
+        lift:  "0 2px 6px rgba(19,19,24,0.05), 0 16px 32px rgba(19,19,24,0.10)",
+        cta:   "0 8px 20px rgba(29,64,207,0.28), 0 2px 6px rgba(19,19,24,0.08)",
+        gold:  "0 8px 20px rgba(245,158,11,0.30), 0 2px 6px rgba(19,19,24,0.08)",
+        deep:  "0 2px 4px rgba(19,19,24,0.04), 0 12px 28px rgba(19,19,24,0.08), 0 28px 64px rgba(19,19,24,0.08)",
+        ring:  "inset 0 0 0 1px rgba(255,255,255,0.08)",
       },
       animation: {
-        "fade-in":  "fadeIn 0.4s ease-out",
-        "slide-up": "slideUp 0.4s ease-out",
+        "fade-in":  "fadeIn 0.5s ease-out",
+        "slide-up": "slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
+        "float":    "float 7s ease-in-out infinite",
       },
       keyframes: {
         fadeIn:  { from: { opacity: "0" }, to: { opacity: "1" } },
         slideUp: {
-          from: { opacity: "0", transform: "translateY(10px)" },
+          from: { opacity: "0", transform: "translateY(14px)" },
           to:   { opacity: "1", transform: "translateY(0)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%":      { transform: "translateY(-8px)" },
         },
       },
     },

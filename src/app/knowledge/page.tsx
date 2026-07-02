@@ -43,7 +43,7 @@ export default async function KnowledgePage({ searchParams }: Props) {
     <div className="container-page py-10 md:py-14">
       {/* Header */}
       <div className="max-w-2xl mb-8">
-        <p className="text-sm font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest mb-2">
+        <p className="eyebrow mb-3">
           База знаний
         </p>
         <h1 className="heading-sans text-4xl md:text-5xl mb-3 text-ink-900 dark:text-white">

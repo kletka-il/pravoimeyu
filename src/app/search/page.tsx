@@ -64,7 +64,7 @@ export default async function SearchPage({ searchParams }: Props) {
 
   return (
     <div className="container-page py-10 md:py-12">
-      <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+      <div className="eyebrow mb-3">
         Умный поиск
       </div>
       <h1 className="heading-sans text-3xl md:text-5xl mb-3 text-ink-900 dark:text-white">
