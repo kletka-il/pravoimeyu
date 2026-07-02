@@ -12,14 +12,14 @@ export default function ContactsPage() {
       </p>
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-4">
-          <Contact title="Телефон" value="+7 (499) 390-64-97" href="tel:+74993906497" />
+          <Contact title="Телефон" value="+7 (926) 265-90-18" href="tel:+79262659018" />
           <Contact title="Email" value="p1ava.imeu@gmail.com" href="mailto:p1ava.imeu@gmail.com" />
           <Contact title="Защита персональных данных" value="p1ava.imeu@gmail.com" href="mailto:p1ava.imeu@gmail.com" />
           <div className="card">
             <h3 className="heading-serif text-xl mb-3">Написать нам</h3>
             <div className="flex flex-wrap gap-2">
               <a
-                href="https://t.me/+74993906497"
+                href="https://t.me/+79262659018"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#2AABEE] text-white text-sm font-semibold hover:opacity-90 transition-opacity"
@@ -30,7 +30,7 @@ export default function ContactsPage() {
                 Telegram
               </a>
               <a
-                href="https://wa.me/74993906497"
+                href="https://wa.me/79262659018"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#25D366] text-white text-sm font-semibold hover:opacity-90 transition-opacity"

@@ -36,12 +36,12 @@ export default function Footer() {
           </div>
           <div className="mt-4 text-xs text-ink-500 space-y-1">
             <div>ООО «Права имею»</div>
-            <a href="tel:+74993906497" className="block hover:text-ink-300 transition-colors">+7 (499) 390-64-97</a>
+            <a href="tel:+79262659018" className="block hover:text-ink-300 transition-colors">+7 (926) 265-90-18</a>
             <a href="mailto:p1ava.imeu@gmail.com" className="block hover:text-ink-300 transition-colors">p1ava.imeu@gmail.com</a>
           </div>
           <div className="mt-4 flex gap-2">
             <a
-              href="https://t.me/+74993906497"
+              href="https://t.me/+79262659018"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Telegram"
@@ -52,7 +52,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://wa.me/74993906497"
+              href="https://wa.me/79262659018"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
