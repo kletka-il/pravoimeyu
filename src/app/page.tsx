@@ -9,6 +9,7 @@ import { unstable_cache } from "next/cache";
 import {
   CheckCircle2, Clock, ShieldCheck, Users, Star, ArrowRight,
 } from "lucide-react";
+import { USERS_BASELINE } from "@/lib/constants";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -67,6 +68,7 @@ const EMPTY_HOME_DATA = {
   categories: [] as { id: string; slug: string; title: string; description: string; order: number }[],
   articlesCount: 0,
   specialistsCount: 0,
+  usersCount: 0,
   topSpecialists: [] as { id: string; hasAvatar: boolean; rating: number; reviewsCount: number; city: string; yearsExperience: number; pricePerHour: number; user: { name: string } | null }[],
 };
 
@@ -76,10 +78,11 @@ const getHomePageData = unstable_cache(
       setTimeout(() => resolve(EMPTY_HOME_DATA), 4000)
     );
     const query = async () => {
-      const [categories, articlesCount, specialistsCount, rawSpecialists] = await Promise.all([
+      const [categories, articlesCount, specialistsCount, usersCount, rawSpecialists] = await Promise.all([
         prisma.category.findMany({ orderBy: { order: "asc" } }),
         prisma.article.count({ where: { isPublished: true } }),
         prisma.specialistProfile.count({ where: { status: "APPROVED" } }),
+        prisma.user.count(),
         prisma.specialistProfile.findMany({
           where: { status: "APPROVED" },
           orderBy: [{ rating: "desc" }, { reviewsCount: "desc" }],
@@ -100,7 +103,7 @@ const getHomePageData = unstable_cache(
         ...s,
         hasAvatar: !!avatarUrl,
       }));
-      return { categories, articlesCount, specialistsCount, topSpecialists };
+      return { categories, articlesCount, specialistsCount, usersCount, topSpecialists };
     };
     return Promise.race([query(), timeout]);
   },
@@ -277,8 +280,15 @@ export default function HomePage() {
   );
 }
 
+function formatUsers(n: number): string {
+  // Округляем вниз до полусотни и показываем как «N+» — честное «более N».
+  const rounded = Math.floor(n / 50) * 50;
+  return `${rounded.toLocaleString("ru-RU")}+`;
+}
+
 async function DynamicSections() {
-  const { categories, articlesCount, specialistsCount, topSpecialists } = await getHomePageData();
+  const { categories, articlesCount, specialistsCount, usersCount, topSpecialists } = await getHomePageData();
+  const totalUsers = USERS_BASELINE + usersCount;
 
   return (
     <>
@@ -291,19 +301,19 @@ async function DynamicSections() {
             small="готовых ответов"
           />
           <TrustItem
-            icon={<Clock size={21} className="text-brand-600 dark:text-brand-300" strokeWidth={2} />}
-            big="5 мин"
-            small="среднее время ответа"
+            icon={<Users size={21} className="text-brand-600 dark:text-brand-300" strokeWidth={2} />}
+            big={formatUsers(totalUsers)}
+            small="пользователей сервиса"
           />
           <TrustItem
-            icon={<Users size={21} className="text-sun-600" strokeWidth={2} />}
+            icon={<ShieldCheck size={21} className="text-sun-600" strokeWidth={2} />}
             big={specialistsCount > 0 ? `${specialistsCount}+` : "Подбираем"}
             small="проверенных юристов"
           />
           <TrustItem
-            icon={<ShieldCheck size={21} className="text-rose-600" strokeWidth={2} />}
-            big="100%"
-            small="данные под защитой"
+            icon={<Clock size={21} className="text-rose-600" strokeWidth={2} />}
+            big="5 мин"
+            small="среднее время ответа"
           />
         </div>
       </section>
