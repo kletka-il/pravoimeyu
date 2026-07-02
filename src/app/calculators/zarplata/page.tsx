@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Калькулятор компенсации за задержку зарплаты | Права имею",
   description: "Рассчитайте компенсацию за задержку выплаты зарплаты по ст. 236 ТК РФ — 1/150 ключевой ставки за каждый день.",
-  alternates: { canonical: "https://pravaimeu.ru/calculators/zarplata" },
+  alternates: { canonical: "https://pravaimei.ru/calculators/zarplata" },
 };
 
 export default function ZarplataPage() {

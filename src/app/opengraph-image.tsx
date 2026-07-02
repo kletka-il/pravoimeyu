@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const alt = "Права имею — юридическая помощь онлайн";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -121,7 +121,7 @@ export default function Image() {
             fontWeight: 600,
           }}
         >
-          pravaimeu.ru
+          pravaimei.ru
         </div>
       </div>
     ),

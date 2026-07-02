@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Калькулятор неустойки по ЗПП | Права имею",
   description: "Рассчитайте неустойку за нарушение прав потребителя — 1% за товар или 3% за услугу. Закон о защите прав потребителей.",
-  alternates: { canonical: "https://pravaimeu.ru/calculators/neustojka" },
+  alternates: { canonical: "https://pravaimei.ru/calculators/neustojka" },
 };
 
 export default function NeustojkaPage() {

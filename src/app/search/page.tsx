@@ -22,7 +22,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
       openGraph: {
         title: `${q} — поиск · Права имею`,
         description: `Юридические ответы на вопрос: «${q}».`,
-        url: `https://pravaimeu.ru/search?q=${encodeURIComponent(q)}`,
+        url: `https://pravaimei.ru/search?q=${encodeURIComponent(q)}`,
       },
       robots: { index: false },
     };
@@ -31,11 +31,11 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     title: "Поиск юридических ответов",
     description:
       "Опишите свою ситуацию — умный поиск найдёт готовые юридические ответы и подберёт специалиста с нужным опытом.",
-    alternates: { canonical: "https://pravaimeu.ru/search" },
+    alternates: { canonical: "https://pravaimei.ru/search" },
     openGraph: {
       title: "Поиск юридических ответов · Права имею",
       description: "Опишите ситуацию своими словами — поиск найдёт готовый ответ из правовой базы.",
-      url: "https://pravaimeu.ru/search",
+      url: "https://pravaimei.ru/search",
       type: "website",
     },
   };

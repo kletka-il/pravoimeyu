@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 
-const BASE = "https://pravaimeu.ru";
+const BASE = "https://pravaimei.ru";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 3600;

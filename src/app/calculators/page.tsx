@@ -5,11 +5,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Юридические калькуляторы | Права имею",
   description: "Бесплатные онлайн-калькуляторы: алименты, госпошлина в суд, неустойка по ЗПП, компенсация за задержку зарплаты, штраф ГИБДД.",
-  alternates: { canonical: "https://pravaimeu.ru/calculators" },
+  alternates: { canonical: "https://pravaimei.ru/calculators" },
   openGraph: {
     title: "Юридические калькуляторы · Права имею",
     description: "Алименты, госпошлина, неустойка, задержка зарплаты, штраф ГИБДД — рассчитайте онлайн бесплатно.",
-    url: "https://pravaimeu.ru/calculators",
+    url: "https://pravaimei.ru/calculators",
     type: "website",
   },
 };

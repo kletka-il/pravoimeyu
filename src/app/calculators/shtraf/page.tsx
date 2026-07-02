@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Калькулятор штрафа ГИБДД со скидкой | Права имею",
   description: "Рассчитайте штраф ГИБДД со скидкой 50% — при оплате в первые 20 дней. Узнайте исключения.",
-  alternates: { canonical: "https://pravaimeu.ru/calculators/shtraf" },
+  alternates: { canonical: "https://pravaimei.ru/calculators/shtraf" },
 };
 
 export default function ShtrafPage() {

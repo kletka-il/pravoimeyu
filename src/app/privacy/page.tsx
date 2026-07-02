@@ -138,7 +138,7 @@ export default function PrivacyPage() {
             Оператор вправе вносить изменения в настоящую политику. Действующая
             версия всегда доступна по адресу{" "}
             <Link href="/privacy" className="text-accent underline">
-              pravaimeu.ru/privacy
+              pravaimei.ru/privacy
             </Link>
             . При существенных изменениях мы уведомим зарегистрированных пользователей
             по email.

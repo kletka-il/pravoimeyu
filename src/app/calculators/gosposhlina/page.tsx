@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Калькулятор госпошлины в суд | Права имею",
   description: "Рассчитайте размер государственной пошлины для подачи иска. Актуальные ставки по ст. 333.19 НК РФ.",
-  alternates: { canonical: "https://pravaimeu.ru/calculators/gosposhlina" },
+  alternates: { canonical: "https://pravaimei.ru/calculators/gosposhlina" },
 };
 
 export default function GosposhlinaPage() {

@@ -1,13 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // standalone-сборка — чтобы приложение запускалось на любом Node-хостинге (Beget и т.п.), не только на Vercel
+  output: "standalone",
   experimental: {
     serverActions: { bodySizeLimit: "2mb" },
   },
   images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
-    ],
+    // без оптимизатора Vercel: аватары хранятся base64 в БД, остальные картинки локальные
+    unoptimized: true,
   },
   async headers() {
     return [

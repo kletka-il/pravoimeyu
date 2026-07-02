@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
       await prisma.contact.create({
         data: {
           name: d.name ?? "",
-          email: `tg_${chatId}@pravaimeu.ru`,
+          email: `tg_${chatId}@pravaimei.ru`,
           phone: d.phone ?? "",
           message: `[Telegram] Тема: ${d.topic}\n\n${d.desc}`,
         },
@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
           </table>
           <div style="padding:16px;background:#f7f8fc;border-radius:8px;font-size:14px;color:#333;line-height:1.6">${(d.desc ?? "").replace(/\n/g, "<br>")}</div>
           <hr style="border:none;border-top:1px solid #e8ebf0;margin:24px 0"/>
-          <p style="color:#9ea8ba;font-size:12px">Telegram chat ID: ${chatId} · Бот pravaimeu.ru</p>
+          <p style="color:#9ea8ba;font-size:12px">Telegram chat ID: ${chatId} · Бот pravaimei.ru</p>
         </div>`;
 
       try {

@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   title: "Жизненные ситуации",
   description:
     "Юридические ситуации по категориям: трудовые споры, ДТП, семейное право, жильё, защита прав потребителей и другие. Пошаговые подсказки и юристы по каждой теме.",
-  alternates: { canonical: "https://pravaimeu.ru/situations" },
+  alternates: { canonical: "https://pravaimei.ru/situations" },
   openGraph: {
     title: "Жизненные ситуации · Права имею",
     description:
       "Юридические ситуации по категориям: трудовые споры, ДТП, семейное право, жильё, защита прав потребителей и другие.",
-    url: "https://pravaimeu.ru/situations",
+    url: "https://pravaimei.ru/situations",
     type: "website",
   },
 };

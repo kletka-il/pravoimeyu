@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Калькулятор алиментов | Права имею",
   description: "Рассчитайте размер алиментов онлайн — по доходу на 1, 2 или 3 детей. Формула по ст. 81 СК РФ.",
-  alternates: { canonical: "https://pravaimeu.ru/calculators/alimenty" },
+  alternates: { canonical: "https://pravaimei.ru/calculators/alimenty" },
 };
 
 export default function AlimonyPage() {
