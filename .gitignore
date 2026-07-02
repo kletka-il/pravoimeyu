@@ -15,3 +15,4 @@ emails/
 tsconfig.tsbuildinfo
 scripts/wipe-users.ts
 scripts/restore-content.ts
+backups/
