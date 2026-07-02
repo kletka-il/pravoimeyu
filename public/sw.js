@@ -1,19 +1,35 @@
-const CACHE_NAME = "pravoimeyu-v4";
+const CACHE_NAME = "pravoimeyu-v6";
 const STATIC_PATTERN = /\/_next\/static\//;
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.add("/offline"))
-      .then(() => self.skipWaiting())
-  );
+  event.waitUntil(self.skipWaiting());
+});
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)));
+      await self.clients.claim();
+      // Перезагружаем все вкладки, чтобы они отвязались от старой версии SW,
+      // которая могла перехватывать HTML и вешать загрузку на мобильных.
+      const wins = await self.clients.matchAll({ type: "window" });
+      await Promise.all(
+        wins.map((c) => {
+          try {
+            return c.navigate(c.url);
+          } catch (e) {
+            return Promise.resolve();
+          }
+        })
+      );
+    })()
   );
 });
 
@@ -23,29 +39,21 @@ self.addEventListener("fetch", (event) => {
 
   if (request.method !== "GET") return;
 
-  // Статика Next.js (_next/static) — cache-first, долгоживущая
-  if (STATIC_PATTERN.test(url.pathname)) {
-    event.respondWith(
-      caches.open(CACHE_NAME).then(async (cache) => {
-        const cached = await cache.match(request);
-        if (cached) return cached;
-        const fresh = await fetch(request);
-        if (fresh.ok) cache.put(request, fresh.clone());
-        return fresh;
-      })
-    );
-    return;
-  }
+  // Навигационные запросы (HTML-страницы) — не перехватываем.
+  // Next.js App Router стримит RSC; SW-обёртка над navigate-запросом
+  // вызывает зависание на ряде мобильных браузеров (Samsung Internet, Sber).
+  if (request.mode === "navigate") return;
 
-  // Всё остальное (HTML, API) — только сеть, без кеша.
-  // Кешировать HTML Next.js App Router нельзя: ломает RSC-навигацию на мобильных.
+  // Только /_next/static/ — кешируем, всё остальное не трогаем.
+  if (!STATIC_PATTERN.test(url.pathname)) return;
+
   event.respondWith(
-    fetch(request).catch(async () => {
-      if (request.mode === "navigate") {
-        const offline = await caches.match("/offline");
-        return offline ?? new Response("Нет подключения", { status: 503 });
-      }
-      return new Response("", { status: 503 });
+    caches.open(CACHE_NAME).then(async (cache) => {
+      const cached = await cache.match(request);
+      if (cached) return cached;
+      const fresh = await fetch(request);
+      if (fresh.ok) cache.put(request, fresh.clone());
+      return fresh;
     })
   );
 });

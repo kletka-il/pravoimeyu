@@ -34,12 +34,24 @@ export default async function SpecialistsPage({ searchParams }: Props) {
   const isAuthenticated = !!session.userId;
   const activeSpec = searchParams.spec ?? "";
 
-  const all = await prisma.specialistProfile.findMany({
+  const rawAll = await prisma.specialistProfile.findMany({
     where: { status: "APPROVED" },
-    include: { user: { select: { name: true } } },
+    select: {
+      id: true,
+      avatarUrl: true,
+      city: true,
+      yearsExperience: true,
+      pricePerHour: true,
+      rating: true,
+      reviewsCount: true,
+      bio: true,
+      specializations: true,
+      user: { select: { name: true } },
+    },
     orderBy: [{ rating: "desc" }, { yearsExperience: "desc" }],
-    // avatarUrl is on the profile record itself
   });
+  // Strip base64 data — avatars served via /api/avatar/[id]
+  const all = rawAll.map(({ avatarUrl, ...s }) => ({ ...s, hasAvatar: !!avatarUrl }));
 
   const specialists = activeSpec
     ? all.filter(s => parseSpecs(s.specializations).includes(activeSpec))
@@ -122,7 +134,7 @@ export default async function SpecialistsPage({ searchParams }: Props) {
                 bio={s.bio}
                 specializations={specs}
                 isAuthenticated={isAuthenticated}
-                avatarUrl={s.avatarUrl || undefined}
+                hasAvatar={s.hasAvatar}
               />
             );
           })}
@@ -133,11 +145,11 @@ export default async function SpecialistsPage({ searchParams }: Props) {
 }
 
 function SpecialistCard({
-  id, name, city, yearsExperience, pricePerHour, rating, reviewsCount, bio, specializations, isAuthenticated, avatarUrl,
+  id, name, city, yearsExperience, pricePerHour, rating, reviewsCount, bio, specializations, isAuthenticated, hasAvatar,
 }: {
   id: string; name: string; city: string; yearsExperience: number;
   pricePerHour: number; rating: number; reviewsCount: number;
-  bio: string; specializations: string[]; isAuthenticated: boolean; avatarUrl?: string;
+  bio: string; specializations: string[]; isAuthenticated: boolean; hasAvatar?: boolean;
 }) {
   const initials = name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
   const specLabels = specializations.slice(0, 2).map(k => SPECIALIZATIONS[k] ?? k);
@@ -147,9 +159,9 @@ function SpecialistCard({
       <div className="flex items-start gap-3 mb-3">
         {/* Аватар */}
         <div className="w-12 h-12 rounded-xl overflow-hidden bg-brand-100 dark:bg-brand-900 flex items-center justify-center text-brand-700 dark:text-brand-300 font-bold text-sm shrink-0">
-          {avatarUrl ? (
+          {hasAvatar ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+            <img src={`/api/avatar/${id}`} alt={name} loading="lazy" className="w-full h-full object-cover" />
           ) : (
             initials
           )}

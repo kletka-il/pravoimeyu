@@ -14,7 +14,7 @@ import { getSession } from "@/lib/session";
 import RegisterSW from "@/components/RegisterSW";
 import LegalChat from "@/components/LegalChat";
 
-const BASE_URL = "https://pravaimeu.ru";
+const BASE_URL = "https://pravaimei.ru";
 const DEFAULT_TITLE = "Права имею — юридическая помощь, когда она нужна срочно";
 const DEFAULT_DESC =
   "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы. Бесплатно для общих вопросов, платно для сложных дел.";
@@ -38,7 +38,6 @@ export const metadata: Metadata = {
   authors: [{ name: "Права имею", url: BASE_URL }],
   creator: "Права имею",
   publisher: "Права имею",
-  manifest: "/manifest.json",
   applicationName: "Права имею",
   alternates: { canonical: BASE_URL },
   openGraph: {
@@ -89,6 +88,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="ru" suppressHydrationWarning className={inter.variable}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* Манифест без crossorigin="use-credentials" — иначе конфликт с ACAO:* на Android */}
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="min-h-screen flex flex-col bg-white dark:bg-ink-950 text-ink-900 dark:text-white transition-colors">
         <Header session={sessionInfo} />

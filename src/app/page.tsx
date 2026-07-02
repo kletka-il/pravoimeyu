@@ -1,5 +1,4 @@
-export const dynamic = "force-dynamic";
-
+import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import SearchBar from "@/components/SearchBar";
@@ -16,12 +15,12 @@ export const metadata: Metadata = {
   title: "Права имею — юридическая помощь, когда она нужна срочно",
   description:
     "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы. Бесплатно для общих вопросов, платно для сложных дел.",
-  alternates: { canonical: "https://pravaimeu.ru" },
+  alternates: { canonical: "https://pravaimei.ru" },
   openGraph: {
     title: "Права имею — юридическая помощь, когда она нужна срочно",
     description:
       "Умный поиск по правовой базе, готовые подсказки на жизненные ситуации и проверенные юристы.",
-    url: "https://pravaimeu.ru",
+    url: "https://pravaimei.ru",
     type: "website",
   },
 };
@@ -40,15 +39,15 @@ const orgSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Права имею",
-  url: "https://pravaimeu.ru",
-  logo: "https://pravaimeu.ru/icons/icon-512.png",
+  url: "https://pravaimei.ru",
+  logo: "https://pravaimei.ru/icons/icon-512.png",
   description:
     "Юридический портал — умный поиск по правовой базе, подсказки на жизненные ситуации и проверенные юристы.",
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer service",
     availableLanguage: "Russian",
-    url: "https://pravaimeu.ru/contacts",
+    url: "https://pravaimei.ru/contacts",
   },
 };
 
@@ -56,37 +55,60 @@ const siteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Права имею",
-  url: "https://pravaimeu.ru",
+  url: "https://pravaimei.ru",
   potentialAction: {
     "@type": "SearchAction",
-    target: "https://pravaimeu.ru/search?q={search_term_string}",
+    target: "https://pravaimei.ru/search?q={search_term_string}",
     "query-input": "required name=search_term_string",
   },
 };
 
+const EMPTY_HOME_DATA = {
+  categories: [] as { id: string; slug: string; title: string; description: string; order: number }[],
+  articlesCount: 0,
+  specialistsCount: 0,
+  topSpecialists: [] as { id: string; hasAvatar: boolean; rating: number; reviewsCount: number; city: string; yearsExperience: number; pricePerHour: number; user: { name: string } | null }[],
+};
+
 const getHomePageData = unstable_cache(
   async () => {
-    const [categories, articlesCount, specialistsCount, topSpecialists] = await Promise.all([
-      prisma.category.findMany({ orderBy: { order: "asc" } }),
-      prisma.article.count({ where: { isPublished: true } }),
-      prisma.specialistProfile.count({ where: { status: "APPROVED" } }),
-      prisma.specialistProfile.findMany({
-        where: { status: "APPROVED" },
-        orderBy: [{ rating: "desc" }, { reviewsCount: "desc" }],
-        take: 4,
-        include: { user: { select: { name: true } } },
-        // avatarUrl is on the profile itself
-      }),
-    ]);
-    return { categories, articlesCount, specialistsCount, topSpecialists };
+    const timeout = new Promise<typeof EMPTY_HOME_DATA>((resolve) =>
+      setTimeout(() => resolve(EMPTY_HOME_DATA), 4000)
+    );
+    const query = async () => {
+      const [categories, articlesCount, specialistsCount, rawSpecialists] = await Promise.all([
+        prisma.category.findMany({ orderBy: { order: "asc" } }),
+        prisma.article.count({ where: { isPublished: true } }),
+        prisma.specialistProfile.count({ where: { status: "APPROVED" } }),
+        prisma.specialistProfile.findMany({
+          where: { status: "APPROVED" },
+          orderBy: [{ rating: "desc" }, { reviewsCount: "desc" }],
+          take: 4,
+          select: {
+            id: true,
+            avatarUrl: true,
+            rating: true,
+            reviewsCount: true,
+            city: true,
+            yearsExperience: true,
+            pricePerHour: true,
+            user: { select: { name: true } },
+          },
+        }),
+      ]);
+      const topSpecialists = rawSpecialists.map(({ avatarUrl, ...s }) => ({
+        ...s,
+        hasAvatar: !!avatarUrl,
+      }));
+      return { categories, articlesCount, specialistsCount, topSpecialists };
+    };
+    return Promise.race([query(), timeout]);
   },
-  ["home-page-data"],
+  ["home-page-data-v2"],
   { revalidate: 300, tags: ["specialists"] }
 );
 
-export default async function HomePage() {
-  const { categories, articlesCount, specialistsCount, topSpecialists } = await getHomePageData();
-
+export default function HomePage() {
   return (
     <>
       <script
@@ -98,10 +120,9 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
       />
 
-      {/* ── Hero — две колонки: слева текст+поиск, справа фото счастливого клиента ── */}
+      {/* ── Hero — рендерится мгновенно, без БД ── */}
       <section className="border-b border-ink-100 dark:border-ink-800 bg-white dark:bg-ink-950">
         <div className="container-page py-10 md:py-16 grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-14 items-center">
-          {/* Левая колонка — текст и поиск */}
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sun-100 text-sun-800 text-xs font-bold uppercase tracking-wider mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-sun-500" />
@@ -132,7 +153,6 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Правая колонка — слот под фото счастливого клиента */}
           <div className="relative hidden lg:block">
             <Image
               src="/images/hero-client.png"
@@ -143,7 +163,6 @@ export default async function HomePage() {
               quality={85}
             />
 
-            {/* Карточка-отзыв поверх фото снизу-слева */}
             <div className="absolute -left-4 bottom-6 max-w-[260px] bg-white dark:bg-ink-900 rounded-2xl shadow-lift border border-ink-100 dark:border-ink-800 p-4">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center text-rose-700 font-bold shrink-0">
@@ -163,7 +182,6 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Стикер trust справа-сверху */}
             <div className="absolute -top-3 -right-2 bg-success-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-soft">
               ✓ Проверенные юристы
             </div>
@@ -171,10 +189,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── ИИ-помощник промо-блок ── */}
+      {/* ── ИИ-помощник промо-блок — рендерится мгновенно ── */}
       <section className="container-page py-8 md:py-10">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 text-white px-6 py-8 md:px-10 md:py-10">
-          {/* Декор */}
           <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
           <div className="absolute bottom-0 left-1/3 w-32 h-32 rounded-full bg-white/5 pointer-events-none" />
 
@@ -197,13 +214,80 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Trust-полоса: 4 факта с иконками ── */}
+      {/* ── Данные из БД: Trust-полоса + Категории + Юристы ── */}
+      <Suspense fallback={<DynamicSkeleton />}>
+        <DynamicSections />
+      </Suspense>
+
+      {/* ── Как это работает — рендерится мгновенно ── */}
+      <section className="container-page py-14 md:py-20">
+        <div className="text-center mb-12">
+          <p className="text-xs font-bold text-brand-700 dark:text-brand-400 uppercase tracking-widest mb-2">
+            Как это работает
+          </p>
+          <h2 className="heading-sans text-3xl md:text-4xl text-ink-900 dark:text-white">
+            Три шага до решения
+          </h2>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+          <Step
+            n="1"
+            title="Опишите ситуацию"
+            text="Обычным языком — как другу. «Попал в ДТП», «не платят зарплату», «закрыли въезд»."
+          />
+          <Step
+            n="2"
+            title="Получите ответ"
+            text="Поиск выдаст готовый ответ из базы со ссылками на статьи закона. Бесплатно."
+          />
+          <Step
+            n="3"
+            title="Выберите юриста"
+            text="Если случай сложный — подберём специалиста с нужным профилем. Только проверенные."
+          />
+        </div>
+      </section>
+
+      {/* ── CTA для юристов — рендерится мгновенно ── */}
+      <section className="container-page pb-16 md:pb-20">
+        <div className="rounded-3xl gradient-brand p-8 md:p-12 text-white relative overflow-hidden">
+          <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6">
+            <div className="flex-1">
+              <p className="text-sun-300 text-xs font-bold uppercase tracking-widest mb-2">
+                Юристам
+              </p>
+              <h3 className="heading-sans text-2xl md:text-3xl text-white mb-2">
+                Подключитесь к платформе
+              </h3>
+              <p className="text-white/80 text-base md:text-lg max-w-xl">
+                Получайте обращения по своей специализации, ведите кабинет, набирайте рейтинг.
+              </p>
+            </div>
+            <Link
+              href="/register?role=SPECIALIST"
+              className="shrink-0 bg-sun-400 hover:bg-sun-500 text-ink-900 px-6 py-3.5 rounded-xl font-bold shadow-cta active:scale-[0.98] transition-all whitespace-nowrap inline-flex items-center gap-2"
+            >
+              Стать юристом <ArrowRight size={18} />
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+async function DynamicSections() {
+  const { categories, articlesCount, specialistsCount, topSpecialists } = await getHomePageData();
+
+  return (
+    <>
+      {/* ── Trust-полоса ── */}
       <section className="border-b border-ink-100 dark:border-ink-800 bg-ink-50 dark:bg-ink-950/60">
         <div className="container-page py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             <TrustItem
               icon={<CheckCircle2 size={22} className="text-success-600" strokeWidth={2} />}
-              big={articlesCount.toString()}
+              big={articlesCount > 0 ? articlesCount.toString() : "—"}
               small="готовых ответов"
             />
             <TrustItem
@@ -225,7 +309,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Категории как товарные плитки ── */}
+      {/* ── Категории ── */}
       <section className="container-page py-14 md:py-20">
         <div className="flex items-end justify-between mb-8">
           <div>
@@ -242,13 +326,12 @@ export default async function HomePage() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-          {categories.map((c, idx) => {
+          {categories.map((c) => {
             const col = CATEGORY_COLOR[c.slug] ?? {
               icon: "text-brand-700",
               bg: "bg-brand-50",
               darkBg: "dark:bg-brand-950",
             };
-            // Помечаем первые две и одну особую — стикерами для разнообразия
             const sticker =
               c.slug === "dtp-i-gibdd"     ? { cls: "sticker-urgent",  text: "Срочно" } :
               c.slug === "krediti-i-dolgi" ? { cls: "sticker-popular", text: "Популярно" } :
@@ -291,7 +374,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Юристы — карточки, как товары на маркетплейсе ── */}
+      {/* ── Юристы ── */}
       {topSpecialists.length > 0 && (
         <section className="section-soft border-y border-ink-100 dark:border-ink-800">
           <div className="container-page py-14 md:py-20">
@@ -309,11 +392,10 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {topSpecialists.map((s) => (
                 <article key={s.id} className="tile">
-                  {/* Аватар */}
                   <div className="aspect-square w-full bg-ink-100 dark:bg-ink-800 flex items-center justify-center overflow-hidden">
-                    {s.avatarUrl ? (
+                    {s.hasAvatar ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={s.avatarUrl} alt={s.user?.name ?? "Юрист"} className="w-full h-full object-cover" />
+                      <img src={`/api/avatar/${s.id}`} alt={s.user?.name ?? "Юрист"} loading="lazy" className="w-full h-full object-cover" />
                     ) : (
                       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" className="text-ink-300">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
@@ -364,58 +446,38 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+    </>
+  );
+}
 
-      {/* ── Как это работает — три дружелюбных шага ── */}
-      <section className="container-page py-14 md:py-20">
-        <div className="text-center mb-12">
-          <p className="text-xs font-bold text-brand-700 dark:text-brand-400 uppercase tracking-widest mb-2">
-            Как это работает
-          </p>
-          <h2 className="heading-sans text-3xl md:text-4xl text-ink-900 dark:text-white">
-            Три шага до решения
-          </h2>
-        </div>
-        <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-          <Step
-            n="1"
-            title="Опишите ситуацию"
-            text="Обычным языком — как другу. «Попал в ДТП», «не платят зарплату», «закрыли въезд»."
-          />
-          <Step
-            n="2"
-            title="Получите ответ"
-            text="Поиск выдаст готовый ответ из базы со ссылками на статьи закона. Бесплатно."
-          />
-          <Step
-            n="3"
-            title="Выберите юриста"
-            text="Если случай сложный — подберём специалиста с нужным профилем. Только проверенные."
-          />
+function DynamicSkeleton() {
+  return (
+    <>
+      {/* Trust-полоса скелетон */}
+      <section className="border-b border-ink-100 dark:border-ink-800 bg-ink-50 dark:bg-ink-950/60">
+        <div className="container-page py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {[0,1,2,3].map((i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-xl bg-ink-200 dark:bg-ink-700 animate-pulse shrink-0" />
+                <div className="flex-1">
+                  <div className="h-5 w-16 bg-ink-200 dark:bg-ink-700 rounded animate-pulse mb-1" />
+                  <div className="h-3 w-24 bg-ink-100 dark:bg-ink-800 rounded animate-pulse" />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── CTA для юристов ── */}
-      <section className="container-page pb-16 md:pb-20">
-        <div className="rounded-3xl gradient-brand p-8 md:p-12 text-white relative overflow-hidden">
-          <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6">
-            <div className="flex-1">
-              <p className="text-sun-300 text-xs font-bold uppercase tracking-widest mb-2">
-                Юристам
-              </p>
-              <h3 className="heading-sans text-2xl md:text-3xl text-white mb-2">
-                Подключитесь к платформе
-              </h3>
-              <p className="text-white/80 text-base md:text-lg max-w-xl">
-                Получайте обращения по своей специализации, ведите кабинет, набирайте рейтинг.
-              </p>
-            </div>
-            <Link
-              href="/register?role=SPECIALIST"
-              className="shrink-0 bg-sun-400 hover:bg-sun-500 text-ink-900 px-6 py-3.5 rounded-xl font-bold shadow-cta active:scale-[0.98] transition-all whitespace-nowrap inline-flex items-center gap-2"
-            >
-              Стать юристом <ArrowRight size={18} />
-            </Link>
-          </div>
+      {/* Категории скелетон */}
+      <section className="container-page py-14 md:py-20">
+        <div className="h-9 w-52 bg-ink-200 dark:bg-ink-700 rounded-xl mb-3 animate-pulse" />
+        <div className="h-5 w-72 bg-ink-100 dark:bg-ink-800 rounded mb-8 animate-pulse" />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+          {[0,1,2,3,4,5].map((i) => (
+            <div key={i} className="h-24 bg-ink-100 dark:bg-ink-800 rounded-2xl animate-pulse" />
+          ))}
         </div>
       </section>
     </>
